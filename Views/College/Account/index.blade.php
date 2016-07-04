@@ -24,7 +24,7 @@
                         <th>Invoice ID</th>
                         <th>Invoice Date</th>
                         <th>Total Amount</th>
-                        <th>Payable To College</th>
+                        <th>Total GST</th>
                         <th>Status</th>
                         <th>Outstanding Amount</th>
                         <th></th>
@@ -140,7 +140,7 @@
                     {data: 'college_invoice_id', name: 'college_invoice_id'},
                     {data: 'invoice_date', name: 'invoice_date'},
                     {data: 'total_commission', name: 'total_commission'},
-                    {data: 'payable_to_college', name: 'payable_to_college'},
+                    {data: 'total_gst', name: 'total_gst'},
                     {data: 'status', name: 'status'},
                     {data: 'outstanding_amount', name: 'outstanding_amount'},
                     {data: 'action', name: 'action', orderable: false, searchable: false}

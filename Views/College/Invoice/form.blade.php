@@ -30,12 +30,7 @@
             </div>
         </div>
     </div>
-<<<<<<< Updated upstream
 
-=======
-    
-    
->>>>>>> Stashed changes
     <div class="panel panel-default">
         <div class="panel-heading">
             <span class="panel-title">Commission on Tuition Fee</span>
@@ -119,7 +114,7 @@
                     <div class="col-sm-8">
                         <div class="input-group">
                             <span class="input-group-addon">$</span>
-                            {!!Form::text('sub_total', null, array('class' => 'form-control', 'id'=>'sub_total','placeholder'=>'click to calculate'))!!}
+                            {!!Form::text('sub_total', 0, array('class' => 'form-control', 'id'=>'sub_total','placeholder'=>'click to calculate'))!!}
                         </div>
                         @if($errors->has('sub_total'))
                             {!! $errors->first('sub_total', '<label class="control-label"
@@ -134,7 +129,7 @@
                 <div class="form-group @if($errors->has('description')) {{'has-error'}} @endif">
                     {!!Form::label('description', 'Description *', array('class' => 'col-sm-4 control-label')) !!}
                     <div class="col-sm-8">
-                        {!!Form::text('description', null, array('class' => 'form-control', 'id'=>'description'))!!}
+                        {!!Form::text('description', 'Commission on tuition Fee', array('class' => 'form-control', 'id'=>'description'))!!}
                         @if($errors->has('description'))
                             {!! $errors->first('description', '<label class="control-label"
                                                                     for="inputError">:message</label>') !!}
@@ -146,8 +141,9 @@
                     {!!Form::label('commission_percent', 'Commission Percent *', array('class' => 'col-sm-4 control-label')) !!}
                     <div class="col-sm-8">
                         <div class="input-group">
-                            <span class="input-group-addon">$</span>
-                            {!!Form::text('commission_percent', null, array('class' => 'form-control', 'id'=>'commission_percent'))!!}
+                            
+                            {!!Form::text('commission_percent', 0, array('class' => 'form-control', 'id'=>'commission_percent'))!!}
+                            <span class="input-group-addon">%</span>
                         </div>
                         @if($errors->has('commission_percent'))
                             {!! $errors->first('commission_percent', '<label class="control-label"
@@ -169,15 +165,18 @@
                         @endif
                     </div>
                 </div>
-                <div class="form-group @if($errors->has('gst')) {{'has-error'}} @endif">
-                    {!!Form::label('gst', 'Commission GST *', array('class' => 'col-sm-4 control-label')) !!}
+                <div class="form-group @if($errors->has('tuition_fee_gst')) {{'has-error'}} @endif">
+                    {!!Form::label('tuition_fee_gst', 'Commission GST *', array('class' => 'col-sm-4 control-label')) !!}
                     <div class="col-sm-8">
                         <div class="input-group">
                             <span class="input-group-addon">$</span>
-                            {!!Form::text('gst', null, array('class' => 'form-control', 'id'=>'gst','placeholder'=>'click to calculate'))!!}
+                            {!!Form::text('tuition_fee_gst', null, array('class' => 'form-control', 'id'=>'tuition_fee_gst','placeholder'=>'10% of Commission Amount','readonly' => 'true'))!!}
+                            <span class="input-group-addon">
+                               {{ Form::checkbox('gst_checker_tuition_fee', 'incentive', true,array('id'=>'gst_checker_tuition_fee')) }} GST
+                            </span>
                         </div>
-                        @if($errors->has('gst'))
-                            {!! $errors->first('gst', '<label class="control-label"
+                        @if($errors->has('tuition_fee_gst'))
+                            {!! $errors->first('tuition_fee_gst', '<label class="control-label"
                                                                      for="inputError">:message</label>') !!}
                         @endif
                     </div>
@@ -189,7 +188,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <span class="panel-title">Other Commission</span>
-            <a href="#" class="btn btn-warning btn-collapse btn-flat btn-xs pull-right"><i class="fa fa-minus-circle"></i> Remove</a>
+            <a href="#" class="btn btn-warning btn-collapse-incentive btn-flat btn-xs pull-right"><i class="fa fa-minus-circle"></i> Remove</a>
         </div>
         <div class="panel-body">
             <div class="col-sm-6">
@@ -208,15 +207,18 @@
                     </div>
                 </div>
 
-                <div class="form-group @if($errors->has('gst')) {{'has-error'}} @endif">
-                    {!!Form::label('gst', 'Incentive GST *', array('class' => 'col-sm-4 control-label')) !!}
+                <div class="form-group @if($errors->has('incentive_gst')) {{'has-error'}} @endif">
+                    {!!Form::label('incentive_gst', 'GST *', array('class' => 'col-sm-4 control-label')) !!}
                     <div class="col-sm-8">
                         <div class="input-group">
                             <span class="input-group-addon">$</span>
-                            {!!Form::text('gst', null, array('class' => 'form-control', 'id'=>'gst','placeholder'=>'click to calculate'))!!}
+                            {!!Form::text('incentive_gst', null, array('class' => 'form-control', 'id'=>'incentive_gst','placeholder'=>'10% of Incentive ','readonly' => 'true'))!!}
+                            <span class="input-group-addon">
+                               {{ Form::checkbox('gst_checker_incentive', 'incentive', true,array('id'=>'gst_checker_incentive')) }} GST
+                            </span>
                         </div>
-                        @if($errors->has('gst'))
-                            {!! $errors->first('gst', '<label class="control-label"
+                        @if($errors->has('incentive_gst'))
+                            {!! $errors->first('incentive_gst', '<label class="control-label"
                                                                      for="inputError">:message</label>') !!}
                         @endif
                     </div>
@@ -248,7 +250,7 @@
                     <div class="col-sm-8">
                         <div class="input-group">
                             <span class="input-group-addon">$</span>
-                            {!!Form::text('total_commission', null, array('class' => 'form-control', 'id'=>'total_commission','placeholder'=>'click to calculate'))!!}
+                            {!!Form::text('total_commission', null, array('class' => 'form-control', 'id'=>'total_commission','placeholder'=>'sum of Commission Amount and Amount','readonly' => 'true'))!!}
                         </div>
                         @if($errors->has('total_commission'))
                             {!! $errors->first('total_commission', '<label class="control-label"
@@ -262,7 +264,7 @@
                     <div class="col-sm-8">
                         <div class="input-group">
                             <span class="input-group-addon">$</span>
-                            {!!Form::text('total_gst', null, array('class' => 'form-control', 'id'=>'total_gst','placeholder'=>'click to calculate'))!!}
+                            {!!Form::text('total_gst', null, array('class' => 'form-control', 'id'=>'total_gst','placeholder'=>'sum of Commission GST and GST','readonly' => 'true'))!!}
                         </div>
                         @if($errors->has('total_gst'))
                             {!! $errors->first('total_gst', '<label class="control-label"
@@ -272,17 +274,31 @@
                 </div>
             </div>
             <div class="col-sm-6">
-                <div class="form-group @if($errors->has('payable_to_college')) {{'has-error'}} @endif">
-                    {!!Form::label('payable_to_college', 'Payable To College *', array('class' => 'col-sm-4 control-label')) !!}
+                 <div class="form-group @if($errors->has('final_total')) {{'has-error'}} @endif">
+                    {!!Form::label('final_total', 'Total with GST', array('class' => 'col-sm-4 control-label')) !!}
                     <div class="col-sm-8">
                         <div class="input-group">
                             <span class="input-group-addon">$</span>
-                            {!!Form::text('payable_to_college', null, array('class' => 'form-control', 'id'=>'payable_to_college','placeholder'=>'click to calculate'))!!}
+                            {!!Form::text('final_total', null, array('class' => 'form-control', 'id'=>'final_total','placeholder'=>'sum of Total Amount and Total GST','readonly' => 'true'))!!}
+                        </div>
+                        @if($errors->has('final_total'))
+                            {!! $errors->first('final_total', '<label class="control-label"
+                                                                     for="inputError">:message</label>') !!}
+                        @endif
+                    </div>
+                </div>
+                <div class="form-group @if($errors->has('payable_to_college')) {{'has-error'}} @endif">
+                    {!!Form::label('payable_to_college', 'Payable To College', array('class' => 'col-sm-4 control-label')) !!}
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <span class="input-group-addon">$</span>
+                            {!!Form::text('payable_to_college', null, array('class' => 'form-control', 'id'=>'payable_to_college','placeholder'=>'Sub Total - Final Total','readonly' => 'true'))!!}
                         </div>
                         @if($errors->has('payable_to_college'))
                             {!! $errors->first('payable_to_college', '<label class="control-label"
-                                                              for="inputError">:message</label>') !!}
+                                                                     for="inputError">:message</label>') !!}
                         @endif
+                         
                     </div>
                 </div>
             </div>
@@ -300,20 +316,58 @@
             autoclose: true
         });
 
+                    
+
         $(".btn-collapse").click(function(e) {
+            $('#tuition_fee').val(0);
+            $('#sub_total').val(0);
+            $('#commission_amount').val(0);
+            $('#tuition_fee_gst').val(0);
+            reset_value();
+            e.preventDefault();
+            var $this = $(this);
+            var parentHead = $this.parent();
+            parentHead.parent().find(".panel-body").slideToggle( "slow", function() {
+                parentHead.toggleClass('collapsed');
+                if(!parentHead.hasClass('collapsed')){
+
+                    
+                    $this.html('<i class="fa fa-minus-circle"></i> Remove');
+                   
+                    
+                }
+                else
+                    $this.html('<i class="fa fa-plus-circle"></i> Add');
+            });
+        });
+
+        $(".btn-collapse-incentive").click(function(e) {
+            $('#incentive').val(0);
+            $('#incentive_gst').val(0);
+            reset_value();
             e.preventDefault();
             var $this = $(this);
             var parentHead = $this.parent();
             parentHead.parent().find(".panel-body").slideToggle( "slow", function() {
                 parentHead.toggleClass('collapsed');
                 if(!parentHead.hasClass('collapsed'))
+                {
+                    
                     $this.html('<i class="fa fa-minus-circle"></i> Remove');
+
+                }
                 else
                     $this.html('<i class="fa fa-plus-circle"></i> Add');
             });
         });
 
-        $('#tuition_fee, #enrollment_fee, #material_fee, #coe_fee, #other_fee').change(function() {
+
+
+
+        var total_commission=0;
+        var total_gst=0;
+
+        $('#tuition_fee, #enrollment_fee, #material_fee, #coe_fee, #other_fee').keyup(function() {
             var tuitionFee = parseFloat($('#tuition_fee').val());
             var enrollmentFee = parseFloat($('#enrollment_fee').val());
             var materialFee = parseFloat($('#material_fee').val());
@@ -321,20 +375,115 @@
             var otherFee = parseFloat($('#other_fee').val());
             var subTotal = parseFloat(tuitionFee + enrollmentFee + materialFee + coeFee + otherFee);
             $('#sub_total').val(subTotal);
+            reset_value();
         });
 
-        $('#commission_percent, #subTotal').change(function() {
+        $('#commission_percent, #subTotal,#commissionAmount,#incentive').keyup(function() {
+            reset_value();
+
+        });
+
+        
+        $('#gst_checker_incentive').click(function(){
+            if($(this).is(":checked")) // "this" refers to the element that fired the event
+            {
+               $('#incentive_gst').val(parseFloat($('#incentive').val()/10));
+            }
+            else
+            {
+                $('#incentive_gst').val(0);
+                
+            }
+            gst_change();
+            
+        });
+
+        $('#gst_checker_tuition_fee').click(function(){
+            if($(this).is(":checked")) // "this" refers to the element that fired the event
+            {
+              
+                $('#tuition_fee_gst').val(parseFloat($('#commission_amount').val()/10));
+            }
+            else
+            {
+                $('#tuition_fee_gst').val(0);
+               
+            }
+             gst_change();
+        });
+
+
+            function gst_change(){
+                var commissionPercent = parseFloat($('#commission_percent').val());
+                var subTotal = parseFloat($('#sub_total').val());
+                var commissionAmount = parseFloat(commissionPercent / 100 * subTotal);
+                var tuition_fee_gst=parseFloat($('#tuition_fee_gst').val());
+
+
+                var incentive = parseFloat($('#incentive').val());
+                var incentive_gst = parseFloat($('#incentive_gst').val()); //10% of commission amount
+
+                total_commission=commissionAmount+incentive;
+                total_gst=tuition_fee_gst+incentive_gst;
+                final_total=total_commission+total_gst;
+                payable_to_college=$('#sub_total').val()-final_total;
+                $('#total_commission').val(total_commission.toFixed(2));
+                $('#total_gst').val(total_gst.toFixed(2));
+                $('#final_total').val(final_total.toFixed(2));
+                $('#payable_to_college').val(payable_to_college.toFixed(2));
+            }
+
+
+
+        function reset_value(){
             var commissionPercent = parseFloat($('#commission_percent').val());
             var subTotal = parseFloat($('#sub_total').val());
-            var commissionAmount = parseFloat(commissionPercent / 100 * subTotal).toFixed(2);
-            $('#commission_amount').val(commissionAmount);
-        });
+            var commissionAmount = parseFloat(commissionPercent / 100 * subTotal);
+            $('#commission_amount').val(commissionAmount.toFixed(2));
+            
+            if($('#gst_checker_tuition_fee').is(":checked")) // "this" refers to the element that fired the event
+            {
+                var tuition_fee_gst=commissionAmount/10;
+                
+            }
+            else
+            {
+                tuition_fee_gst=0;
+                
+            }
+            $('#tuition_fee_gst').val(tuition_fee_gst.toFixed(2));
 
-        $('#commission_amount').change(function() {
-            var commissionAmount = parseFloat($(this).val());
-            var gst = commissionAmount * 0.1; //10% of commission amount
-            $('#gst').val(gst.toFixed(2));
-        });
+
+            var incentive = parseFloat($('#incentive').val());
+
+            if($('#gst_checker_incentive').is(":checked")) // "this" refers to the element that fired the event
+            {
+                 var incentive_gst = incentive /10; //10% of commission amount
+                
+            }
+            else
+            {
+                var incentive_gst=0;
+                
+            }
+             $('#incentive_gst').val(incentive_gst.toFixed(2));
+            
+
+
+
+            total_commission=commissionAmount+incentive;
+            total_gst=tuition_fee_gst+incentive_gst;
+            final_total=total_commission+total_gst;
+            payable_to_college=$('#sub_total').val()-final_total;
+            $('#total_commission').val(total_commission.toFixed(2));
+            $('#total_gst').val(total_gst.toFixed(2));
+            $('#final_total').val(final_total.toFixed(2));
+            $('#payable_to_college').val(payable_to_college.toFixed(2));
+        }
+
+
+
+
     });
 </script>
 
