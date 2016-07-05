@@ -6,8 +6,57 @@
     <li>View</li>
 @stop
 @section('content')
+    
+<div>
 
-    <div class="col-xs-12">
+    <div class="col-xs-3">
+        
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Invoice Details</h3>
+                </div>
+                <!-- Recent Payments -->
+                <div class="box-body">
+
+                    <strong><i class="fa fa-file-text-o margin-r-5"></i> Invoice Id</strong>
+
+                    <p class="text-muted">CI00012</p>
+
+                    <strong><i class="fa fa-file-text-o margin-r-5"></i> Invoice Date </strong>
+
+                    <p class="text-muted">12/08/2016</p>
+
+                    <strong><i class="fa fa-file-text-o margin-r-5"></i> Total Amount</strong>
+
+                    <p class="text-muted">$1000</p>
+
+                    <strong><i class="fa fa-file-text-o margin-r-5"></i> Total GST </strong>
+
+                    <p class="text-muted">$100</p>
+
+                    <strong><i class="fa fa-file-text-o margin-r-5"></i> Final Total </strong>
+
+                    <p class="text-muted">$1100</p>
+
+                    <strong><i class="fa fa-file-text-o margin-r-5"></i> Total Paid </strong>
+
+                    <p class="text-muted">$900</p>
+
+                    <strong><i class="fa fa-file-text-o margin-r-5"></i> Status </strong>
+
+                    <p class="text-muted">Pending</p>
+
+                    <strong><i class="fa fa-file-text-o margin-r-5"></i> Oustanding Amount </strong>
+
+                    <p class="text-muted">$200</p>
+
+
+
+                </div>
+            </div>
+        
+    </div>
+    <div class="col-xs-9">
         <div class="box box-primary">
             <div class="box-header with-border">
                 <h3 class="box-title">Invoice Payments</h3>
