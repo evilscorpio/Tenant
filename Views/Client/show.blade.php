@@ -9,7 +9,7 @@
 
     <div class="container">
         <div class="row">
-        @include('Tenant::Client/client_header')  
+        @include('Tenant::Client/client_header')
         </div>
         <div class="col-md-3">
 
