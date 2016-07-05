@@ -18,11 +18,11 @@
         </div>
 
         <div class="form-group @if($errors->has('amount')) {{'has-error'}} @endif">
-            {!!Form::label('amount', 'Amount *', array('class' => 'col-sm-4 control-label')) !!}
+            {!!Form::label('amount', 'Tution Fee *', array('class' => 'col-sm-4 control-label')) !!}
             <div class="col-sm-8">
                 <div class="input-group">
                     <span class="input-group-addon">$</span>
-                    {!!Form::text('amount', null, array('class' => 'form-control', 'id'=>'amount'))!!}
+                    {!!Form::text('amount', null, array('class' => 'form-control', 'id'=>'amount','autocomplete'=>'off'))!!}
                 </div>
                 @if($errors->has('amount'))
                     {!! $errors->first('amount', '<label class="control-label"
@@ -36,7 +36,7 @@
             <div class="col-sm-8">
                 <div class="input-group">
                     <span class="input-group-addon">$</span>
-                    {!!Form::text('discount', null, array('class' => 'form-control', 'id'=>'discount'))!!}
+                    {!!Form::text('discount', 0, array('class' => 'form-control', 'id'=>'discount','autocomplete'=>'off'))!!}
                 </div>
                 @if($errors->has('discount'))
                     {!! $errors->first('discount', '<label class="control-label"
@@ -50,7 +50,7 @@
             <div class="col-sm-8">
                 <div class="input-group">
                     <span class="input-group-addon">$</span>
-                    {!!Form::text('invoice_amount', null, array('class' => 'form-control', 'id'=>'invoice_amount'))!!}
+                    {!!Form::text('invoice_amount', null, array('class' => 'form-control', 'id'=>'invoice_amount','readonly' => 'true'))!!}
                 </div>
                 @if($errors->has('invoice_amount'))
                     {!! $errors->first('invoice_amount', '<label class="control-label"
@@ -58,6 +58,37 @@
                 @endif
             </div>
         </div>
+        
+        <div class="form-group @if($errors->has('gst')) {{'has-error'}} @endif">
+                    {!!Form::label('gst', 'GST *', array('class' => 'col-sm-4 control-label')) !!}
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <span class="input-group-addon">$</span>
+                            {!!Form::text('gst', null, array('class' => 'form-control', 'id'=>'gst','placeholder'=>'10% of Amount ','readonly' => 'true'))!!}
+                            <span class="input-group-addon">
+                               {{ Form::checkbox('gst_checker_incentive', 'incentive', false,array('id'=>'gst_checker_incentive')) }} GST
+                            </span>
+                        </div>
+                        @if($errors->has('gst'))
+                            {!! $errors->first('gst', '<label class="control-label"
+                                                                     for="inputError">:message</label>') !!}
+                        @endif
+                    </div>
+                </div>
+
+            <div class="form-group @if($errors->has('final_total')) {{'has-error'}} @endif">
+                {!!Form::label('final_total', 'Final Total *', array('class' => 'col-sm-4 control-label')) !!}
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <span class="input-group-addon">$</span>
+                        {!!Form::text('final_total', null, array('class' => 'form-control', 'id'=>'final_total','readonly' => 'true'))!!}
+                    </div>
+                    @if($errors->has('final_total'))
+                        {!! $errors->first('final_total', '<label class="control-label"
+                                                               for="inputError">:message</label>') !!}
+                    @endif
+                </div>
+            </div>
 
         <div class="form-group @if($errors->has('description')) {{'has-error'}} @endif">
             {!!Form::label('description', 'Description', array('class' => 'col-sm-4 control-label')) !!}
@@ -92,6 +123,53 @@
 
 
 <script>
+
+    $('#amount, #invoice_amount,#discount').keyup(function() {
+            var amount=parseFloat($('#amount').val());
+            var discount=parseFloat($('#discount').val());
+            var invoice_amount = amount-discount;
+            if($('#gst_checker_tuition_fee').is(":checked")) // "this" refers to the element that fired the event
+            {
+                var gst=invoice_amount/10;
+
+            }
+            else
+            {
+                gst=0;
+
+            }
+
+            $('#invoice_amount').val(invoice_amount.toFixed(2));
+            $('#gst').val(gst);
+
+            final_total=invoice_amount+gst;
+            $('#final_total').val(final_total.toFixed(2));
+
+        });
+
+    $('#gst_checker_incentive').click(function(){
+            if($(this).is(":checked")) // "this" refers to the element that fired the event
+            {
+                $('#gst').val(parseFloat($('#invoice_amount').val()/10));
+            }
+            else
+            {
+                $('#gst').val(0);
+
+            }
+            gst_change();
+
+        });
+
+    function gst_change(){
+
+            var invoice_amount = parseFloat($('#invoice_amount').val());
+            var gst = parseFloat($('#gst').val()); //10% of commission amount 
+            $('#gst').val(gst.toFixed(2));
+            final_total=invoice_amount+gst;
+            $('#final_total').val(final_total.toFixed(2));
+        }
+
     $(function () {
         $("#invoice_date").datepicker({
             autoclose: true
