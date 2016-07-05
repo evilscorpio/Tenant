@@ -7,6 +7,7 @@ use App\Modules\Tenant\Models\Application\CourseApplication;
 use App\Modules\Tenant\Models\Institute\Institute;
 use App\Modules\Tenant\Models\Invoice\CollegeInvoice;
 use App\Modules\Tenant\Models\Payment\CollegePayment;
+use App\Modules\Agency\Models\Agency;
 use Flash;
 use DB;
 
@@ -21,14 +22,14 @@ class CollegeController extends BaseController
         'date_paid' => 'required',
         'payment_method' => 'required|min:2|max:45'
     ];
-
-    function __construct(Client $client, Request $request, CourseApplication $application, CollegePayment $payment, CollegeInvoice $invoice)
+    function __construct(Client $client, Request $request, CourseApplication $application, CollegePayment $payment, CollegeInvoice $invoice,Agency $agency)
     {
         $this->client = $client;
         $this->request = $request;
         $this->application = $application;
         $this->invoice = $invoice;
         $this->payment = $payment;
+        $this->agency=$agency;
         parent::__construct();
     }
 
@@ -79,6 +80,7 @@ class CollegeController extends BaseController
 
     public function printInvoice($invoice_id)
     {
+        $data['agency'] = $this->agency->getAgencyDetails('33');
         $data['invoice_id'] = $invoice_id;
         return view("Tenant::College/Invoice/print_invoice", $data);
     }
@@ -185,6 +187,7 @@ class CollegeController extends BaseController
 
     public function show($invoice_id)
     {
+        $data['agency'] = $this->agency->getAgencyDetails('33');
         $data['invoice'] = $this->invoice->getDetails($invoice_id); //dd($data['invoice']->toArray());
         return view("Tenant::College/Invoice/show", $data);
     }

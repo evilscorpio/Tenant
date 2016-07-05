@@ -132,7 +132,6 @@ class Client extends Model
             $client->referred_by = $request['referred_by'];
             $client->description = $request['description'];
             $client->save();
-
             // Saving client profile
             $person = Person::find($client->person_id);
             $person->first_name = $request['first_name'];
