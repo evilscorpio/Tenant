@@ -17,7 +17,6 @@ class AgentController extends BaseController
         'number' => 'required',
         'email' => 'email|required',
         'name' => 'required',
-
     ];
 
     function __construct(Request $request, Agent $agent, SuperAgentInstitute $superagent)

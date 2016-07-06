@@ -242,6 +242,10 @@ Route::group(array('prefix' => 'tenant', 'module' => 'Tenant', 'middleware' => '
     Route::get('client/data', 'ClientController@getData');
     Route::get('clients/{client_id}/innernotes', ['as' => 'tenant.client.innernotes', 'uses' => 'ClientController@innernotes']);
     Route::post('clients/{client_id}/innernotes', 'ClientController@uploadApplicationNotes');
-     Route::get('innernote/{notes_id}/delete',['as' => 'tenant.client.innernotes.delete', 'uses' => 'ClientController@deleteApplicationNote']);
+    Route::get('innernote/{notes_id}/delete',['as' => 'tenant.client.innernotes.delete', 'uses' => 'ClientController@deleteApplicationNote']);
+
+    /* Routes for Settings Module */
+    Route::get('settings/company', ['as' => 'tenant.company.edit', 'uses' => 'SettingController@company']);
+    Route::post('settings/company/{agent_id}/store', ['as' => 'tenant.company.store', 'uses' => 'SettingController@updateCompany']);
 
 });

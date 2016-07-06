@@ -192,4 +192,15 @@ Class Agent extends Model
             ->find($agent_id);
         return $agent;
     }
+
+    function getAgentDetails()
+    {
+        $agent = Agent::leftJoin('companies', 'companies.company_id', '=', 'agents.company_id')
+            ->leftJoin('phones', 'phones.phone_id', '=', 'companies.phone_id')
+            ->leftJoin('addresses', 'addresses.address_id', '=', 'agents.address_id')
+            ->select(['companies.name', 'companies.website', 'companies.invoice_to_name', 'agents.*', 'addresses.*', 'phones.number'])
+            ->orderBy('companies.company_id', 'desc')
+            ->first(); //get agent details
+        return $agent;
+    }
 }
