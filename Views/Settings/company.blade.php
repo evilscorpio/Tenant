@@ -1,9 +1,8 @@
 @extends('layouts.tenant')
-@section('title', 'Add Agent')
+@section('title', 'Company Profile')
 @section('breadcrumb')
     @parent
-    <li><a href="{{url('tenant/agents')}}" title="All Agents"><i class="fa fa-briefcase"></i> Agents</a></li>
-    <li>Add</li>
+    <li>Company Profile</li>
 @stop
 @section('content')
     <div class="col-xs-12">

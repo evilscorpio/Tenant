@@ -57,26 +57,11 @@
                     </div>
                     <!-- Recent Payments -->
                     <div class="box-body">
+                        @foreach($remainders as $key => $remainder)
+                            <strong><i class="fa fa-file-text-o margin-r-5"></i> {{ $remainder->description }}</strong>
 
-                        <strong><i class="fa fa-file-text-o margin-r-5"></i> Request offer for holmes...</strong>
-
-                        <p class="text-muted">20/12/2016</p>
-
-                        <strong><i class="fa fa-file-text-o margin-r-5"></i> Create Payment 
-                            $1000...</strong>
-
-                        <p class="text-muted">12/08/2016</p>
-
-                        <strong><i class="fa fa-file-text-o margin-r-5"></i> Request offer coe...</strong>
-
-                        <p class="text-muted">20/12/2016</p>
-
-                        <strong><i class="fa fa-file-text-o margin-r-5"></i> Create Payment 
-                            $1000...</strong>
-
-                        <p class="text-muted">12/08/2016</p>
-
-
+                            <p class="text-muted">{{ format_date($remainder->reminder_date) }}</p>
+                        @endforeach
                     </div>
                 </div>
 

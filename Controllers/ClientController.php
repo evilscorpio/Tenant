@@ -30,7 +30,7 @@ class ClientController extends BaseController
         $this->notes = $notes;
         $this->document = $document;
         $this->client_notes = $client_notes;
-         $this->application_notes = $application_notes;
+        $this->application_notes = $application_notes;
         parent::__construct();
     }
 
@@ -55,7 +55,7 @@ class ClientController extends BaseController
             ->leftJoin('users', 'clients.user_id', '=', 'users.user_id')
             ->leftJoin('person_phones', 'person_phones.person_id', '=', 'persons.person_id')
             ->leftJoin('phones', 'phones.phone_id', '=', 'person_phones.phone_id')
-            ->select(['clients.client_id', 'clients.added_by','clients.added_by', 'users.email', 'users.status', 'phones.number as phone', 'clients.created_at', DB::raw('CONCAT(persons.first_name, " ", persons.last_name) AS fullname')]);
+            ->select(['clients.client_id', 'clients.added_by', 'clients.added_by', 'users.email', 'users.status', 'phones.number as phone', 'clients.created_at', DB::raw('CONCAT(persons.first_name, " ", persons.last_name) AS fullname')]);
 
         $datatable = \Datatables::of($clients)
             ->addColumn('action', '<a data-toggle="tooltip" title="View Client" class="btn btn-action-box" href ="{{ route( \'tenant.client.show\', $client_id) }}"><i class="fa fa-eye"></i></a> <a data-toggle="tooltip" title="Client Documents" class="btn btn-action-box" href ="{{ route( \'tenant.client.document\', $client_id) }}"><i class="fa fa-file"></i></a> <a data-toggle="tooltip" title="Edit Client" class="btn btn-action-box" href ="{{ route( \'tenant.client.edit\', $client_id) }}"><i class="fa fa-edit"></i></a> <a data-toggle="tooltip" title="Delete Client" class="delete-user btn btn-action-box" href="{{ route( \'tenant.client.destroy\', $client_id) }}"><i class="fa fa-trash"></i></a>')
@@ -106,7 +106,7 @@ class ClientController extends BaseController
         /* Additional validations for creating user */
         $this->rules['email'] = 'email|min:5|max:55|unique:users';
         $this->validate($this->request, $this->rules);
-        
+
         // if validates
         $created = $this->client->add($this->request->all());
 
@@ -124,6 +124,7 @@ class ClientController extends BaseController
     public function show($client_id)
     {
         $data['client'] = $this->client->getDetails($client_id);
+        $data['remainders'] = $this->client_notes->getAll($client_id, true);
         return view("Tenant::Client/show", $data);
     }
 
@@ -228,7 +229,7 @@ class ClientController extends BaseController
     function notes($client_id)
     {
         $data['client'] = $this->client->getDetails($client_id);
-        $data['notes'] = $this->notes->getNotes($client_id);
+        $data['notes'] = $this->client_notes->getAll($client_id);
         return view("Tenant::Client/notes", $data);
     }
 
@@ -245,7 +246,7 @@ class ClientController extends BaseController
         return view("Tenant::Client/innerdocument", $data);
     }
 
-      function innernotes($client_id)
+    function innernotes($client_id)
     {
         $data['client'] = $this->client->getDetails($client_id);
         $data['client_notes'] = $this->client_notes->getClientNotes($client_id);
@@ -274,51 +275,51 @@ class ClientController extends BaseController
         return redirect()->back();
     }
 
-    
- function uploadClientNotes($client_id)
+
+    function uploadClientNotes($client_id)
     {
         $upload_rules = ['description' => 'required'
         ];
-        if($this->request->get('remind') == 1)
+        if ($this->request->get('remind') == 1)
             $upload_rules['reminder_date'] = 'required';
 
         $this->validate($this->request, $upload_rules);
-     
-            $this->client_notes->uploadClientNotes($client_id, $this->request->all());
-            \Flash::success('Notes uploaded successfully!');
-            return redirect()->route('tenant.client.notes', $client_id);
-         }
-    
 
-     function deleteNote($note_id)
-     {
+        $this->client_notes->add($client_id, $this->request->all());
+        \Flash::success('Notes uploaded successfully!');
+        return redirect()->route('tenant.client.notes', $client_id);
+    }
+
+
+    function deleteNote($note_id)
+    {
         $client_id = $this->client_notes->deleteNote($note_id);
-  
+
         \Flash::success('Note deleted successfully!');
-         return redirect()->route('tenant.client.notes', $client_id);
-     } 
+        return redirect()->route('tenant.client.notes', $client_id);
+    }
 
     function uploadApplicationNotes($client_id)
     {
         $upload_rules = ['description' => 'required'
         ];
-        if($this->request->get('remind') == 1)
+        if ($this->request->get('remind') == 1)
             $upload_rules['reminder_date'] = 'required';
 
         $this->validate($this->request, $upload_rules);
-     
-            $this->application_notes->uploadApplicationNotes($client_id, $this->request->all());
-            \Flash::success('Notes uploaded successfully!');
-            return redirect()->route('tenant.client.innernotes', $client_id);
-         }
 
-          function deleteApplicationNote($note_id)
-     {
-       $application_id= $this->application_notes->deleteApplicationNote($note_id);
-  
+        $this->application_notes->uploadApplicationNotes($client_id, $this->request->all());
+        \Flash::success('Notes uploaded successfully!');
+        return redirect()->route('tenant.client.innernotes', $client_id);
+    }
+
+    function deleteApplicationNote($note_id)
+    {
+        $application_id = $this->application_notes->deleteApplicationNote($note_id);
+
         \Flash::success('Note deleted successfully!');
-         return redirect()->route('tenant.client.innernotes', $application_id);
-         
-     } 
+        return redirect()->route('tenant.client.innernotes', $application_id);
+
+    }
 
 }
