@@ -47,12 +47,12 @@ class CollegeInvoicePayment extends Model
             ]);
 
             CollegeInvoicePayment::create([
-                'ci_payment_id' => $payment->ci_payment_id,
+                'ci_payment_id' => $payment->college_payment_id,
                 'college_invoice_id' => $invoice_id
             ]);
 
             DB::commit();
-            return $payment->ci_payment_id;
+            return $payment->college_payment_id;
             // all good
         } catch (\Exception $e) {
             DB::rollback();
