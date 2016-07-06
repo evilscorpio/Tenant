@@ -44,7 +44,7 @@
                     <div class="col-sm-8">
                         <div class="input-group">
                             <span class="input-group-addon">$</span>
-                            {!!Form::text('tuition_fee', null, array('class' => 'form-control', 'id'=>'tuition_fee'))!!}
+                            {!!Form::text('tuition_fee', null, array('class' => 'form-control', 'id'=>'tuition_fee', 'autocomplete' => 'off'))!!}
                         </div>
                         @if($errors->has('tuition_fee'))
                             {!! $errors->first('tuition_fee', '<label class="control-label"
