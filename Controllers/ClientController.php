@@ -105,7 +105,11 @@ class ClientController extends BaseController
     {
         /* Additional validations for creating user */
         $this->rules['email'] = 'email|min:5|max:55|unique:users';
-        $this->validate($this->request, $this->rules);
+        $messages = [
+            'email.unique' => 'Client with the same email address already exists.',
+        ];
+
+        $this->validate($this->request, $this->rules, $messages);
 
         // if validates
         $created = $this->client->add($this->request->all());
