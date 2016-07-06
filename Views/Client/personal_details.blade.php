@@ -11,7 +11,7 @@
       <div class="row">
         @include('Tenant::Client/client_header') 
       </div>
-      <div class="row">
+      <div class="content">
 <!-- About Me Box -->
     <div class="col-md-3">
         <div class="box box-primary">
@@ -51,6 +51,8 @@
                 <div class="box box-primary">
                     <div class="box-header with-border">
                         <h3 class="box-title">Personal Details</h3>
+                        <a href="{{ route('tenant.client.edit', $client->client_id) }}"
+                           class="btn btn-success btn-flat pull-right"><i class="fa fa-edit"></i> Edit</a>
                     </div>
                     <div class="box-body">
                         <table class="table table-hover">

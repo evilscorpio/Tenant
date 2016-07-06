@@ -7,11 +7,11 @@
 @stop
 @section('content')
     <div class="col-xs-12">
+        @include('flash::message')
         <div class="box box-primary">
             <div class="box-header with-border">
                 <h3 class="box-title">Client Details</h3>
             </div>
-            @include('flash::message')
             {!!Form::model($client, array('route' => array('tenant.client.update', $client->client_id), 'class' => 'form-horizontal form-left', 'method' => 'put'))!!}
             {!!Form::hidden('user_id', $client->user_id)!!}
             @include('Tenant::Client/form')

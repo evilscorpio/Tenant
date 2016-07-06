@@ -63,6 +63,9 @@
                             <p class="text-muted">{{ format_date($remainder->reminder_date) }}</p>
                         @endforeach
                     </div>
+                    <div class="box-footer">
+                        <a href="{{url("tenant/clients/$client->client_id/notes")}}" class="btn btn-primary btn-flat"><i class="fa fa-plus"></i> Add New</a>
+                    </div>
                 </div>
 
 

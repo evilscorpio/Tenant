@@ -172,7 +172,8 @@ class ClientController extends BaseController
         $updated = $this->client->edit($this->request->all(), $client_id);
         if ($updated)
             Flash::success('Client has been updated successfully.');
-        return redirect()->route('tenant.client.index');
+        //return redirect()->route('tenant.client.index');
+        return redirect()->back();
     }
 
     /**
