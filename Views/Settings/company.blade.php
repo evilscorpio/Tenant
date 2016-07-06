@@ -10,7 +10,7 @@
         @include('flash::message')
         <div class="box box-primary">
             <div class="box-header with-border">
-                <h3 class="box-title">Agent Details</h3>
+                <h3 class="box-title">Company Profile</h3>
             </div>
             {!!Form::model($company, array('route' => ['tenant.company.store', $company->agent_id], 'class' => 'form-horizontal form-left'))!!}
             <div class="box-body">

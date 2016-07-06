@@ -227,6 +227,7 @@ class ApplicationController extends BaseController
         //
     }
 
+    // Directly From Application Dashboard
     public function createSubAgent($application_id, Request $request)
     {
         $application = CourseApplication::find($application_id);
@@ -234,6 +235,16 @@ class ApplicationController extends BaseController
         $application->save();
 
         Flash::success('Sub Agent has been added successfully.');
+        return redirect()->route('tenant.application.show', $application_id);
+    }
+
+    public function addSuperAgent($application_id, Request $request)
+    {
+        $application = CourseApplication::find($application_id);
+        $application->super_agent_id = $request->agent_id;
+        $application->save();
+
+        Flash::success('Super Agent has been added successfully.');
         return redirect()->route('tenant.application.show', $application_id);
     }
 

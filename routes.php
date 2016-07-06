@@ -108,7 +108,8 @@ Route::group(array('prefix' => 'tenant', 'module' => 'Tenant', 'middleware' => '
     Route::get('application/superagent/add', ['as' => 'application.superagent.add', 'uses' => 'ApplicationController@createSuperAgent']);
 
     /* Create super and sub agents for application */
-    Route::post('applications/{application_id}/subagent', ['as' => 'tenant.application.sugagent', 'uses' => 'ApplicationController@createSubAgent']);
+    Route::post('applications/{application_id}/subagent', ['as' => 'tenant.application.subagent', 'uses' => 'ApplicationController@createSubAgent']);
+    Route::post('applications/{application_id}/superagent', ['as' => 'tenant.application.superagent', 'uses' => 'ApplicationController@addSuperAgent']);
 
     /* Routes for college section */
     Route::get('applications/{application_id}/college', ['as' => 'tenant.application.college', 'uses' => 'CollegeController@index']);

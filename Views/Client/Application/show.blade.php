@@ -115,7 +115,7 @@
                                     @else
                                         None
                                         <button class="btn btn-primary btn-xs pull-right" data-toggle="modal"
-                                                data-target="#agentModal"><i class="glyphicon glyphicon-plus-sign"></i>
+                                                data-target="#superAgentModal"><i class="glyphicon glyphicon-plus-sign"></i>
                                             Add
                                         </button>
                                     @endif
@@ -184,6 +184,36 @@
                     <h4 class="modal-title">Add Sub Agent</h4>
                 </div>
                 {!!Form::open(['url' => 'tenant/applications/'.$application->application_id.'/subagent', 'id' => 'add-agent', 'class' => 'form-horizontal form-left'])!!}
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        {!!Form::label('agent_id', 'Agent *', array('class' => 'col-sm-4 control-label')) !!}
+                        <div class="col-sm-8">
+                            {!!Form::select('agent_id', $agents, null, array('class' => 'form-control', 'id'=>'agent_id'))!!}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success"><i class="fa fa-plus-circle"></i>
+                        Add
+                    </button>
+                </div>
+                {!!Form::close()!!}
+            </div>
+
+        </div>
+    </div>
+
+    <div id="superAgentModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add Super Agent</h4>
+                </div>
+                {!!Form::open(['url' => 'tenant/applications/'.$application->application_id.'/superagent', 'id' => 'add-agent', 'class' => 'form-horizontal form-left'])!!}
                 <div class="modal-body">
 
                     <div class="form-group">
