@@ -38,7 +38,7 @@
                 "columns": [
                     {data: 'client_id', name: 'client_id'},
                     {data: 'fullname', name: 'fullname'},
-                    {data: 'phone', name: 'phone'},
+                    {data: 'number', name: 'number'},
                     {data: 'email', name: 'email'},
                     {data: 'added_by', name: 'added_by'},
                     {data: 'action', name: 'action', orderable: false, searchable: false}
