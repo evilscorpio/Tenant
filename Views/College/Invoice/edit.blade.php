@@ -14,7 +14,7 @@
                 <h3 class="box-title">Add Invoice</h3>
             </div>
             @include('flash::message')
-             {!!Form::model($client, array('route' => array('tenant.client.update', $client->client_id), 'class' => 'form-horizontal form-left', 'method' => 'put'))!!}
+             {!!Form::model($client, array('route' => array('tenant.client.update', $client->client_id), 'class' => 'form-horizontal form-left', 'method' => 'put', 'autocomplete' => 'off'))!!}
             {!!Form::hidden('user_id', $payment->user_id)!!}
             @include('Tenant::Client/Invoice/form')
             <div class="box-footer clearfix">
