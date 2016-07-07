@@ -24,6 +24,10 @@ class UserController extends BaseController {
 		parent::__construct();
 	}
 
+	public function dashboard(){
+		return view("Tenant::User/dashboard");
+	}
+
 	/**
 	 * Display a listing of the users.
 	 *

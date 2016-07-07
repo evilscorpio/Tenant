@@ -223,6 +223,7 @@ Route::group(array('prefix' => 'tenant', 'module' => 'Tenant', 'middleware' => '
     Route::get('users/data', 'UserController@getData');
     Route::get('profile', 'UserController@edit');
     Route::post('profile', 'UserController@update');
+    Route::get('users/dashboard','UserController@dashboard');
 
     /*routes for innerdocument*/
     Route::get('client/data', 'ClientController@getData');
