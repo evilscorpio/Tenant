@@ -2,38 +2,7 @@
 <div class="container">
     <div class="row">
         <div class="client-navbar" style="display: none;">
-            <div class="col-sm-12 col-md-2">
-                <div class="container">
-                    <img src="https://scontent-lax3-1.xx.fbcdn.net/v/t1.0-9/1936510_10207216981375364_4596889339024157957_n.jpg?oh=f3031e9add8769ca489e5865a54b6bc4&oe=57B0E02E"
-                         class="img-rounded" alt="Cinque Terre" width="150" height="150">
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-10">
-                <div class="row">
-                    <h4>{{$client->first_name}} {{$client->middle_name}} <b>{{$client->last_name}}</b></h4>
-                    <p><i class="fa fa-phone"></i> {{$client->number}} | <i class="fa fa-envelope"></i> {{$client->email}} </p>
-                    <address>
-                        {{ $client->street }},
-                        {{ $client->suburb }}<br/>
-                        {{ $client->state }},
-                        {{ $client->postcode }}<br/>
-                        <strong>{{ get_country($client->country_id) }}</strong>
-                    </address>
-                </div>
-                <div class="container-fluid">
-                    <div id="navbar" class="navbar-collapse collapse">
-                        <ul class="nav navbar-nav">
-                            <li><a href={{url("tenant/clients/$client->client_id")}}>Dashboard</a></li>
-                            <li><a href={{url("tenant/clients/$client->client_id/personal_details")}}>Personal
-                                    Details</a></li>
-                            <li class="active"><a href={{url("tenant/clients/$client->client_id/applications")}}>College
-                                    Application</a></li>
-                            <li><a href={{url("tenant/clients/$client->client_id/accounts")}}>Accounts</a></li>
-                            <li><a href={{url("tenant/clients/$client->client_id/document")}}>Documents</a></li>
-                            <li><a href={{url("tenant/clients/$client->client_id/notes")}}>Notes</a></li>
-                        </ul>
-                    </div>
-                </div>
+            @include('Tenant::Client/client_header')
             </div>
         </div>
         {{--<span class="btn btn-success btn-small btn-flat menu-toggle"><i class="fa fa-bars"></i> Toggle Client Menu</span>--}}
