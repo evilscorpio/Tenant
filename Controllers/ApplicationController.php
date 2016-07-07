@@ -166,13 +166,15 @@ class ApplicationController extends BaseController
         $data['paid_to_college'] = $this->payment->paymentToCollege($application_id);
         $remaining = $application->tuition_fee - $data['paid_to_college'];
         $data['remaining'] = ($remaining < 0)? 0 : $remaining;
+
         $data['total_commission_amount'] = $this->invoice->getTotalAmount($application_id);
         $data['commission_claimed'] = $this->payment->commissionClaimed($application_id);
         $remaining_commission = $data['total_commission_amount'] - $data['commission_claimed'];
         $data['remaining_commission'] = ($remaining_commission < 0)? 0 : $remaining_commission;
+
         $student_stats = $this->student_invoice->getStats($application_id);
         $data['student_outstanding'] = $student_stats['due_amount'];
-        $college_stats = $this->invoice->getStats($application_id);
+        $college_stats = $data['college_stats'] = $this->invoice->getStats($application_id);
         $data['college_outstanding'] = $college_stats['due_amount'];
         $data['uninvoiced_amount'] = $this->payment->getUninvoicedAmount($application_id);
         $data['client'] = $this->client->getDetails($application->client_id);

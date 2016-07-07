@@ -73,7 +73,20 @@
                             <div class="panel-body">
                                 <table class="table table-striped table-bordered">
                                     <tr>
-                                        <td>Commission Payable Amout</td>
+                                        <td>Total Invoice</td>
+                                        <td>${{ $college_stats['invoice_amount'] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total Paid Invoice</td>
+                                        <td>${{ $college_stats['total_paid'] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Outstanding Amount</td>
+                                        <td>${{ $college_stats['due_amount'] }}</td>
+                                    </tr>
+
+                                    {{--<tr>
+                                        <td>Commission Payable Amount</td>
                                         <td>${{ $total_commission_amount }}</td>
                                     </tr>
                                     <tr>
@@ -83,7 +96,7 @@
                                     <tr>
                                         <td>Remaining Commission</td>
                                         <td>${{ $remaining_commission }}</td>
-                                    </tr>
+                                    </tr>--}}
                                 </table>
                             </div>
                         </div>
