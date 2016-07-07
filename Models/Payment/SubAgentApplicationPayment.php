@@ -38,6 +38,11 @@ class SubAgentApplicationPayment extends Model
      */
     public $timestamps = false;
 
+    public function invoice()
+    {
+        return $this->belongsTo('App\Modules\Tenant\Models\PaymentInvoiceBreakdown', 'payment_id');
+    }
+
     public function add(array $request, $application_id)
     {
         DB::beginTransaction();
