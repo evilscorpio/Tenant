@@ -7,7 +7,7 @@
 @stop
 @section('content')
 
-    @include('Tenant::Client/Application/navbar')
+    @include('Tenant::Client/client_header')
     <div class="container">
         <div class="col-xs-12 col-md-12">
             @include('flash::message')

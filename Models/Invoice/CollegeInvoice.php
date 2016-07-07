@@ -140,4 +140,13 @@ class CollegeInvoice extends Model
             ->find($invoice_id);
         return $client->client_id;
     }
+
+    function getInvoicePayDetails($invoice_id)
+    {
+        $paid = CollegeInvoice::join('college_payments', 'college_payments.college_invoice_id', '=', 'college_invoices.college_invoice_id')
+            ->join('college_invoice_payments', 'college_payments.college_payment_id', '=', 'college_invoice_payments.ci_payment_id')
+            ->where('college_invoice_payments.college_invoice_id', $invoice_id)
+            ->sum('college_payments.amount');
+        return paid;
+    }
 }

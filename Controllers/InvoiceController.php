@@ -72,7 +72,7 @@ class InvoiceController extends BaseController
 
     function payments($invoice_id, $type = 1)
     {
-        $data['invoice_id'] = $invoice_id;
+        $data['invoice'] = $this->getInvoiceDetails($invoice_id, $type);
         $data['type'] = $type;
         /* For Navbar */
         $data['application'] = new \stdClass();
@@ -87,18 +87,37 @@ class InvoiceController extends BaseController
     {
         switch ($type) {
             case 1:
-                $client_id = $this->college_invoice->getClientId($invoice_id);
                 $application_id = CollegeInvoice::find($invoice_id)->course_application_id;
                 break;
             case 2:
-                $client_id = $this->student_invoice->getClientId($invoice_id);
                 $application_id = StudentInvoice::find($invoice_id)->application_id;
                 break;
             default:
-                $client_id = $this->subagent_invoice->getClientId($invoice_id);
                 $application_id = SubAgentInvoice::find($invoice_id)->course_application_id;
         }
         return $application_id;
+    }
+
+    function getInvoiceDetails($invoice_id, $type)
+    {
+        switch ($type) {
+            case 1:
+                $invoice = CollegeInvoice::select(['college_invoice_id as invoice_id', 'invoice_date', 'total_commission as total_amount', 'total_gst', 'final_total']) //, 'total_paid', 'status', 'outstanding_amount'
+                    ->find($invoice_id);
+                $invoice->formatted_id = format_id($invoice->college_invoice_id, 'CI');
+                break;
+            case 2:
+                $invoice = StudentInvoice::join('invoices', 'student_invoices.invoice_id', '=', 'invoices.invoice_id')
+                    ->select(['student_invoice_id as invoice_id', 'invoice_date', 'amount as total_amount', 'total_gst', 'final_total'])
+                    ->find($invoice_id);
+                $invoice->formatted_id = format_id($invoice->college_invoice_id, 'SI');
+                break;
+            default:
+                $invoice = SubAgentInvoice::find($invoice_id);
+                $invoice->formatted_id = format_id($invoice->college_invoice_id, 'SAI');
+        }
+        //dd($invoice->toArray());
+        return $invoice;
     }
 
 

@@ -44,11 +44,11 @@ class AgentController extends BaseController
      */
     function getData()
     {
-        $agents = Agent::leftJoin('companies', 'companies.company_id', '=', 'agents.company_id')
+        $agents = Agent::join('companies', 'companies.company_id', '=', 'agents.company_id')
             ->leftJoin('phones', 'phones.phone_id', '=', 'companies.phone_id')
-            ->leftJoin('superagent_institutes', 'agents.agent_id', '=', 'superagent_institutes.agents_id')
+            //->leftJoin('superagent_institutes', 'agents.agent_id', '=', 'superagent_institutes.agents_id')
             ->leftJoin('users', 'users.user_id', '=', 'agents.added_by')
-            ->select(['companies.name', 'companies.website', 'agents.description', 'agents.agent_id', 'agents.email', 'agents.added_by', 'agents.created_at', 'superagent_institutes.institute_id', 'phones.number', 'users.email as user_email']);
+            ->select(['companies.name', 'companies.website', 'agents.description', 'agents.agent_id', 'agents.email', 'agents.added_by', 'agents.created_at', 'phones.number', 'users.email as user_email']);
 
         $datatable = \Datatables::of($agents)
             ->addColumn('action', '<a data-toggle="tooltip" title="View Agent" class="btn btn-action-box" href ="{{ route( \'tenant.agents.show\', $agent_id) }}"><i class="fa fa-eye"></i></a> <a data-toggle="tooltip" title="Edit Agent" class="btn btn-action-box" href ="{{ route( \'tenant.agents.edit\', $agent_id) }}"><i class="fa fa-edit"></i></a> <a data-toggle="tooltip" title="Delete Agent" class="delete-user btn btn-action-box" href="{{ route( \'tenant.agents.destroy\', $agent_id) }}"><i class="fa fa-trash"></i></a>')

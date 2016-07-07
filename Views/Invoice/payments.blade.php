@@ -21,23 +21,23 @@
 
                     <strong><i class="fa fa-file-text-o margin-r-5"></i> Invoice Id</strong>
 
-                    <p class="text-muted">CI00012</p>
+                    <p class="text-muted">{{ $invoice->formatted_id }}</p>
 
                     <strong><i class="fa fa-file-text-o margin-r-5"></i> Invoice Date </strong>
 
-                    <p class="text-muted">12/08/2016</p>
+                    <p class="text-muted">{{ format_date($invoice->invoice_date) }}</p>
 
                     <strong><i class="fa fa-file-text-o margin-r-5"></i> Total Amount</strong>
 
-                    <p class="text-muted">$1000</p>
+                    <p class="text-muted">${{float_format($invoice->total_amount)}}</p>
 
                     <strong><i class="fa fa-file-text-o margin-r-5"></i> Total GST </strong>
 
-                    <p class="text-muted">$100</p>
+                    <p class="text-muted">${{float_format($invoice->total_gst)}}</p>
 
                     <strong><i class="fa fa-file-text-o margin-r-5"></i> Final Total </strong>
 
-                    <p class="text-muted">$1100</p>
+                    <p class="text-muted">${{float_format($invoice->final_total)}}</p>
 
                     <strong><i class="fa fa-file-text-o margin-r-5"></i> Total Paid </strong>
 
@@ -96,7 +96,7 @@
                 "info": true,
                 "autoWidth": true,
 
-                "ajax": appUrl + "/tenant/invoices/payments/" + <?php echo $invoice_id ?> + "/" + <?php echo $type ?> + "/data",
+                "ajax": appUrl + "/tenant/invoices/payments/" + <?php echo $invoice->invoice_id ?> + "/" + <?php echo $type ?> + "/data",
                 "columns": [
                     {data: 'payment_id', name: 'payment_id'},
                     {data: 'date_paid', name: 'date_paid'},
