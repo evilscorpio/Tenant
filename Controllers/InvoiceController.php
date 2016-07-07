@@ -2,10 +2,15 @@
 
 use App\Http\Requests;
 use App\Modules\Tenant\Models\Agent;
+use App\Modules\Tenant\Models\Application\CourseApplication;
 use App\Modules\Tenant\Models\Application\StudentApplicationPayment;
+use App\Modules\Tenant\Models\Client\Client;
 use App\Modules\Tenant\Models\Client\ClientPayment;
+use App\Modules\Tenant\Models\Invoice\CollegeInvoice;
 use App\Modules\Tenant\Models\Invoice\CollegeInvoicePayment;
 use App\Modules\Tenant\Models\Invoice\Invoice;
+use App\Modules\Tenant\Models\Invoice\StudentInvoice;
+use App\Modules\Tenant\Models\Invoice\SubAgentInvoice;
 use App\Modules\Tenant\Models\Payment\CollegePayment;
 use App\Modules\Tenant\Models\Payment\SubAgentApplicationPayment;
 use App\Modules\Tenant\Models\PaymentInvoiceBreakdown;
@@ -25,14 +30,18 @@ class InvoiceController extends BaseController
         'acn' => 'required',
     ];
 
-    function __construct(Invoice $invoice, Request $request, PaymentInvoiceBreakdown $payment_invoice, SubAgentApplicationPayment $subagent_payment, CollegeInvoicePayment $college_payment, StudentApplicationPayment $student_payment)
+    function __construct(Invoice $invoice, Request $request, PaymentInvoiceBreakdown $payment_invoice, SubAgentApplicationPayment $subagent_payment, CollegeInvoice $college_invoice, StudentInvoice $student_invoice, SubAgentInvoice $subagent_invoice, CollegeInvoicePayment $college_payment, StudentApplicationPayment $student_payment, Client $client)
     {
         $this->invoice = $invoice;
+        $this->client = $client;
         $this->request = $request;
         $this->payment_invoice = $payment_invoice;
         $this->subagent_payment = $subagent_payment;
         $this->college_payment = $college_payment;
         $this->student_payment = $student_payment;
+        $this->college_invoice = $college_invoice;
+        $this->student_invoice = $student_invoice;
+        $this->subagent_invoice = $subagent_invoice;
         parent::__construct();
     }
 
@@ -65,7 +74,31 @@ class InvoiceController extends BaseController
     {
         $data['invoice_id'] = $invoice_id;
         $data['type'] = $type;
+        /* For Navbar */
+        $data['application'] = new \stdClass();
+        $data['application']->application_id = $app_id = $this->getApplicationId($invoice_id, $type);
+        $client_id = CourseApplication::find($app_id)->client_id;
+        $data['client'] = $this->client->getDetails($client_id);
+
         return view("Tenant::Invoice/payments", $data);
+    }
+
+    function getApplicationId($invoice_id, $type)
+    {
+        switch ($type) {
+            case 1:
+                $client_id = $this->college_invoice->getClientId($invoice_id);
+                $application_id = CollegeInvoice::find($invoice_id)->course_application_id;
+                break;
+            case 2:
+                $client_id = $this->student_invoice->getClientId($invoice_id);
+                $application_id = StudentInvoice::find($invoice_id)->application_id;
+                break;
+            default:
+                $client_id = $this->subagent_invoice->getClientId($invoice_id);
+                $application_id = SubAgentInvoice::find($invoice_id)->course_application_id;
+        }
+        return $application_id;
     }
 
 

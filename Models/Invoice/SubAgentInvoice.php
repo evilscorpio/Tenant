@@ -105,5 +105,13 @@ class SubAgentInvoice extends Model
             ->sum('client_payments.amount');
         return $payments;
     }
+
+    function getClientId($invoice_id)
+    {
+        $client = SubAgentInvoice::join('course_application', 'subagent_invoices.application_id', '=', 'course_application.course_application_id')
+            ->select('client_id', 'course_application_id')
+            ->find($invoice_id);
+        return $client->client_id;
+    }
 }
 

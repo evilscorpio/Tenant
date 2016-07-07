@@ -6,6 +6,7 @@
     <li>View</li>
 @stop
 @section('content')
+    @include('Tenant::Client/Application/navbar')
     
 <div>
 

@@ -10,26 +10,27 @@
             </div>
             <div class="col-sm-12 col-md-10">
                 <div class="row">
-
                     <h4>{{$client->first_name}} {{$client->middle_name}} <b>{{$client->last_name}}</b></h4>
-
-                    <p>University of Western Sydney</p>
-
-                    <p>
-                        Graduate Diploma of Professional Accounting
-                    </p>
+                    <p><i class="fa fa-phone"></i> {{$client->number}} | <i class="fa fa-envelope"></i> {{$client->email}} </p>
+                    <address>
+                        {{ $client->street }},
+                        {{ $client->suburb }}<br/>
+                        {{ $client->state }},
+                        {{ $client->postcode }}<br/>
+                        <strong>{{ get_country($client->country_id) }}</strong>
+                    </address>
                 </div>
                 <div class="container-fluid">
                     <div id="navbar" class="navbar-collapse collapse">
                         <ul class="nav navbar-nav">
-                            <li><a href={{url("tenant/clients/$application->client_id")}}>Dashboard</a></li>
-                            <li><a href={{url("tenant/clients/$application->client_id/personal_details")}}>Personal
+                            <li><a href={{url("tenant/clients/$client->client_id")}}>Dashboard</a></li>
+                            <li><a href={{url("tenant/clients/$client->client_id/personal_details")}}>Personal
                                     Details</a></li>
-                            <li class="active"><a href={{url("tenant/clients/$application->client_id/applications")}}>College
+                            <li class="active"><a href={{url("tenant/clients/$client->client_id/applications")}}>College
                                     Application</a></li>
-                            <li><a href={{url("tenant/clients/$application->client_id/accounts")}}>Accounts</a></li>
-                            <li><a href={{url("tenant/clients/$application->client_id/document")}}>Documents</a></li>
-                            <li><a href={{url("tenant/clients/$application->client_id/notes")}}>Notes</a></li>
+                            <li><a href={{url("tenant/clients/$client->client_id/accounts")}}>Accounts</a></li>
+                            <li><a href={{url("tenant/clients/$client->client_id/document")}}>Documents</a></li>
+                            <li><a href={{url("tenant/clients/$client->client_id/notes")}}>Notes</a></li>
                         </ul>
                     </div>
                 </div>
@@ -55,7 +56,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 {{--<a class="navbar-brand visible-xs" href="#">AMS</a>--}}
-                <a class="navbar-brand menu-toggle" href="#"><i class="fa fa-user"></i> Show Client Menu</a>
+                <a class="navbar-brand menu-toggle" href=""><i class="fa fa-user"></i> Show Client Menu</a>
             </div>
 
             <div id="navbar" class="navbar-collapse collapse">
@@ -131,7 +132,8 @@
         $(".client-navbar, .menu-opener-inner").slideToggle();
     });*/
 
-    $(".menu-toggle").click(function () {
+    $(".menu-toggle").click(function (e) {
+        e.preventDefault();
         $(".client-navbar").slideToggle();
     });
 </script>

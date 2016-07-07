@@ -188,7 +188,7 @@ class Client extends Model
             ->leftJoin('phones', 'phones.phone_id', '=', 'person_phones.phone_id')
             ->leftJoin('users', 'users.user_id', '=', 'clients.user_id')
             ->where('clients.client_id', $client_id) //and user for email?
-            ->first();
+            ->first(); //dd($client->toArray());
         return $client;
     }
 }

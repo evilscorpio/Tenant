@@ -103,4 +103,12 @@ class StudentInvoice extends Model
         }
         return $invoice_list;
     }
+
+    function getClientId ($invoice_id)
+    {
+        $client = StudentInvoice::join('course_application', 'student_invoices.application_id', '=', 'course_application.course_application_id')
+            ->select('client_id')
+            ->find($invoice_id);
+        return $client->client_id;
+    }
 }
