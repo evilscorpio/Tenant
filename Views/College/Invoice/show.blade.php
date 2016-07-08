@@ -2,7 +2,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Sample Invoice</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 </head>
 
 <body>
@@ -10,9 +11,7 @@
     <div class="row">
         <div class="col-xs-6">
             <h1>
-
                 <img src="http://theexcursionnepal.com/assets/images/logo.png" width="400px">
-
             </h1>
         </div>
         <div class="col-xs-6 text-right">
@@ -28,8 +27,12 @@
                 <div class="panel-body">
                     <p>{{ $agency->abn }}
 
-                    <h3><small>{{ $agency->street }}</small></h3>
-                    <h3><small>{{ $agency->suburb }} {{ $agency->state }} {{ $agency->postcode }}</small></h3>
+                    <h3>
+                        <small>{{ $agency->street }}</small>
+                    </h3>
+                    <h3>
+                        <small>{{ $agency->suburb }} {{ $agency->state }} {{ $agency->postcode }}</small>
+                    </h3>
                     </p>
                 </div>
             </div>
@@ -42,8 +45,13 @@
                 <div class="panel-body">
                     <p>
                         Thom Zheng
-                    <h3><small>Invoice #{{ $invoice->college_invoice_id }}</small></h3>
-                    <h3><small>Date {{ format_date($invoice->invoice_date) }}</small></h3>
+
+                    <h3>
+                        <small>Invoice #{{ $invoice->college_invoice_id }}</small>
+                    </h3>
+                    <h3>
+                        <small>Date {{ format_date($invoice->invoice_date) }}</small>
+                    </h3>
                     </p>
                 </div>
             </div>
@@ -93,8 +101,10 @@
             <h4>
                 Sub Total : <br>
                 GST : <br>
+
                 <h3>Total Amount :</h3>
                 Less Paid Amount : <br>
+
                 <h3>Amount Due :</h3> <br>
             </h4>
             </p>
@@ -104,8 +114,10 @@
             <h4>
                 ${{ $invoice->total_commission }} <br>
                 ${{ $invoice->total_gst }} <br>
+
                 <h3>${{ $invoice->final_total }} </h3>
                 $1000.00<br>
+
                 <h3>$345</h3><br>
             </h4>
             </p>
@@ -118,8 +130,9 @@
                     <h4>Bank details</h4>
                 </div>
                 <div class="panel-body">
-                    <p>Account Name</p>
-                    <p>BSB : 063-043 | Account Number : 1064 4210</p>
+                    <p>{{ $bank->account_name }}</p>
+
+                    <p>BSB : 063-043 | Account Number : {{ $bank->number }}</p>
 
                     <p>Bank Name</p>
                 </div>
@@ -132,8 +145,10 @@
                         <h4>Contact Details</h4>
                     </div>
                     <div class="panel-body">
-                        <p>Ph : {{ $agency->phone_id }} </p>
-                        <p>Email : {{ $agency->email_id }} </p>
+                        <p>Ph : {{ $agency->number }} </p>
+
+                        <p>Email : {{ $agency->email }} </p>
+
                         <p>Website : {{ $agency->website }}</p>
 
                     </div>

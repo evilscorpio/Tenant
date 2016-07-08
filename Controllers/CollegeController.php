@@ -1,6 +1,7 @@
 <?php namespace App\Modules\Tenant\Controllers;
 
 use App\Http\Requests;
+use App\Models\Tenant\Setting;
 use App\Modules\Tenant\Models\Agent;
 use App\Modules\Tenant\Models\Client\Client;
 use App\Modules\Tenant\Models\Application\CourseApplication;
@@ -22,14 +23,17 @@ class CollegeController extends BaseController
         'date_paid' => 'required',
         'payment_method' => 'required|min:2|max:45'
     ];
-    function __construct(Client $client, Request $request, CourseApplication $application, CollegePayment $payment, CollegeInvoice $invoice,Agency $agency)
+
+    function __construct(Client $client, Request $request, CourseApplication $application, CollegePayment $payment, CollegeInvoice $invoice, Agency $agency, Agent $agent, Setting $setting)
     {
         $this->client = $client;
         $this->request = $request;
         $this->application = $application;
         $this->invoice = $invoice;
         $this->payment = $payment;
-        $this->agency=$agency;
+        $this->agency = $agency;
+        $this->agent = $agent;
+        $this->setting = $setting;
         parent::__construct();
     }
 
@@ -86,7 +90,6 @@ class CollegeController extends BaseController
     }
 
 
-
     public function storeInvoice($application_id)
     {
         $rules = [
@@ -126,10 +129,10 @@ class CollegeController extends BaseController
                     <li><a href="http://localhost/condat/tenant/contact/2">Delete</a></li>
                   </ul>
                 </div>')
-            ->addColumn('invoice_id',  function($data) {
-                if((empty($data->college_invoice_id) || $data->college_invoice_id == 0) && $data->payment_type == 'College to Agent')
-                    return 'Uninvoiced <a class="btn btn-success btn-xs" data-toggle="modal" data-target="#condat-modal" data-url="'.url('tenant/college/payment/'.$data->college_payment_id.'/'.$data->course_application_id.'/assign').'"><i class="glyphicon glyphicon-plus-sign"></i> Assign to Invoice</a>';
-                elseif($data->payment_type == 'College to Agent')
+            ->addColumn('invoice_id', function ($data) {
+                if ((empty($data->college_invoice_id) || $data->college_invoice_id == 0) && $data->payment_type == 'College to Agent')
+                    return 'Uninvoiced <a class="btn btn-success btn-xs" data-toggle="modal" data-target="#condat-modal" data-url="' . url('tenant/college/payment/' . $data->college_payment_id . '/' . $data->course_application_id . '/assign') . '"><i class="glyphicon glyphicon-plus-sign"></i> Assign to Invoice</a>';
+                elseif ($data->payment_type == 'College to Agent')
                     return format_id($data->college_invoice_id, 'CI');
                 else
                     return 'Cannot Be Assigned';
@@ -165,8 +168,8 @@ class CollegeController extends BaseController
                     <span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <ul role="menu" class="dropdown-menu">
-                    <li><a href="'.route("tenant.invoice.payments", [$data->college_invoice_id, 1]).'">View payments</a></li>
-                    <li><a href="'.route('tenant.college.invoice', $data->college_invoice_id).'">View Invoice</a></li>
+                    <li><a href="' . route("tenant.invoice.payments", [$data->college_invoice_id, 1]) . '">View payments</a></li>
+                    <li><a href="' . route('tenant.college.invoice', $data->college_invoice_id) . '">View Invoice</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Edit</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Delete</a></li>
                   </ul>
@@ -174,12 +177,12 @@ class CollegeController extends BaseController
             })
             ->addColumn('status', function ($data) {
                 $outstanding = $this->invoice->getOutstandingAmount($data->college_invoice_id);
-                return ($outstanding != 0)? 'Outstanding' : 'Paid';
+                return ($outstanding != 0) ? 'Outstanding' : 'Paid';
             })
             ->addColumn('outstanding_amount', function ($data) {
                 $outstanding = $this->invoice->getOutstandingAmount($data->college_invoice_id);
-                if($outstanding != 0)
-                    return $outstanding.' <a class="btn btn-success btn-xs" data-toggle="modal" data-target="#condat-modal" data-url="' . url('tenant/invoices/' . $data->college_invoice_id . '/payment/add/1') . '"><i class="glyphicon glyphicon-plus-sign"></i> Add Payment</a>';
+                if ($outstanding != 0)
+                    return $outstanding . ' <a class="btn btn-success btn-xs" data-toggle="modal" data-target="#condat-modal" data-url="' . url('tenant/invoices/' . $data->college_invoice_id . '/payment/add/1') . '"><i class="glyphicon glyphicon-plus-sign"></i> Add Payment</a>';
                 else
                     return 0;
             })
@@ -194,7 +197,8 @@ class CollegeController extends BaseController
 
     public function show($invoice_id)
     {
-        $data['agency'] = $this->agency->getAgencyDetails('33');
+        $data['agency'] = $this->agent->getAgentDetails();
+        $data['bank'] = $this->setting->getBankDetails(); dd($data['bank']);
         $data['invoice'] = $this->invoice->getDetails($invoice_id); //dd($data['invoice']->toArray());
         return view("Tenant::College/Invoice/show", $data);
     }

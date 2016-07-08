@@ -250,4 +250,8 @@ Route::group(array('prefix' => 'tenant', 'module' => 'Tenant', 'middleware' => '
     Route::get('settings/company', ['as' => 'tenant.company.edit', 'uses' => 'SettingController@company']);
     Route::post('settings/company/{agent_id}/store', ['as' => 'tenant.company.store', 'uses' => 'SettingController@updateCompany']);
 
+    /* Routes for Bank Module */
+    Route::get('settings/bank', ['as' => 'tenant.bank.edit', 'uses' => 'SettingController@bank']);
+    Route::post('settings/bank/store', ['as' => 'tenant.bank.store', 'uses' => 'SettingController@updateBank']);
+
 });
