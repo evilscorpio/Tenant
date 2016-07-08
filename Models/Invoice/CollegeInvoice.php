@@ -152,10 +152,10 @@ class CollegeInvoice extends Model
     //remaining
     function getOutstandingAmount($invoice_id)
     {
-        $paid = CollegePayment::join('college_invoice_payments', 'college_payments.college_payment_id', '=', 'college_invoice_payments.ci_payment_id')
-            ->where('college_invoice_payments.college_invoice_id', $invoice_id)
-            ->sum('college_payments.amount');
-        return $paid;
+        $paid = $this->getPaidAmount($invoice_id);
+        $final_total = CollegeInvoice::find($invoice_id)->final_total;
+        $outstanding = ($final_total - $paid > 0)? $final_total - $paid : 0;
+        return $outstanding;
     }
 
     function getPayDetails($invoice_id)
