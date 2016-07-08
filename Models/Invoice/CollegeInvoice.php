@@ -85,7 +85,7 @@ class CollegeInvoice extends Model
     {
         $college_invoice = CollegeInvoice::leftJoin('ci_tuition_commissions', 'ci_tuition_commissions.college_invoice_id', '=', 'college_invoices.college_invoice_id')
             ->leftJoin('ci_other_commissions', 'ci_other_commissions.college_invoice_id', '=', 'college_invoices.college_invoice_id')
-            ->select('college_invoices.*', 'ci_tuition_commissions.*', 'ci_other_commissions.amount', 'ci_other_commissions.gst', 'ci_other_commissions.description as other_description')
+            ->select('college_invoices.*', 'college_invoices.college_invoice_id as invoice_id', 'ci_tuition_commissions.*', 'ci_other_commissions.amount', 'ci_other_commissions.gst', 'ci_other_commissions.description as other_description')
             ->find($invoice_id);
         return $college_invoice;
     }

@@ -44,13 +44,12 @@
                 </div>
                 <div class="panel-body">
                     <p>
-                        Thom Zheng
-
+                        {{ $invoice_to }}
                     <h3>
-                        <small>Invoice #{{ $invoice->college_invoice_id }}</small>
+                        <small>Invoice #{{ format_id($invoice->invoice_id, 'CI') }}</small>
                     </h3>
                     <h3>
-                        <small>Date {{ format_date($invoice->invoice_date) }}</small>
+                        <small>Date: {{ format_date($invoice->invoice_date) }}</small>
                     </h3>
                     </p>
                 </div>
@@ -130,11 +129,11 @@
                     <h4>Bank details</h4>
                 </div>
                 <div class="panel-body">
-                    <p>{{ $bank->account_name }}</p>
+                    <p>{{ $bank['account_name'] }}</p>
 
-                    <p>BSB : 063-043 | Account Number : {{ $bank->number }}</p>
+                    <p><strong>BSB</strong> : {{ $bank['bsb'] }} | <strong>Account Number</strong> : {{ $bank['number'] }}</p>
 
-                    <p>Bank Name</p>
+                    <p>{{ $bank['name'] }}</p>
                 </div>
             </div>
         </div>
@@ -145,11 +144,11 @@
                         <h4>Contact Details</h4>
                     </div>
                     <div class="panel-body">
-                        <p>Ph : {{ $agency->number }} </p>
+                        <p><strong>Ph</strong> : {{ $agency->number }} </p>
 
-                        <p>Email : {{ $agency->email }} </p>
+                        <p><strong>Email</strong> : {{ $agency->email }} </p>
 
-                        <p>Website : {{ $agency->website }}</p>
+                        <p><strong>Website</strong> : {{ $agency->website }}</p>
 
                     </div>
                 </div>

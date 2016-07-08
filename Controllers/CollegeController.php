@@ -198,8 +198,13 @@ class CollegeController extends BaseController
     public function show($invoice_id)
     {
         $data['agency'] = $this->agent->getAgentDetails();
-        $data['bank'] = $this->setting->getBankDetails(); dd($data['bank']);
-        $data['invoice'] = $this->invoice->getDetails($invoice_id); //dd($data['invoice']->toArray());
+        $data['bank'] = $this->setting->getBankDetails();
+        $data['invoice'] = $invoice = $this->invoice->getDetails($invoice_id);
+        $super_agent = CourseApplication::find($invoice->course_application_id)->super_agent_id;
+        if($super_agent != null && $super_agent != 0)
+            $data['invoice_to'] = get_agent_name($super_agent);
+        else
+            $data['invoice_to'] = 'Thom Zheng';
         return view("Tenant::College/Invoice/show", $data);
     }
 
