@@ -41,17 +41,15 @@
 
                     <strong><i class="fa fa-file-text-o margin-r-5"></i> Total Paid </strong>
 
-                    <p class="text-muted">$900</p>
+                    <p class="text-muted">${{float_format($invoice->paid)}}</p>
 
                     <strong><i class="fa fa-file-text-o margin-r-5"></i> Status </strong>
 
-                    <p class="text-muted">Pending</p>
+                    <p class="text-muted">{{ $invoice->status }}</p>
 
-                    <strong><i class="fa fa-file-text-o margin-r-5"></i> Oustanding Amount </strong>
+                    <strong><i class="fa fa-file-text-o margin-r-5"></i> Outstanding Amount </strong>
 
-                    <p class="text-muted">$200</p>
-
-
+                    <p class="text-muted">${{float_format($invoice->outstanding)}}</p>
 
                 </div>
             </div>
