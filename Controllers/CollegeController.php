@@ -199,7 +199,7 @@ class CollegeController extends BaseController
     {
         $data['agency'] = $this->agent->getAgentDetails();
         $data['bank'] = $this->setting->getBankDetails();
-        $data['invoice'] = $invoice = $this->invoice->getDetails($invoice_id);
+        $data['invoice'] = $invoice = $this->invoice->getDetails($invoice_id); //dd($data['invoice']->toArray());
         $super_agent = CourseApplication::find($invoice->course_application_id)->super_agent_id;
         if($super_agent != null && $super_agent != 0)
             $data['invoice_to'] = get_agent_name($super_agent);
