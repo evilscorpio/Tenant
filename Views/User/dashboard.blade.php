@@ -10,85 +10,12 @@
 <div class="container">
     <section class="content-header">
         <h1>Dashboard</h1>
-        <ol class="breadcrumb">
-                            <li><a href="http://expertfinance.thinkingnepal.com" data-push="true"><i class="fa fa-dashboard"></i> Dashboard </a></li>
-                    </ol>
     </section>
 
     <section class="content clearfix">
-    	<div class="row">
-	        <div class="col-md-2">
-	            <div class="box box-primary">
-	                <div class="box-header ui-sortable-handle">
-	                    <h3 class="box-title">New Application</h3>
-	                </div>
-	                <div class="box-body">
-		                12 
-		            </div>
-	            </div>
-	        </div>
-
-	        <div class="col-md-2">
-	            <div class="box box-primary">
-	                <div class="box-header ui-sortable-handle">
-	                    <h3 class="box-title">Offer Letter Processing</h3>
-	                </div>
-	                <div class="box-body">
-		                12 
-		            </div>
-	            </div>
-	        </div>
-
-	        <div class="col-md-2">
-	            <div class="box box-primary">
-	                <div class="box-header ui-sortable-handle">
-	                    <h3 class="box-title">Offer Letter Received</h3>
-	                </div>
-	                <div class="box-body">
-		                12 
-		            </div>
-	            </div>
-	        </div>
-
-	        <div class="col-md-2">
-	            <div class="box box-primary">
-	                <div class="box-header ui-sortable-handle">
-	                    <h3 class="box-title">Coe Processing</h3>
-	                </div>
-	                <div class="box-body">
-		                12 
-		            </div>
-	            </div>
-	        </div>
-
-	        <div class="col-md-2">
-	            <div class="box box-primary">
-	                <div class="box-header ui-sortable-handle">
-	                    <h3 class="box-title">Coe Received</h3>
-	                </div>
-	                <div class="box-body">
-		                12 
-		            </div>
-	            </div>
-	        </div>
-
-
-	        <div class="col-md-2">
-	            <div class="box box-primary">
-	                <div class="box-header ui-sortable-handle">
-	                    <h3 class="box-title">Course Completed</h3>
-	                </div>
-	                <div class="box-body">
-		                12 
-		            </div>
-	            </div>
-	        </div>
-
-
-
-	    </div>
-    	<div class="row">
-	        <div class="col-md-12">
+    	<div class="col-md-8">
+    		<div class="row">
+	        
 	            <div class="box box-primary">
 	                <div class="box-header ui-sortable-handle">
 	                    <h3 class="box-title">Active Clients</h3>
@@ -101,33 +28,70 @@
 		                <table id="clients" class="table table-bordered table-striped dataTable">
 		                    <thead>
 		                    <tr>
-		                        <th>Client ID</th>
+		                       
 		                        <th>Client Name</th>
 		                        <th>Phone No</th>
 		                        <th>Email</th>
-		                        <th>Added By</th>
+		                        
 		                        <th>Actions</th>
 
 		                    </tr>
 		                    </thead>
 		                    <tr>
-		                        <td>C1001</td>
+		                        
 		                        <td>Jenish Maskey</td>
 		                        <td>0430807730</td>
 		                        <td>jenisjack_1@hotmail.com</td>
-		                        <td>Krita Maharjan</td>
-		                        <td>Actions</td>
-
+		                        
+		                        <td>
+		                        	<div class="box-tools pull-right">
+				                        <a class="btn btn-primary" href=""><i class="fa fa-eye"></i></a>
+				                    </div>
+				                    <div class="box-tools pull-right">
+				                        <a class="btn btn-primary" href=""><i class="fa fa-remove"></i></a>
+				                    </div>
+	                			</td>
 		                    </tr>
-
 		                </table>
 		            </div>
 	            </div>
 	        </div>
 
-	    </div>
-        <div class="row">
-        	<div class="col-md-8">
+	        <div class="row">
+		            <div class="box box-primary">
+		                <div class="box-header ui-sortable-handle">
+		                    <h3 class="box-title">Application List</h3>
+		                </div>
+		                <div class="box-body">
+			                <div id="chart">
+						      <ul id="numbers">
+						        <li><span>&nbsp;</span></li>
+						        <li><span>28</span></li>
+						        <li><span>24</span></li>
+						        <li><span>20</span></li>
+						        <li><span>16</span></li>
+						        <li><span>12</span></li>
+						        <li><span>8</span></li>
+						        <li><span>4</span></li>
+						        <li><span>0</span></li>
+						      </ul>
+						      <ul id="bars">
+						        <li><div data-applications="26" class="bar"></div><span>Enquiry</span></li>
+						        <li><div data-applications="25" class="bar"></div><span>Offer Processing</span></li>
+						        <li><div data-applications="30" class="bar"></div><span>Offer Received</span></li>
+						        <li><div data-applications="16" class="bar"></div><span>Coe Processing</span></li>
+						        <li><div data-applications="0" class="bar"></div><span>Coe Received</span></li>
+						        <li><div data-applications="12" class="bar"></div><span>Course Started</span></li>
+						        <li><div data-applications="2" class="bar"></div><span>Course Completed</span></li>
+						      </ul>
+
+						    </div>
+			            </div>
+			            <br>
+		            </div>    
+		    </div>
+
+		    <div class="row">        	
 	            <div class="box box-primary">
 				    <div class="box-header ui-sortable-handle">
 				        <i class="ion ion-clipboard"></i>
@@ -194,6 +158,9 @@
 				    </div>
 				</div>
 			</div>
+		</div>
+
+        	
 			<div class="col-md-4">
 				<div class="box box-primary">
 	                <div class="box-header ui-sortable-handle">
@@ -220,12 +187,28 @@
 		            </div>
 	            </div>
 			</div>
-		</div>
 		
-
-		</div>
-	</section>
+	</section>		
 </div>
+
+
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('/local/public/css/chart.css') }}" />
+        
+    <script src="{{ URL::asset('/local/public/js/chart.js') }}"></script>
+     <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36251023-1']);
+  _gaq.push(['_setDomainName', 'jqueryscript.net']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
 
 
 @stop
