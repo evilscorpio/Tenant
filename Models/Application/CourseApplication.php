@@ -115,4 +115,13 @@ class CourseApplication extends Model
     {
 
     }
+
+    function getClientName($application_id)
+    {
+        $client = CourseApplication::join('clients', 'clients.client_id', '=', 'course_application.client_id')
+        ->leftJoin('persons', 'persons.person_id', '=', 'clients.person_id')
+        ->select(DB::raw('CONCAT(first_name, " ", last_name) AS full_name'))
+        ->find($application_id);
+        return $client->full_name;
+    }
 }

@@ -79,17 +79,16 @@
         </thead>
         <tbody>
         <tr>
-            <td>Jenish Maskey</td>
+            <td>{{ $client_name }}</td>
             <td>{{ $invoice->description }}</td>
-            <td class="text-right">${{ $invoice->commission_amount }}</td>
-            <td class="text-right">${{ $invoice->gst }}</td>
+            <td class="text-right">${{ float_format($invoice->commission_amount) }}</td>
+            <td class="text-right">${{ float_format($invoice->gst) }}</td>
         </tr>
         <tr>
-            <td>Template Design</td>
+            <td>{{ $client_name }}</td>
             <td>{{ $invoice->other_description }}</td>
-
-            <td class="text-right">${{ $invoice->amount }}</td>
-            <td class="text-right">${{ $invoice->gst }}</td>
+            <td class="text-right">${{ float_format($invoice->incentive) }}</td>
+            <td class="text-right">${{ float_format($invoice->incentive_gst) }}</td>
         </tr>
 
         </tbody>
@@ -111,13 +110,13 @@
         <div class="col-xs-2">
             <p>
             <h4>
-                ${{ $invoice->total_commission }} <br>
-                ${{ $invoice->total_gst }} <br>
+                ${{ float_format($invoice->total_commission) }} <br>
+                ${{ float_format($invoice->total_gst) }} <br>
 
-                <h3>${{ $invoice->final_total }} </h3>
-                $1000.00<br>
+                <h3>${{ float_format($invoice->final_total) }} </h3>
+                ${{ float_format($pay_details->paid) }}<br>
 
-                <h3>$345</h3><br>
+                <h3>${{ float_format($pay_details->outstandingAmount) }}</h3><br>
             </h4>
             </p>
         </div>
