@@ -7,8 +7,6 @@
 @stop
 @section('content')
 
-    @include('Tenant::Client/Application/navbar')
-
     <div class="col-xs-12">
         <div class="box box-primary">
             <div class="box-header with-border">
