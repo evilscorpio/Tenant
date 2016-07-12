@@ -19,9 +19,9 @@
         </div>
         <div class="col-sm-6">
             <div class="form-group @if($errors->has('installment_no')) {{'has-error'}} @endif">
-                {!!Form::label('installment_no', 'Installment Number', array('class' => 'col-sm-4 control-label')) !!}
+                {!!Form::label('installment_no *', 'Installment Number', array('class' => 'col-sm-4 control-label')) !!}
                 <div class="col-sm-8">
-                    {!!Form::text('installment_no', null, array('class' => 'form-control', 'id'=>'installment_no'))!!}
+                    {!!Form::text('installment_no', null, array('class' => 'form-control', 'id'=>'installment_no','placeholder'=>'T1'))!!}
                     @if($errors->has('installment_no'))
                         {!! $errors->first('installment_no', '<label class="control-label"
                                                                 for="inputError">:message</label>') !!}
@@ -212,7 +212,7 @@
                     <div class="col-sm-8">
                         <div class="input-group">
                             <span class="input-group-addon">$</span>
-                            {!!Form::text('incentive_gst', null, array('class' => 'form-control', 'id'=>'incentive_gst','placeholder'=>'10% of Incentive ','readonly' => 'true'))!!}
+                            {!!Form::text('incentive_gst', null, array('class' => 'form-control', 'id'=>'incentive_gst','placeholder'=>'10% of Incentive','readonly' => 'true'))!!}
                             <span class="input-group-addon">
                                {{ Form::checkbox('gst_checker_incentive', 'incentive', true,array('id'=>'gst_checker_incentive')) }} GST
                             </span>
@@ -415,8 +415,8 @@
 
         function gst_change(){
             var commissionPercent = parseFloat($('#commission_percent').val());
-            var subTotal = parseFloat($('#sub_total').val());
-            var commissionAmount = parseFloat(commissionPercent / 100 * subTotal);
+            var tuition_fee = parseFloat($('#tuition_fee').val());
+            var commissionAmount = parseFloat(commissionPercent / 100 * tuition_fee);
             var tuition_fee_gst=parseFloat($('#tuition_fee_gst').val());
 
 
@@ -437,8 +437,8 @@
 
         function reset_value(){
             var commissionPercent = parseFloat($('#commission_percent').val());
-            var subTotal = parseFloat($('#sub_total').val());
-            var commissionAmount = parseFloat(commissionPercent / 100 * subTotal);
+            var tuition_fee = parseFloat($('#tuition_fee').val());
+            var commissionAmount = parseFloat(commissionPercent / 100 * tuition_fee);
             $('#commission_amount').val(commissionAmount.toFixed(2));
 
             if($('#gst_checker_tuition_fee').is(":checked")) // "this" refers to the element that fired the event
