@@ -7,6 +7,7 @@ use App\Modules\Tenant\Models\Application\CourseApplication;
 use App\Modules\Tenant\Models\Invoice\SubAgentInvoice;
 use Flash;
 use DB;
+use Carbon;
 
 use Illuminate\Http\Request;
 
@@ -144,6 +145,47 @@ class SubAgentController extends BaseController
         $invoices = SubAgentInvoice::join('invoices', 'subagent_invoices.invoice_id', '=', 'invoices.invoice_id')
             ->select(['invoices.*', 'subagent_invoices.subagent_invoice_id'])
             ->where('subagent_invoices.course_application_id', $application_id)
+            ->orderBy('created_at', 'desc');
+        $datatable = \Datatables::of($invoices)
+            ->addColumn('action', function ($data) {
+                return '<div class="btn-group">
+                  <button class="btn btn-primary" type="button">Action</button>
+                  <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle" type="button">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                  </button>
+                  <ul role="menu" class="dropdown-menu">
+                    <li><a href="'.route("tenant.invoice.payments", [$data->invoice_id, 3]).'">View Payments</a></li>
+                    <li><a href="http://localhost/condat/tenant/contact/2">View</a></li>
+                    <li><a href="http://localhost/condat/tenant/contact/2">Edit</a></li>
+                    <li><a href="http://localhost/condat/tenant/contact/2">Delete</a></li>
+                  </ul>
+                </div>';
+            })
+            ->addColumn('status', 'Outstanding')
+            ->addColumn('outstanding_amount', function ($data) {
+                return '5000 <a class="btn btn-success btn-xs" data-toggle="modal" data-target="#condat-modal" data-url="'.url('tenant/invoices/'.$data->invoice_id.'/payment/add/3').'"><i class="glyphicon glyphicon-plus-sign"></i> Add Payment</a>';
+            })
+            ->editColumn('invoice_date', function ($data) {
+                return format_date($data->invoice_date);
+            })
+            ->editColumn('invoice_id', function ($data) {
+                return format_id($data->invoice_id, 'I');
+            });
+        return $datatable->make(true);
+    }
+
+    /**
+     * Get all the invoices through ajax request.
+     *
+     * @return JSON response
+     */
+    function getFutureData($application_id)
+    {
+        $invoices = SubAgentInvoice::join('invoices', 'subagent_invoices.invoice_id', '=', 'invoices.invoice_id')
+            ->select(['invoices.*', 'subagent_invoices.subagent_invoice_id'])
+            ->where('subagent_invoices.course_application_id', $application_id)
+            ->where('invoice_date', '>=', Carbon\Carbon::now())
             ->orderBy('created_at', 'desc');
         $datatable = \Datatables::of($invoices)
             ->addColumn('action', function ($data) {

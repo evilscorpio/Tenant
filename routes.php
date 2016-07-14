@@ -157,6 +157,7 @@ Route::group(array('prefix' => 'tenant', 'module' => 'Tenant', 'middleware' => '
     Route::get('subagents/{application_id}/invoice', ['as' => 'application.subagents.invoice', 'uses' => 'SubAgentController@createInvoice']);
     Route::post('subagents/{application_id}/storeInvoice', ['as' => 'application.subagents.storeInvoice', 'uses' => 'SubAgentController@storeInvoice']);
     Route::get('subagents/invoices/{client_id}/data', 'SubAgentController@getInvoicesData');
+    Route::get('subagents/future/{client_id}/data', 'SubAgentController@getFutureData');
 
     /* Assign payments to invoices */
     Route::get('payment/{payment_id}/{application_id}/assign', ['as' => 'tenant.subagent.payment.assign', 'uses' => 'SubAgentController@assignInvoice']);

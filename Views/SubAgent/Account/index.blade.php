@@ -67,28 +67,16 @@
                 </button>
             </div>
             <div class="box-body">
-                <table id="clients" class="table table-bordered table-striped dataTable">
+                <table id="future" class="table table-bordered table-striped dataTable">
                     <thead>
                     <tr>
                         <th>Invoice ID</th>
-                        <th>Future Invoice Date</th>
+                        <th>Invoice Date</th>
                         <th>Description</th>
                         <th>Invoice Amount</th>
                         <th>Status</th>
                         <th>Outstanding Amount</th>
                         <th></th>
-
-                    </tr>
-                    <tr>
-                        <td>I80001</td>
-                        <td>12/06/2016</td>
-
-                        <td>College fee</td>
-                        <td>2000</td>
-                        <td>outstanding</td>
-                        <td>5000 /view paymens)</td>
-                        <td>Add payment / view / edit / delete</td>
-
                     </tr>
                     </thead>
                 </table>
@@ -165,6 +153,29 @@
                 "autoWidth": true,
 
                 "ajax": appUrl + "/tenant/subagents/invoices/" + <?php echo $application->application_id ?> +"/data",
+                "columns": [
+                    {data: 'invoice_id', name: 'invoice_id'},
+                    {data: 'invoice_date', name: 'invoice_date'},
+                    {data: 'description', name: 'description', orderable: false},
+                    {data: 'invoice_amount', name: 'invoice_amount'},
+                    {data: 'status', name: 'status'},
+                    {data: 'outstanding_amount', name: 'outstanding_amount'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false}
+                ]
+            });
+
+            fTable = $('#future').DataTable({
+                "processing": true,
+                "serverSide": true,
+
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": true,
+
+                "ajax": appUrl + "/tenant/subagents/future/" + <?php echo $application->application_id ?> +"/data",
                 "columns": [
                     {data: 'invoice_id', name: 'invoice_id'},
                     {data: 'invoice_date', name: 'invoice_date'},
