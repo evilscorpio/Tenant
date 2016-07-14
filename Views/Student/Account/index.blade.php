@@ -68,28 +68,17 @@
                 </button>
             </div>
             <div class="box-body">
-                <table id="clients" class="table table-bordered table-striped dataTable">
+                <table id="recent" class="table table-bordered table-striped dataTable">
                     <thead>
                     <tr>
                         <th>Invoice ID</th>
-                        <th>Future Invoice Date</th>
+                        <th>Invoice Date</th>
                         <th>Description</th>
                         <th>Invoice Amount</th>
+                        <th>GST</th>
                         <th>Status</th>
                         <th>Outstanding Amount</th>
                         <th></th>
-
-                    </tr>
-                    <tr>
-                        <td>I80001</td>
-                        <td>12/06/2016</td>
-
-                        <td>College fee</td>
-                        <td>2000</td>
-                        <td>outstanding</td>
-                        <td>5000 /view paymens)</td>
-                        <td>Add payment / view / edit / delete</td>
-
                     </tr>
                     </thead>
                 </table>
@@ -139,6 +128,30 @@
                 "autoWidth": true,
 
                 "ajax": appUrl + "/tenant/students/invoices/" + <?php echo $application->application_id ?> +"/data",
+                "columns": [
+                    {data: 'student_invoice_id', name: 'student_invoice_id'},
+                    {data: 'invoice_date', name: 'invoice_date'},
+                    {data: 'description', name: 'description', orderable: false},
+                    {data: 'invoice_amount', name: 'invoice_amount'},
+                    {data: 'total_gst', name: 'total_gst'},
+                    {data: 'status', name: 'status'},
+                    {data: 'outstanding_amount', name: 'outstanding_amount'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false}
+                ]
+            });
+
+            rTable = $('#recent').DataTable({
+                "processing": true,
+                "serverSide": true,
+
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": true,
+
+                "ajax": appUrl + "/tenant/students/recent/" + <?php echo $application->application_id ?> +"/data",
                 "columns": [
                     {data: 'student_invoice_id', name: 'student_invoice_id'},
                     {data: 'invoice_date', name: 'invoice_date'},
