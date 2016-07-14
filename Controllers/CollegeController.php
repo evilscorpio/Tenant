@@ -9,6 +9,7 @@ use App\Modules\Tenant\Models\Institute\Institute;
 use App\Modules\Tenant\Models\Invoice\CollegeInvoice;
 use App\Modules\Tenant\Models\Payment\CollegePayment;
 use App\Modules\Agency\Models\Agency;
+use Carbon;
 use Flash;
 use DB;
 
@@ -159,6 +160,55 @@ class CollegeController extends BaseController
             ->orderBy('college_invoices.created_at', 'desc');*/
 
         $invoices = CollegeInvoice::where('course_application_id', $application_id)->select(['*'])->orderBy('created_at', 'desc');
+        $datatable = \Datatables::of($invoices)
+            ->addColumn('action', function ($data) {
+                return '<div class="btn-group">
+                  <button class="btn btn-primary" type="button">Action</button>
+                  <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle" type="button">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                  </button>
+                  <ul role="menu" class="dropdown-menu">
+                    <li><a href="' . route("tenant.invoice.payments", [$data->college_invoice_id, 1]) . '">View payments</a></li>
+                    <li><a href="' . route('tenant.college.invoice', $data->college_invoice_id) . '">View Invoice</a></li>
+                    <li><a href="http://localhost/condat/tenant/contact/2">Edit</a></li>
+                    <li><a href="http://localhost/condat/tenant/contact/2">Delete</a></li>
+                  </ul>
+                </div>';
+            })
+            ->addColumn('status', function ($data) {
+                $outstanding = $this->invoice->getOutstandingAmount($data->college_invoice_id);
+                return ($outstanding != 0) ? 'Outstanding' : 'Paid';
+            })
+            ->addColumn('outstanding_amount', function ($data) {
+                $outstanding = $this->invoice->getOutstandingAmount($data->college_invoice_id);
+                if ($outstanding != 0)
+                    return $outstanding . ' <a class="btn btn-success btn-xs" data-toggle="modal" data-target="#condat-modal" data-url="' . url('tenant/invoices/' . $data->college_invoice_id . '/payment/add/1') . '"><i class="glyphicon glyphicon-plus-sign"></i> Add Payment</a>';
+                else
+                    return 0;
+            })
+            ->editColumn('invoice_date', function ($data) {
+                return format_date($data->invoice_date);
+            })
+            ->editColumn('college_invoice_id', function ($data) {
+                return format_id($data->college_invoice_id, 'CI');
+            });
+        return $datatable->make(true);
+    }
+
+    /**
+     * Get all the invoices through ajax request.
+     *
+     * @return JSON response
+     */
+    function getRecentData($application_id)
+    {
+        /*$invoices = CollegeInvoice::join('course_application', 'course_application.course_application_id', '=', 'college_invoices.course_application_id')
+            ->where('course_application.course_application_id', $application_id)
+            ->select(['college_invoices.*'])
+            ->orderBy('college_invoices.created_at', 'desc');*/
+
+        $invoices = CollegeInvoice::where('course_application_id', $application_id)->where('invoice_date', '>=', Carbon\Carbon::now())->select(['*'])->orderBy('created_at', 'desc');
         $datatable = \Datatables::of($invoices)
             ->addColumn('action', function ($data) {
                 return '<div class="btn-group">

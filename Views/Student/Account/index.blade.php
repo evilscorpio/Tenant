@@ -144,7 +144,7 @@
                     {data: 'invoice_date', name: 'invoice_date'},
                     {data: 'description', name: 'description', orderable: false},
                     {data: 'invoice_amount', name: 'invoice_amount'},
-                    {data: 'gst', name: 'gst'},
+                    {data: 'total_gst', name: 'total_gst'},
                     {data: 'status', name: 'status'},
                     {data: 'outstanding_amount', name: 'outstanding_amount'},
                     {data: 'action', name: 'action', orderable: false, searchable: false}

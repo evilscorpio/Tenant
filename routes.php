@@ -124,6 +124,7 @@ Route::group(array('prefix' => 'tenant', 'module' => 'Tenant', 'middleware' => '
     Route::get('applications/{application_id}/invoice', ['as' => 'tenant.application.invoice', 'uses' => 'CollegeController@createInvoice']);
     Route::post('applications/{application_id}/storeInvoice', ['as' => 'tenant.application.storeInvoice', 'uses' => 'CollegeController@storeInvoice']);
     Route::get('applications/invoices/{client_id}/data', 'CollegeController@getInvoicesData');
+    Route::get('applications/recent/{client_id}/data', 'CollegeController@getRecentData');
     Route::get('applications/invoices/receipt/{invoice_id}', 'CollegeController@printInvoice');
 
     /* College Invoices */
