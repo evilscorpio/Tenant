@@ -27,18 +27,14 @@
 	                <div class="box-body">
 		                <table id="clients" class="table table-bordered table-striped dataTable">
 		                    <thead>
-		                    <tr>
-		                       
+		                    <tr>		                       
 		                        <th>Client Name</th>
 		                        <th>Phone No</th>
-		                        <th>Email</th>
-		                        
+		                        <th>Email</th>		                        
 		                        <th>Actions</th>
-
 		                    </tr>
 		                    </thead>
-		                    <tr>
-		                        
+		                    <tr>		                        
 		                        <td>Jenish Maskey</td>
 		                        <td>0430807730</td>
 		                        <td>jenisjack_1@hotmail.com</td>
