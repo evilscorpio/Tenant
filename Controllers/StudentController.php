@@ -5,6 +5,8 @@ use App\Modules\Tenant\Models\Application\StudentApplicationPayment;
 use App\Modules\Tenant\Models\Client\Client;
 use App\Modules\Tenant\Models\Application\CourseApplication;
 use App\Modules\Tenant\Models\Invoice\StudentInvoice;
+use App\Modules\Tenant\Models\Agent;
+use App\Modules\Tenant\Models\Setting;
 use Flash;
 use DB;
 use Carbon;
@@ -21,13 +23,15 @@ class StudentController extends BaseController
         'payment_method' => 'required|min:2|max:45'
     ];
 
-    function __construct(Client $client, Request $request, CourseApplication $application, StudentApplicationPayment $payment, StudentInvoice $invoice)
+    function __construct(Client $client, Request $request, CourseApplication $application, StudentApplicationPayment $payment, StudentInvoice $invoice, Agent $agent, Setting $setting)
     {
         $this->client = $client;
         $this->request = $request;
         $this->application = $application;
         $this->invoice = $invoice;
         $this->payment = $payment;
+        $this->agent = $agent;
+        $this->setting = $setting;
         parent::__construct();
     }
 
@@ -104,18 +108,20 @@ class StudentController extends BaseController
             ->select(['student_application_payments.student_payments_id', 'client_payments.*', 'payment_invoice_breakdowns.invoice_id', 'course_application_id']);
 
         $datatable = \Datatables::of($payments)
-            ->addColumn('action', '<div class="btn-group">
+            ->addColumn('action', function ($data) {
+                return '<div class="btn-group">
                   <button class="btn btn-primary" type="button">Action</button>
                   <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle" type="button">
                     <span class="caret"></span>
                     <span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <ul role="menu" class="dropdown-menu">
-                    <li><a href="http://localhost/condat/tenant/contact/2">View</a></li>
+                    <li><a href="'.url("tenant/students/payment/receipt/". $data->student_payments_id).'">Print Receipt</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Edit</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Delete</a></li>
                   </ul>
-                </div>')
+                </div>';
+            })
             ->addColumn('invoice_id', function($data) {
                 if(empty($data->invoice_id) || $data->invoice_id == 0)
                     return 'Uninvoiced <a class="btn btn-success btn-xs" data-toggle="modal" data-target="#condat-modal" data-url="'.url('tenant/student/payment/'.$data->client_payment_id.'/'.$data->course_application_id.'/assign').'"><i class="glyphicon glyphicon-plus-sign"></i> Assign to Invoice</a>';
@@ -244,6 +250,15 @@ class StudentController extends BaseController
         $data['invoice_array'] = $this->invoice->getList($application_id);
         $data['payment_id'] = $payment_id;
         return view("Tenant::Client/Payment/assign", $data);
+    }
+
+    function printReceipt($payment_id)
+    {
+        $data['agency'] = $this->agent->getAgentDetails();
+        $data['bank'] = $this->setting->getBankDetails();
+        $data['payment'] = $this->payment->getDetails($payment_id);
+
+        return view("Tenant::Student/Payment/receipt", $data);
     }
 
 }
