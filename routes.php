@@ -172,6 +172,8 @@ Route::group(array('prefix' => 'tenant', 'module' => 'Tenant', 'middleware' => '
 
     Route::get('clients/{client_id}/personal_details', 'ClientController@personal_details');
     Route::get('clients/{client_id}/notes', 'ClientController@notes');
+    Route::get('clients/{client_id}/active', 'ClientController@setActive');
+    Route::get('clients/{client_id}/inactive', 'ClientController@removeActive');
 
     /* Routes for Institute module */
     Route::resource('institute', 'InstituteController');

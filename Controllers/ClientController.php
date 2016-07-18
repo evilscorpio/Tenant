@@ -1,6 +1,7 @@
 <?php namespace App\Modules\Tenant\Controllers;
 
 use App\Http\Requests;
+use App\Modules\Tenant\Models\Client\ActiveClient;
 use App\Modules\Tenant\Models\Client\Client;
 use App\Modules\Tenant\Models\Client\ClientDocument;
 use App\Modules\Tenant\Models\Document;
@@ -55,7 +56,11 @@ class ClientController extends BaseController
             ->leftJoin('users', 'clients.user_id', '=', 'users.user_id')
             ->leftJoin('person_phones', 'person_phones.person_id', '=', 'persons.person_id')
             ->leftJoin('phones', 'phones.phone_id', '=', 'person_phones.phone_id')
-            ->select(['clients.client_id', 'clients.added_by', 'clients.added_by', 'users.email', 'users.status', 'phones.number', 'clients.created_at', DB::raw('CONCAT(persons.first_name, " ", persons.last_name) AS fullname')]);
+            ->leftJoin('active_clients', function($q) {
+                $q->on('active_clients.client_id', '=', 'clients.client_id');
+                $q->where('active_clients.user_id', '=', current_tenant_id());
+            })
+            ->select(['clients.client_id', 'clients.added_by', 'clients.added_by', 'users.email', 'users.status', 'phones.number', 'clients.created_at', DB::raw('CONCAT(persons.first_name, " ", persons.last_name) AS fullname'), 'active_clients.id as active_id']);
 
         $datatable = \Datatables::of($clients)
             ->addColumn('action', '<a data-toggle="tooltip" title="View Client" class="btn btn-action-box" href ="{{ route( \'tenant.client.show\', $client_id) }}"><i class="fa fa-eye"></i></a> <a data-toggle="tooltip" title="Client Documents" class="btn btn-action-box" href ="{{ route( \'tenant.client.document\', $client_id) }}"><i class="fa fa-file"></i></a> <a data-toggle="tooltip" title="Edit Client" class="btn btn-action-box" href ="{{ route( \'tenant.client.edit\', $client_id) }}"><i class="fa fa-edit"></i></a> <a data-toggle="tooltip" title="Delete Client" class="delete-user btn btn-action-box" href="{{ route( \'tenant.client.destroy\', $client_id) }}"><i class="fa fa-trash"></i></a>')
@@ -68,6 +73,9 @@ class ClientController extends BaseController
                             @else
                                 <span class="label label-danger">Trashed</span>
                             @endif')
+            ->addColumn('active', function ($data) {
+                return ($data->active_id != null)? '<input type="checkbox" value=1 class="icheck active" id="'.$data->client_id.'" checked = "checked" />' : '<input type="checkbox" value=0 class="icheck active" id="'.$data->client_id.'"/>';
+            })
             ->editColumn('created_at', function ($data) {
                 return format_datetime($data->created_at);
             })
@@ -325,6 +333,22 @@ class ClientController extends BaseController
         \Flash::success('Note deleted successfully!');
         return redirect()->route('tenant.client.innernotes', $application_id);
 
+    }
+
+    /* Krita */
+    function setActive($client_id)
+    {
+        ActiveClient::create([
+            'client_id' => $client_id,
+            'user_id' => current_tenant_id(),
+            'created_at' => get_today_datetime()
+        ]);
+    }
+
+    function removeActive($client_id)
+    {
+        $active = ActiveClient::where('client_id', $client_id)->where('user_id', current_tenant_id())->first();
+        if(!empty($active)) $active->delete();
     }
 
 }
