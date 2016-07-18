@@ -113,5 +113,22 @@ class SubAgentInvoice extends Model
             ->find($invoice_id);
         return $client->client_id;
     }
+
+    function getOutstandingAmount($invoice_id)
+    {
+        $paid = $this->getPaidAmount($invoice_id);
+        $final_total = Invoice::find($invoice_id)->invoice_amount;
+        $outstanding = ($final_total - $paid > 0)? $final_total - $paid : 0;
+        return $outstanding;
+    }
+
+    function getPaidAmount($invoice_id)
+    {
+        $paid = SubAgentApplicationPayment::leftJoin('client_payments', 'client_payments.client_payment_id', '=', 'subagent_application_payments.client_payment_id')
+            ->join('payment_invoice_breakdowns', 'client_payments.client_payment_id', '=', 'payment_invoice_breakdowns.payment_id')
+            ->where('invoice_id', $invoice_id)
+            ->sum('client_payments.amount');
+        return $paid;
+    }
 }
 

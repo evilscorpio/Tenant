@@ -162,9 +162,16 @@ class SubAgentController extends BaseController
                   </ul>
                 </div>';
             })
-            ->addColumn('status', 'Outstanding')
+            ->addColumn('status', function ($data) {
+                $outstanding = $this->invoice->getOutstandingAmount($data->invoice_id);
+                return ($outstanding != 0) ? 'Outstanding' : 'Paid';
+            })
             ->addColumn('outstanding_amount', function ($data) {
-                return '5000 <a class="btn btn-success btn-xs" data-toggle="modal" data-target="#condat-modal" data-url="'.url('tenant/invoices/'.$data->invoice_id.'/payment/add/3').'"><i class="glyphicon glyphicon-plus-sign"></i> Add Payment</a>';
+                $outstanding = $this->invoice->getOutstandingAmount($data->invoice_id);
+                if ($outstanding != 0)
+                    return $outstanding . ' <a class="btn btn-success btn-xs" data-toggle="modal" data-target="#condat-modal" data-url="' . url('tenant/invoices/' . $data->invoice_id . '/payment/add/3') . '"><i class="glyphicon glyphicon-plus-sign"></i> Add Payment</a>';
+                else
+                    return 0;
             })
             ->editColumn('invoice_date', function ($data) {
                 return format_date($data->invoice_date);
@@ -203,9 +210,16 @@ class SubAgentController extends BaseController
                   </ul>
                 </div>';
             })
-            ->addColumn('status', 'Outstanding')
+            ->addColumn('status', function ($data) {
+                $outstanding = $this->invoice->getOutstandingAmount($data->invoice_id);
+                return ($outstanding != 0) ? 'Outstanding' : 'Paid';
+            })
             ->addColumn('outstanding_amount', function ($data) {
-                return '5000 <a class="btn btn-success btn-xs" data-toggle="modal" data-target="#condat-modal" data-url="'.url('tenant/invoices/'.$data->invoice_id.'/payment/add/3').'"><i class="glyphicon glyphicon-plus-sign"></i> Add Payment</a>';
+                $outstanding = $this->invoice->getOutstandingAmount($data->invoice_id);
+                if ($outstanding != 0)
+                    return $outstanding . ' <a class="btn btn-success btn-xs" data-toggle="modal" data-target="#condat-modal" data-url="' . url('tenant/invoices/' . $data->invoice_id . '/payment/add/3') . '"><i class="glyphicon glyphicon-plus-sign"></i> Add Payment</a>';
+                else
+                    return 0;
             })
             ->editColumn('invoice_date', function ($data) {
                 return format_date($data->invoice_date);
