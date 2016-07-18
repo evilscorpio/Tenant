@@ -1,7 +1,7 @@
 <?php namespace App\Modules\Tenant\Controllers;
 
 use App\Http\Requests;
-use App\Models\Tenant\Setting;
+use App\Modules\Tenant\Models\Setting;
 use App\Modules\Tenant\Models\Agent;
 use App\Modules\Tenant\Models\Client\Client;
 use App\Modules\Tenant\Models\Application\CourseApplication;
