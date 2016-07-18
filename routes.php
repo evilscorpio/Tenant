@@ -259,4 +259,7 @@ Route::group(array('prefix' => 'tenant', 'module' => 'Tenant', 'middleware' => '
     Route::get('settings/bank', ['as' => 'tenant.bank.edit', 'uses' => 'SettingController@bank']);
     Route::post('settings/bank/store', ['as' => 'tenant.bank.store', 'uses' => 'SettingController@updateBank']);
 
+    /* Routes for Reports Module */
+    Route::get('reports/collegeInvoice', 'ReportController@CollegeInvoiceReport');
+
 });
