@@ -23,13 +23,17 @@
         <div class="col-xs-5">
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h4>The Excursion Nepal</h4>
+              <h4>{{ $agency->name }}</h4>
             </div>
             <div class="panel-body">
-              <p>ABN 403242413
+              <p>{{ $agency->abn }}
 
-              <h3><small>276 Pitt Street</small></h3>
-              <h3><small> Sydney NSW 2000</small></h3>
+              <h3>
+                <small>{{ $agency->street }}</small>
+              </h3>
+              <h3>
+                <small>{{ $agency->suburb }} {{ $agency->state }} {{ $agency->postcode }}</small>
+              </h3>
               </p>
             </div>
           </div>
@@ -42,8 +46,8 @@
             <div class="panel-body">
               <p>
                 Thom Zheng
-                <h3><small>Invoice #001</small></h3>
-                <h3><small>Date 12-jun-2016</small></h3>
+                <h3><small>Invoice #{{ format_id($invoice->invoice_id, 'SI') }}</small></h3>
+                <h3><small>Date {{ format_date($invoice->invoice_date) }}</small></h3>
               </p>
             </div>
           </div>
@@ -65,8 +69,8 @@
         </thead>
         <tbody>
           <tr>
-            <td>Title of your article here</td>
-            <td class="text-right">$1200.00</td>
+            <td>{{ $invoice->description }}</td>
+            <td class="text-right">${{ float_format($invoice->invoice_amount) }}</td>
           </tr>
 
 
@@ -87,11 +91,11 @@
         <div class="col-xs-2">
           <p>
             <h4>
-              $1200.00 <br>
-              0 <br>
-              <h3>$1200.00 </h3>
-              $1000.00<br>
-              <h3>$200</h3><br>
+            ${{ float_format($invoice->amount) }}<br>
+              ${{ float_format($invoice->total_gst) }} <br>
+              <h3>${{ float_format($invoice->final_total) }}</h3>
+              ${{ float_format($pay_details->paid) }}<br>
+              <h3>${{ float_format($pay_details->outstandingAmount) }}</h3><br>
             </h4>
           </p>
         </div>
@@ -103,10 +107,11 @@
               <h4>Bank details</h4>
             </div>
             <div class="panel-body">
-              <p>Account Name</p>
-              <p>BSB : 063-043 | Account Number : 1064 4210</p>
-              
-              <p>Bank Name</p>
+              <p>{{ $bank['account_name'] }}</p>
+
+              <p><strong>BSB</strong> : {{ $bank['bsb'] }} | <strong>Account Number</strong> : {{ $bank['number'] }}</p>
+
+              <p>{{ $bank['name'] }}</p>
             </div>
           </div>
         </div>
@@ -117,10 +122,12 @@
                 <h4>Contact Details</h4>
               </div>
               <div class="panel-body">
-                <p>Ph : 61 2 8084 4043 </p>
-                <p>Email : info@theexcursionnepal.com </p>
-                <p>Website : www.theeexcursionnepal.com</p>
-                  
+                <p><strong>Ph</strong> : {{ $agency->number }} </p>
+
+                <p><strong>Email</strong> : {{ $agency->email }} </p>
+
+                <p><strong>Website</strong> : {{ $agency->website }}</p>
+
               </div>
             </div>
           </div>

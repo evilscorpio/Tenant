@@ -128,4 +128,20 @@ class StudentInvoice extends Model
             ->sum('client_payments.amount');
         return $paid;
     }
+
+    function getDetails($invoice_id)
+    {
+        $student_invoice = StudentInvoice::join('invoices', 'student_invoices.invoice_id', '=', 'invoices.invoice_id')
+            ->select(['invoices.*', 'student_invoices.student_invoice_id'])
+            ->find($invoice_id);
+        return $student_invoice;
+    }
+
+    function getPayDetails($invoice_id)
+    {
+        $details = new \stdClass();
+        $details->paid = $this->getPaidAmount($invoice_id);
+        $details->outstandingAmount = $this->getOutstandingAmount($invoice_id);
+        return $details;
+    }
 }

@@ -145,6 +145,9 @@ Route::group(array('prefix' => 'tenant', 'module' => 'Tenant', 'middleware' => '
     Route::get('students/recent/{client_id}/data', 'StudentController@getRecentData');
     Route::get('students/payment/receipt/{payment_id}', 'StudentController@printReceipt');
 
+    /* Student Invoices */
+    Route::get('student/{invoice_id}/invoice', ['as' => 'tenant.student.invoice', 'uses' => 'StudentController@show']);
+
     /* Routes for subagent section */
     Route::get('applications/{application_id}/subagents', ['as' => 'tenant.application.subagents', 'uses' => 'SubAgentController@index']);
 

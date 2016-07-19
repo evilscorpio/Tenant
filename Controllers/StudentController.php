@@ -116,15 +116,15 @@ class StudentController extends BaseController
                     <span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <ul role="menu" class="dropdown-menu">
-                    <li><a href="'.url("tenant/students/payment/receipt/". $data->student_payments_id).'">Print Receipt</a></li>
+                    <li><a href="' . url("tenant/students/payment/receipt/" . $data->student_payments_id) . '">Print Receipt</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Edit</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Delete</a></li>
                   </ul>
                 </div>';
             })
-            ->addColumn('invoice_id', function($data) {
-                if(empty($data->invoice_id) || $data->invoice_id == 0)
-                    return 'Uninvoiced <a class="btn btn-success btn-xs" data-toggle="modal" data-target="#condat-modal" data-url="'.url('tenant/student/payment/'.$data->client_payment_id.'/'.$data->course_application_id.'/assign').'"><i class="glyphicon glyphicon-plus-sign"></i> Assign to Invoice</a>';
+            ->addColumn('invoice_id', function ($data) {
+                if (empty($data->invoice_id) || $data->invoice_id == 0)
+                    return 'Uninvoiced <a class="btn btn-success btn-xs" data-toggle="modal" data-target="#condat-modal" data-url="' . url('tenant/student/payment/' . $data->client_payment_id . '/' . $data->course_application_id . '/assign') . '"><i class="glyphicon glyphicon-plus-sign"></i> Assign to Invoice</a>';
                 else
                     return format_id($data->invoice_id, 'SI');
             })
@@ -162,8 +162,8 @@ class StudentController extends BaseController
                     <span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <ul role="menu" class="dropdown-menu">
-                    <li><a href="'.route("tenant.invoice.payments", [$data->invoice_id, 2]).'">View payments</a></li>
-                    <li><a href="http://localhost/condat/tenant/contact/2">View</a></li>
+                    <li><a href="' . route("tenant.invoice.payments", [$data->invoice_id, 2]) . '">View payments</a></li>
+                    <li><a href="' . route('tenant.student.invoice', $data->student_invoice_id) . '">View Invoice</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Edit</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Delete</a></li>
                   </ul>
@@ -215,8 +215,8 @@ class StudentController extends BaseController
                     <span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <ul role="menu" class="dropdown-menu">
-                    <li><a href="'.route("tenant.invoice.payments", [$data->invoice_id, 2]).'">View payments</a></li>
-                    <li><a href="http://localhost/condat/tenant/contact/2">View</a></li>
+                    <li><a href="' . route("tenant.invoice.payments", [$data->invoice_id, 2]) . '">View payments</a></li>
+                    <li><a href="' . route('tenant.student.invoice', $data->student_invoice_id) . '">View Invoice</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Edit</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Delete</a></li>
                   </ul>
@@ -259,6 +259,16 @@ class StudentController extends BaseController
         $data['payment'] = $this->payment->getDetails($payment_id);
 
         return view("Tenant::Student/Payment/receipt", $data);
+    }
+
+    public function show($invoice_id)
+    {
+        $data['agency'] = $this->agent->getAgentDetails();
+        $data['bank'] = $this->setting->getBankDetails();
+        $data['invoice'] = $invoice = $this->invoice->getDetails($invoice_id); //dd($data['invoice']->toArray());
+        //$data['client_name'] = $this->application->getClientName($invoice->course_application_id);
+        $data['pay_details'] = $this->invoice->getPayDetails($invoice_id);
+        return view("Tenant::Student/Invoice/show", $data);
     }
 
 }
