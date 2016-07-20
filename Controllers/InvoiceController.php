@@ -98,7 +98,7 @@ class InvoiceController extends BaseController
             case 1:
                 $invoice = CollegeInvoice::select(['college_invoice_id as invoice_id', 'invoice_date', 'total_commission as total_amount', 'total_gst', 'final_total']) //, 'total_paid', 'status', 'outstanding_amount'
                     ->find($invoice_id);
-                $invoice->formatted_id = format_id($invoice->college_invoice_id, 'CI');
+                $invoice->formatted_id = format_id($invoice->invoice_id, 'CI');
                 $invoice->paid = $this->college_invoice->getPaidAmount($invoice_id);
 
                 $outstanding = $invoice->final_total - $invoice->paid;

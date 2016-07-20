@@ -70,7 +70,7 @@ class StudentController extends BaseController
 
     public function editPayment($payment_id)
     {
-        $data['payment'] = $this->payment->getDetails($payment_id); 
+        $data['payment'] = $this->payment->getDetails($payment_id);
         return view("Tenant::Student/Payment/edit", $data);
     }
 
