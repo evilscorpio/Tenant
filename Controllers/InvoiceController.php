@@ -113,8 +113,8 @@ class InvoiceController extends BaseController
                 $invoice->formatted_id = format_id($invoice->invoice_id, 'SI');
                 break;
             default:
-                $invoice = SubAgentInvoice::find($invoice_id);
-                $invoice->formatted_id = format_id($invoice_id, 'SAI');
+                $invoice = SubAgentInvoice::where('invoice_id', $invoice_id)->first();
+                $invoice->formatted_id = format_id($invoice->subagent_invoice_id, 'SAI');
         }
         //dd($invoice->toArray());
         return $invoice;
