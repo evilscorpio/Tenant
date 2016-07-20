@@ -67,6 +67,7 @@ class InvoiceController extends BaseController
     function payments($invoice_id, $type = 1)
     {
         $data['invoice'] = $this->getInvoiceDetails($invoice_id, $type);
+        $data['invoice_id'] = $invoice_id;
         $data['type'] = $type;
         /* For Navbar */
         $data['application'] = new \stdClass();
@@ -84,10 +85,10 @@ class InvoiceController extends BaseController
                 $application_id = CollegeInvoice::find($invoice_id)->course_application_id;
                 break;
             case 2:
-                $application_id = StudentInvoice::find($invoice_id)->application_id;
+                $application_id = StudentInvoice::where('invoice_id', $invoice_id)->first()->application_id;
                 break;
             default:
-                $application_id = SubAgentInvoice::find($invoice_id)->course_application_id;
+                $application_id = SubAgentInvoice::where('invoice_id', $invoice_id)->first()->course_application_id;
         }
         return $application_id;
     }
@@ -180,10 +181,11 @@ class InvoiceController extends BaseController
 
     function studentPayments($invoice_id)
     {
-        $payments = StudentApplicationPayment::join('payment_invoice_breakdowns', 'student_application_payments.client_payment_id', '=', 'payment_invoice_breakdowns.payment_id')
-            ->leftJoin('client_payments', 'client_payments.client_payment_id', '=', 'student_application_payments.client_payment_id')
+        $payments = StudentApplicationPayment::leftJoin('client_payments', 'client_payments.client_payment_id', '=', 'student_application_payments.client_payment_id')
+            ->join('payment_invoice_breakdowns', 'client_payments.client_payment_id', '=', 'payment_invoice_breakdowns.payment_id')
             ->where('payment_invoice_breakdowns.invoice_id', $invoice_id)
-            ->select(['student_application_payments.student_payments_id', 'client_payments.*', 'client_payments.client_payment_id as payment_id']);
+            ->select(['student_application_payments.student_payments_id', 'client_payments.*', 'client_payments.client_payment_id as payment_id'])
+            ->get();
         return $payments;
     }
 
