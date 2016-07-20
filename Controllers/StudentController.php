@@ -177,7 +177,7 @@ class StudentController extends BaseController
                     <span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <ul role="menu" class="dropdown-menu">
-                    <li><a href="' . route("tenant.invoice.payments", [$data->student_invoices, 2]) . '">View payments</a></li>
+                    <li><a href="' . route("tenant.invoice.payments", [$data->student_invoice_id, 2]) . '">View payments</a></li>
                     <li><a href="' . route('tenant.student.invoice', $data->student_invoice_id) . '">View Invoice</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Edit</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Delete</a></li>
@@ -230,7 +230,7 @@ class StudentController extends BaseController
                     <span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <ul role="menu" class="dropdown-menu">
-                    <li><a href="' . route("tenant.invoice.payments", [$data->student_invoices, 2]) . '">View payments</a></li>
+                    <li><a href="' . route("tenant.invoice.payments", [$data->student_invoice_id, 2]) . '">View payments</a></li>
                     <li><a href="' . route('tenant.student.invoice', $data->student_invoice_id) . '">View Invoice</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Edit</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Delete</a></li>
