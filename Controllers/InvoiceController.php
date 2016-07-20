@@ -22,13 +22,7 @@ use Illuminate\Http\Request;
 class InvoiceController extends BaseController
 {
 
-    protected $request;/* Validation rules for user create and edit */
-    protected $rules = [
-        'short_name' => 'required|min:2|max:55',
-        'phone' => 'required',
-        'abn' => 'required',
-        'acn' => 'required',
-    ];
+    protected $request;
 
     function __construct(Invoice $invoice, Request $request, PaymentInvoiceBreakdown $payment_invoice, SubAgentApplicationPayment $subagent_payment, CollegeInvoice $college_invoice, StudentInvoice $student_invoice, SubAgentInvoice $subagent_invoice, CollegeInvoicePayment $college_payment, StudentApplicationPayment $student_payment, Client $client)
     {
@@ -115,11 +109,11 @@ class InvoiceController extends BaseController
                 $invoice = StudentInvoice::join('invoices', 'student_invoices.invoice_id', '=', 'invoices.invoice_id')
                     ->select(['student_invoice_id as invoice_id', 'invoice_date', 'amount as total_amount', 'total_gst', 'final_total'])
                     ->find($invoice_id);
-                $invoice->formatted_id = format_id($invoice->college_invoice_id, 'SI');
+                $invoice->formatted_id = format_id($invoice->student_invoice_id, 'SI');
                 break;
             default:
                 $invoice = SubAgentInvoice::find($invoice_id);
-                $invoice->formatted_id = format_id($invoice->college_invoice_id, 'SAI');
+                $invoice->formatted_id = format_id($invoice->subagent_invoice_id, 'SAI');
         }
         //dd($invoice->toArray());
         return $invoice;

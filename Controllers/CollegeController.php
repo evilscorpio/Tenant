@@ -62,6 +62,21 @@ class CollegeController extends BaseController
         return view("Tenant::College/Payment/add", $data);
     }
 
+    public function editPayment($payment_id)
+    {
+        $data['payment'] = $this->payment->getDetails($payment_id);
+        return view("Tenant::Student/Payment/edit", $data);
+    }
+
+    public function updatePayment($payment_id)
+    {
+        $this->validate($this->request, $this->rules);
+
+        $application_id = $this->payment->editPayment($this->request->all(), $payment_id);
+        Flash::success('Payment has been updated successfully.');
+        return redirect()->route('tenant.application.college', $application_id);
+    }
+
     public function storePayment($application_id)
     {
         $this->validate($this->request, $this->rules);

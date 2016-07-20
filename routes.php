@@ -118,6 +118,8 @@ Route::group(array('prefix' => 'tenant', 'module' => 'Tenant', 'middleware' => '
     Route::get('applications/{application_id}/payment', ['as' => 'tenant.application.payment', 'uses' => 'CollegeController@createPayment']);
     Route::get('applications/{application_id}/payment/{type}', ['as' => 'tenant.application.college.payment', 'uses' => 'CollegeController@createPayment']);
     Route::post('applications/{application_id}/storePayment', ['as' => 'tenant.application.storePayment', 'uses' => 'CollegeController@storePayment']);
+    Route::get('applications/{payment_id}/editPayment', ['as' => 'tenant.application.editPayment', 'uses' => 'CollegeController@editPayment']);
+    Route::put('applications/{payment_id}/editPayment', ['as' => 'tenant.application.updatePayment', 'uses' => 'CollegeController@editPayment']);
     Route::get('applications/payments/{client_id}/data', 'CollegeController@getPaymentsData');
 
     /* Create invoices for a application college */
@@ -136,6 +138,8 @@ Route::group(array('prefix' => 'tenant', 'module' => 'Tenant', 'middleware' => '
     /* Create payments for a application college */
     Route::get('students/{application_id}/payment', ['as' => 'application.students.payment', 'uses' => 'StudentController@createPayment']);
     Route::post('students/{application_id}/storePayment', ['as' => 'application.students.storePayment', 'uses' => 'StudentController@storePayment']);
+    Route::get('students/{payment_id}/editPayment', ['as' => 'application.students.editPayment', 'uses' => 'StudentController@editPayment']);
+    Route::put('students/{payment_id}/editPayment', ['as' => 'application.students.updatePayment', 'uses' => 'StudentController@updatePayment']);
     Route::get('students/payments/{client_id}/data', 'StudentController@getPaymentsData');
 
     /* Create invoices for a application college */

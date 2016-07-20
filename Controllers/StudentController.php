@@ -68,6 +68,21 @@ class StudentController extends BaseController
         return redirect()->route('tenant.application.students', $application_id);
     }
 
+    public function editPayment($payment_id)
+    {
+        $data['payment'] = $this->payment->getDetails($payment_id);
+        return view("Tenant::Student/Payment/edit", $data);
+    }
+
+    public function updatePayment($payment_id)
+    {
+        $this->validate($this->request, $this->rules);
+
+        $application_id = $this->payment->editPayment($this->request->all(), $payment_id);
+        Flash::success('Payment has been updated successfully.');
+        return redirect()->route('tenant.application.students', $application_id);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -117,7 +132,7 @@ class StudentController extends BaseController
                   </button>
                   <ul role="menu" class="dropdown-menu">
                     <li><a href="' . url("tenant/students/payment/receipt/" . $data->student_payments_id) . '">Print Receipt</a></li>
-                    <li><a href="http://localhost/condat/tenant/contact/2">Edit</a></li>
+                    <li><a href="'.route("application.students.editPayment", $data->client_payment_id).'">Edit</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Delete</a></li>
                   </ul>
                 </div>';

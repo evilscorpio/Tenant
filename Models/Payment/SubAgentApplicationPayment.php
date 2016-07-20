@@ -1,4 +1,4 @@
-<?php namespace App\Modules\Tenant\Models\Payment;
+\<?php namespace App\Modules\Tenant\Models\Payment;
 
 use App\Modules\Tenant\Models\Client\ClientPayment;
 use App\Modules\Tenant\Models\Invoice\Invoice;
@@ -108,4 +108,23 @@ class SubAgentApplicationPayment extends Model
         return $payment;
     }
 
+
+
+    function getDetails($payment_id)
+    {
+        $payment = StudentApplicationPayment::leftJoin('client_payments', 'client_payments.client_payment_id', '=', 'student_application_payments.client_payment_id')
+            ->leftJoin('payment_invoice_breakdowns', 'client_payments.client_payment_id', '=', 'payment_invoice_breakdowns.payment_id')
+            ->select(['student_application_payments.student_payments_id', 'client_payments.*', 'payment_invoice_breakdowns.invoice_id', 'course_application_id'])
+            ->find($payment_id);
+        return $payment;
+    }
+
+    function editPayment($request, $payment_id)
+    {
+        $payment = new ClientPayment();
+        $payment->edit($request, $payment_id);
+
+        $student_payment = StudentApplicationPayment::where('client_payment_id', $payment_id)->first();
+        return $student_payment->course_application_id;
+    }
 }

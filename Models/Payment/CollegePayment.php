@@ -84,4 +84,24 @@ class CollegePayment extends Model
         return $amount;
     }
 
+    function getDetails($payment_id)
+    {
+        $payment = CollegePayment::leftJoin('college_invoice_payments', 'college_payments.college_payment_id', '=', 'college_invoice_payments.ci_payment_id')
+            ->select(['college_payments.*', 'college_invoice_payments.college_invoice_id']);
+
+        StudentApplicationPayment::leftJoin('client_payments', 'client_payments.client_payment_id', '=', 'student_application_payments.client_payment_id')
+            ->leftJoin('payment_invoice_breakdowns', 'client_payments.client_payment_id', '=', 'payment_invoice_breakdowns.payment_id')
+            ->select(['student_application_payments.student_payments_id', 'client_payments.*', 'payment_invoice_breakdowns.invoice_id', 'course_application_id'])
+            ->find($payment_id);
+        return $payment;
+    }
+
+    function editPayment($request, $payment_id)
+    {
+        $payment = new ClientPayment();
+        $payment->edit($request, $payment_id);
+
+        $student_payment = StudentApplicationPayment::where('client_payment_id', $payment_id)->first();
+        return $student_payment->course_application_id;
+    }
 }

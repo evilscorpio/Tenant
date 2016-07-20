@@ -51,4 +51,17 @@ class ClientPayment extends Model
         }
     }
 
+    function edit($request, $payment_id)
+    {
+        $payment = ClientPayment::find($payment_id);
+        $payment->amount = $request['amount'];
+        $payment->date_paid = insert_dateformat($request['date_paid']);
+        $payment->payment_method = $request['payment_method'];
+        $payment->payment_type = $request['payment_type'];
+        $payment->description = $request['description'];
+        $payment->save();
+
+        return $payment->client_payment_id;
+    }
+
 }
