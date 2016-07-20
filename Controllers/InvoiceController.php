@@ -108,8 +108,9 @@ class InvoiceController extends BaseController
             case 2:
                 $invoice = StudentInvoice::join('invoices', 'student_invoices.invoice_id', '=', 'invoices.invoice_id')
                     ->select(['student_invoice_id as invoice_id', 'invoice_date', 'amount as total_amount', 'total_gst', 'final_total'])
-                    ->find($invoice_id);
-                $invoice->formatted_id = format_id($invoice_id, 'SI');
+                    ->where('student_invoices.invoice_id', $invoice_id)
+                    ->first();
+                $invoice->formatted_id = format_id($invoice->invoice_id, 'SI');
                 break;
             default:
                 $invoice = SubAgentInvoice::find($invoice_id);
