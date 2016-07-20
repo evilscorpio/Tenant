@@ -155,7 +155,7 @@ class SubAgentController extends BaseController
                     <span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <ul role="menu" class="dropdown-menu">
-                    <li><a href="'.route("tenant.invoice.payments", [$data->invoice_id, 3]).'">View Payments</a></li>
+                    <li><a href="'.route("tenant.invoice.payments", [$data->subagent_invoice_id, 3]).'">View Payments</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">View</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Edit</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Delete</a></li>
@@ -203,7 +203,7 @@ class SubAgentController extends BaseController
                     <span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <ul role="menu" class="dropdown-menu">
-                    <li><a href="'.route("tenant.invoice.payments", [$data->invoice_id, 3]).'">View Payments</a></li>
+                    <li><a href="'.route("tenant.invoice.payments", [$data->subagent_invoice_id, 3]).'">View Payments</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">View</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Edit</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Delete</a></li>

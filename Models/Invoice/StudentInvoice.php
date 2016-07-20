@@ -19,7 +19,7 @@ class StudentInvoice extends Model
      *
      * @var string
      */
-    protected $primaryKey = 'student_invoice_id';
+    protected $primaryKey = 'student_invoices';
 
     /**
      * The attributes that are mass assignable.
