@@ -1,4 +1,4 @@
-\<?php namespace App\Modules\Tenant\Models\Payment;
+<?php namespace App\Modules\Tenant\Models\Payment;
 
 use App\Modules\Tenant\Models\Client\ClientPayment;
 use App\Modules\Tenant\Models\Invoice\Invoice;

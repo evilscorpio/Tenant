@@ -98,7 +98,7 @@ class InvoiceController extends BaseController
             case 1:
                 $invoice = CollegeInvoice::select(['college_invoice_id as invoice_id', 'invoice_date', 'total_commission as total_amount', 'total_gst', 'final_total']) //, 'total_paid', 'status', 'outstanding_amount'
                     ->find($invoice_id);
-                $invoice->formatted_id = format_id($invoice->invoice_id, 'CI');
+                $invoice->formatted_id = format_id($invoice_id, 'CI');
                 $invoice->paid = $this->college_invoice->getPaidAmount($invoice_id);
 
                 $outstanding = $invoice->final_total - $invoice->paid;
@@ -109,11 +109,11 @@ class InvoiceController extends BaseController
                 $invoice = StudentInvoice::join('invoices', 'student_invoices.invoice_id', '=', 'invoices.invoice_id')
                     ->select(['student_invoice_id as invoice_id', 'invoice_date', 'amount as total_amount', 'total_gst', 'final_total'])
                     ->find($invoice_id);
-                $invoice->formatted_id = format_id($invoice->student_invoice_id, 'SI');
+                $invoice->formatted_id = format_id($invoice_id, 'SI');
                 break;
             default:
                 $invoice = SubAgentInvoice::find($invoice_id);
-                $invoice->formatted_id = format_id($invoice->subagent_invoice_id, 'SAI');
+                $invoice->formatted_id = format_id($invoice_id, 'SAI');
         }
         //dd($invoice->toArray());
         return $invoice;
