@@ -3,6 +3,7 @@
 use Illuminate\Database\Eloquent\Model;
 use DB;
 use Carbon\Carbon;
+use App\Modules\Tenant\Models\Application\CourseApplication;
 class ApplicationStatus extends Model
 {
 
@@ -67,7 +68,102 @@ class ApplicationStatus extends Model
           }
          }
 
+    function application_update(array $request, $course_application_id)
+    {
+        DB::beginTransaction();
 
+        try {
+
+            $applications = CourseApplication::find($course_application_id);
+            $applications->tuition_fee = $request['total_tuition_fee'];
+            $applications->intake_id   = $request['intake_date'];
+            $applications->save();
+           
+
+            DB::commit();
+            return true;
+            // all good
+        } catch (\Exception $e) {
+            DB::rollback();
+            //return false;
+            dd($e);
+            // something went wrong
+        }
+    }
+
+    function offer_update(array $request, $course_application_id)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            $applications = CourseApplication::find($course_application_id);
+            $applications->tuition_fee = $request['total_tuition_fee'];
+            $applications->intake_id   = $request['intake_date'];
+            $applications->student_id   = $request['student_id'];
+            $applications->COE_fee   = $request['total_fee_for_coe'];
+
+            $applications->save();
+           
+
+            DB::commit();
+            return true;
+            // all good
+        } catch (\Exception $e) {
+            DB::rollback();
+            //return false;
+            dd($e);
+            // something went wrong
+        }
+    }
+
+    function coe_update(array $request, $course_application_id)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            $applications = CourseApplication::find($course_application_id);
+            $applications->COE_fee = $request['fee_paid_for_coe'];
+            $applications->save();
+
+           
+
+            DB::commit();
+            return true;
+            // all good
+        } catch (\Exception $e) {
+            DB::rollback();
+            //return false;
+            dd($e);
+            // something went wrong
+        }
+    }
+
+    function coe_issued_update(array $request, $course_application_id)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            $applications = CourseApplication::find($course_application_id);
+            $applications->COE_fee = $request['total_tuition_fee'];
+            $applications->end_date = $request['finish_date'];
+            $applications->student_id = $request['student_id'];
+            $applications->save();
+
+           
+
+            DB::commit();
+            return true;
+            // all good
+        } catch (\Exception $e) {
+            DB::rollback();
+            //return false;
+            dd($e);
+            // something went wrong
+        }
+    }
 
 
 

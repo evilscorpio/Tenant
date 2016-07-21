@@ -275,14 +275,34 @@ Route::group(array('prefix' => 'tenant', 'module' => 'Tenant', 'middleware' => '
     Route::get('reports/collegeInvoice', 'ReportController@CollegeInvoiceReport');
 
      /* Routes for applications module made by Anish */
-    Route::get('applications/enquiry',['as' => 'applications.enquiry.index', 'uses' => 'ApplicationsStatusController@index']);
-    Route::get('applications/offer_letter_processing',['as' => 'applications.offer_letter_processing.index', 'uses' => 'ApplicationsStatusController@offerLetterProcessing']);
-   // Route::get('applications/offer_letter_issued',['as' => 'applications.offer_letter_issued.index', 'uses' => 'ApplicationsStatusController@offerLetterIssued']);
-    //Route::get('applications/coe_processing',['as' => 'applications.coe_processing.index', 'uses' => 'ApplicationsStatusController@coeProcessing']);
-    //Route::get('applications/coe_issued',['as' => 'applications.coe_issued.index', 'uses' => 'ApplicationsStatusController@coeIssued']);
-    //Route::get('applications/enrolled',['as' => 'applications.enrolled.index', 'uses' => 'ApplicationsStatusController@enrolled']);
-    //Route::get('applications/completed',['as' => 'applications.completed.index', 'uses' => 'ApplicationsStatusController@completed']);
-    //Route::get('applications/cancelled',['as' => 'applications.cancelled.index', 'uses' => 'ApplicationsStatusController@cancelled']);
-    //Route::get('applications/advanced_search',['as' => 'applications.advanced_search.index', 'uses' => 'ApplicationsStatusController@advancedSearch']);
+    Route::get('applications/enquiry',['as' => 'applications.enquiry.index', 'uses' => 'ApplicationStatusController@index']);
+    Route::get('applications/offer_letter_processing',['as' => 'applications.offer_letter_processing.index', 'uses' => 'ApplicationStatusController@offerLetterProcessing']);
+    Route::get('applications/offer_letter_issued',['as' => 'applications.offer_letter_issued.index', 'uses' => 'ApplicationStatusController@offerLetterIssued']);
+    Route::get('applications/coe_processing',['as' => 'applications.coe_processing.index', 'uses' => 'ApplicationStatusController@coeProcessing']);
+    Route::get('applications/coe_issued',['as' => 'applications.coe_issued.index', 'uses' => 'ApplicationStatusController@coeIssued']);
+    Route::get('applications/enrolled',['as' => 'applications.enrolled.index', 'uses' => 'ApplicationStatusController@enrolled']);
+    Route::get('applications/completed',['as' => 'applications.completed.index', 'uses' => 'ApplicationStatusController@completed']);
+    Route::get('applications/cancelled',['as' => 'applications.cancelled.index', 'uses' => 'ApplicationStatusController@cancelled']);
+    Route::get('applications/advanced_search',['as' => 'applications.advanced_search.index', 'uses' => 'ApplicationStatusController@advancedSearch']);
+    /* Routes for actions in applications module */
+    Route::get('applications/{course_application_id}/apply_offer',['as' => 'applications.apply.offer', 'uses' => 'ApplicationStatusController@apply_offer']);
+    Route::post('applications/{course_application_id}/update',['as' => 'applications.apply.update', 'uses' => 'ApplicationStatusController@update']);
+    Route::get('applications/{course_application_id}/cancel_application',['as' => 'applications.cancel.application', 'uses' => 'ApplicationStatusController@cancel_application']);
+    Route::post('applications/{notes_id}/cancel',['as' => 'application.cancel', 'uses' => 'ApplicationStatusController@cancel_qurantine']);
+    Route::get('applications/{course_application_id}/offer_letter_received',['as' => 'applications.offer.received', 'uses' => 'ApplicationStatusController@offer_letter_received']);
+    Route::post('applications/{course_application_id}/update_offer_update',['as' => 'applications.offer_letter.update', 'uses' => 'ApplicationStatusController@offer_received_update']);
+    Route::get('applications/{course_application_id}/apply_coe',['as' => 'applications.apply.coe', 'uses' => 'ApplicationStatusController@apply_coe']);
+    Route::post('applications/{course_application_id}/update_applied_coe',['as' => 'applications.update.applied.coe', 'uses' => 'ApplicationStatusController@update_applied_coe']);
+    //Route::get('application/enquiry/data', 'ApplicationStatusController@getData');
+    //Route::post('applications/{course_application_id}/status',['as' => 'applications.status', 'uses' => 'ApplicationsStatusController@status']);
 
+    
+    Route::get('applications/{course_application_id}/COE_issued',['as' => 'applications.action.coe.issued', 'uses' => 'ApplicationStatusController@action_coe_issued']);
+    Route::post('applications/{course_application_id}/update_COE_issued',['as' => 'applications.action.update.coe.issued', 'uses' => 'ApplicationStatusController@update_coe_issued']);
+    //Route::get('applications/{course_application_id}/coe_processing',['as' => 'applications.coe.processing', 'uses' => 'ApplicationsStatusController@coe_processing']);
+    //Route::put('applications/{course_application_id}', ['as' => 'applications.update', 'uses' => 'ApplicationsStatusController@update']);
+    //Route::put('applications/{course_application_id}/update', ['as'=>'apply_offer.update', 'uses'=>'ApplicationsStatusController@update']);
+   // Route::resource('apply_offer', 'ApplyOfferController',['only'=>['edit','update']]);
+
+    //end anish routes
 });

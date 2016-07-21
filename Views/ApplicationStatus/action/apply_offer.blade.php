@@ -23,7 +23,7 @@
 
 				<h1 class="margin-down">{{ $applications->first_name}} - <small>Apply Offer</small></h1>
 				
-				@include('Tenant::application/partial/navbar')
+				@include('Tenant::ApplicationStatus/partial/navbar')
 				
 				<div class="box box-primary margin-up">
 					<div class="box-body">
@@ -31,8 +31,8 @@
 							<div class="col-md-7 col-md-offset-1">
 								{!! Form::model($applications, [
 									'class'=>'form-horizontal',
-									'method'=>'PUT',
-									'route'=>['application.apply.update',$applications->course_application_id]
+									'method'=>'POST',
+									'route'=>['applications.apply.update',$applications->course_application_id]
 								])!!}
 							
     							<div class="form-group">

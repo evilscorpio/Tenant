@@ -17,9 +17,7 @@
         @endif
         <h1>Application - <small>COE Issued</small></h1>
        
-        @include('Tenant::application/partial/navbar')
-      
-        @include('Tenant::application/partial/filter_search')
+         @include('Tenant::ApplicationStatus/partial/navbar')
           
         <section>
           <div class="box box-primary">

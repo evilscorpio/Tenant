@@ -21,13 +21,13 @@
 				@endif
 				<h1 class="margin-down">{{ $applications->first_name}} - <small>Cancel Application</small></h1>
 				
-				@include('Tenant::application/partial/navbar')
+				 @include('Tenant::ApplicationStatus/partial/navbar')
 				
 				<div class="box box-primary">
 					<div class="box-body">
 						{!! Form::open([
 									'class'=>'form-horizontal',
-									'route'=>['application.cancel', $applications->course_application_id]
+									'route'=>['applications.cancel', $applications->course_application_id]
 						])!!}	
 						
 							<div class="form-group">

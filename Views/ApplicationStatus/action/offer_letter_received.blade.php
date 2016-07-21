@@ -23,15 +23,15 @@
 				<h1 class="margin-down">{{ $applications->first_name }} - <small>Offer Letter Received</small></h1>
 				
 
-				@include('Tenant::application/partial/navbar')
+				 @include('Tenant::ApplicationStatus/partial/navbar')
 
 				<div class="box box-primary margin-up">
 					<div class="box-body">
 						{!! Form::model($applications,[
 							'class'=>'form-horizontal',
 							'files'=>true,
-							'method'=>'PUT',
-							'route'=>['application.offer_letter.update',$applications->course_application_id]
+							'method'=>'POST',
+							'route'=>['applications.offer_letter.update',$applications->course_application_id]
 							])!!}
 
 					<div class="form-group">

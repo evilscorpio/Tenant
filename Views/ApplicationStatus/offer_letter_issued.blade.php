@@ -17,9 +17,7 @@
         @endif
         <h1>Application - <small>Offer Letter Issued</small></h1>
        
-        @include('Tenant::application/partial/navbar')
-      
-        @include('Tenant::application/partial/filter_search')
+         @include('Tenant::ApplicationStatus/partial/navbar')
         
         <section>
           <div class="box box-primary">
@@ -52,7 +50,7 @@
                           <td>{{ $application->intake_date }}</td>
                           <td>{{ $application->company }}</td>
                           <td>
-                            <a href="{{ route('application.apply.coe',[$application->course_application_id]) }}" title="Apply COE"><i class=" btn btn-primary btn-sm glyphicon glyphicon-education" data-toggle="tooltip" data-placement="top" title="Apply COE"></i></a>
+                            <a href="{{ route('applications.apply.coe',[$application->course_application_id]) }}" title="Apply COE"><i class=" btn btn-primary btn-sm glyphicon glyphicon-education" data-toggle="tooltip" data-placement="top" title="Apply COE"></i></a>
                             <a href="#" title="view"><i class="processing btn btn-primary btn-sm glyphicon glyphicon-eye-open" data-toggle="tooltip" data-placement="top" title="View"></i></a>
                             <a href="#" title="edit"><i class="processing btn btn-primary btn-sm glyphicon glyphicon-edit" data-toggle="tooltip" data-placement="top" title="Edit"></i></a>
 

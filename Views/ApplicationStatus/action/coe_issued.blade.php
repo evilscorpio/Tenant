@@ -23,7 +23,7 @@
 				<h1 class="margin-down">Application - <small>COE Issued</small></h1>
 				
 
-				@include('Tenant::application/partial/navbar')
+				 @include('Tenant::ApplicationStatus/partial/navbar')
 
 				<div class="box box-primary margin-up">
 					<h1 class="margin-from-left">{{ $applications->fullname}}</h1>
@@ -31,8 +31,8 @@
 						{!! Form::model($applications,[
 							'class'=>'form-horizontal',
 							'files'=>true,
-							'method'=>'PUT',
-							'route'=>['application.action.update.coe.issued',$applications->course_application_id]
+							'method'=>'POST',
+							'route'=>['applications.action.update.coe.issued',$applications->course_application_id]
 							])!!}
 
 					<div class="form-group col-md-12">

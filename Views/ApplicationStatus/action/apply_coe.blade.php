@@ -22,14 +22,14 @@
 				@endif
 				<h1 class="margin-down">Application - <small>Apply COE</small></h1>
 				
-				@include('Tenant::application/partial/navbar')
+				 @include('Tenant::ApplicationStatus/partial/navbar')
 				
 				<div class="box box-primary">
 					<div class="box-body">
 						{!! Form::model($applications,[
 							'class'=>'form-horizontal',
-							'method'=>'PUT',
-							'route'=>['application.update.applied.coe', $applications->course_application_id ]
+							'method'=>'POST',
+							'route'=>['applications.update.applied.coe', $applications->course_application_id ]
 						])!!}	
 						
 							<div class="form-group col-md-12">
