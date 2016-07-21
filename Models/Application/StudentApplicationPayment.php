@@ -106,7 +106,7 @@ class StudentApplicationPayment extends Model
     function getDetails($payment_id)
     {
         $payment = StudentApplicationPayment::leftJoin('client_payments', 'client_payments.client_payment_id', '=', 'student_application_payments.client_payment_id')
-            ->select('client_payments.*')
+            ->select('client_payments.*', 'student_application_payments.student_payments_id')
             ->find($payment_id);
         return $payment;
     }

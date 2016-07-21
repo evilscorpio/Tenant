@@ -175,11 +175,13 @@ Class Agent extends Model
 
     function getAgents()
     {
+        $arr[0] = 'No Agents';
         $agents = Agent::join('companies', 'companies.company_id', '=', 'agents.company_id')
             ->select(['companies.name', 'agents.agent_id'])
             ->lists('companies.name', 'agents.agent_id')
             ->toArray();
-        array_unshift($agents, "No Agent");
+        $agents = $arr + $agents;
+        //array_unshift($agents, "No Agent"); This re-indexes numeric keys
         return $agents;
     }
 
