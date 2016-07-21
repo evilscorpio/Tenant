@@ -65,7 +65,8 @@ class CollegeController extends BaseController
     public function editPayment($payment_id)
     {
         $data['payment'] = $this->payment->getDetails($payment_id);
-        return view("Tenant::Student/Payment/edit", $data);
+        $data['pay_type'] = 1; // Can change to any payment type
+        return view("Tenant::College/Payment/edit", $data);
     }
 
     public function updatePayment($payment_id)
@@ -133,7 +134,8 @@ class CollegeController extends BaseController
             ->select(['college_payments.*', 'college_invoice_payments.college_invoice_id']);
 
         $datatable = \Datatables::of($payments)
-            ->addColumn('action', '<div class="btn-group">
+            ->addColumn('action', function ($data) {
+                return '<div class="btn-group">
                   <button class="btn btn-primary" type="button">Action</button>
                   <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle" type="button">
                     <span class="caret"></span>
@@ -141,10 +143,11 @@ class CollegeController extends BaseController
                   </button>
                   <ul role="menu" class="dropdown-menu">
                     <li><a href="http://localhost/condat/tenant/contact/2">View</a></li>
-                    <li><a href="http://localhost/condat/tenant/contact/2">Edit</a></li>
+                    <li><a href="'.route("tenant.application.editPayment", $data->college_payment_id).'">Edit</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Delete</a></li>
                   </ul>
-                </div>')
+                </div>';
+            })
             ->addColumn('invoice_id', function ($data) {
                 if ((empty($data->college_invoice_id) || $data->college_invoice_id == 0) && $data->payment_type == 'College to Agent')
                     return 'Uninvoiced <a class="btn btn-success btn-xs" data-toggle="modal" data-target="#condat-modal" data-url="' . url('tenant/college/payment/' . $data->college_payment_id . '/' . $data->course_application_id . '/assign') . '"><i class="glyphicon glyphicon-plus-sign"></i> Assign to Invoice</a>';

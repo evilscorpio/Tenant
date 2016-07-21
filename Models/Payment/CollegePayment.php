@@ -87,21 +87,21 @@ class CollegePayment extends Model
     function getDetails($payment_id)
     {
         $payment = CollegePayment::leftJoin('college_invoice_payments', 'college_payments.college_payment_id', '=', 'college_invoice_payments.ci_payment_id')
-            ->select(['college_payments.*', 'college_invoice_payments.college_invoice_id']);
-
-        StudentApplicationPayment::leftJoin('client_payments', 'client_payments.client_payment_id', '=', 'student_application_payments.client_payment_id')
-            ->leftJoin('payment_invoice_breakdowns', 'client_payments.client_payment_id', '=', 'payment_invoice_breakdowns.payment_id')
-            ->select(['student_application_payments.student_payments_id', 'client_payments.*', 'payment_invoice_breakdowns.invoice_id', 'course_application_id'])
+            ->select(['college_payments.*'])
             ->find($payment_id);
         return $payment;
     }
 
     function editPayment($request, $payment_id)
     {
-        $payment = new ClientPayment();
-        $payment->edit($request, $payment_id);
+        $payment = CollegePayment::find($payment_id);
+        $payment->amount = $request['amount'];
+        $payment->date_paid = insert_dateformat($request['date_paid']);
+        $payment->payment_method = $request['payment_method'];
+        $payment->payment_type = $request['payment_type'];
+        $payment->description = $request['description'];
+        $payment->save();
 
-        $student_payment = StudentApplicationPayment::where('client_payment_id', $payment_id)->first();
-        return $student_payment->course_application_id;
+        return $payment->course_application_id;
     }
 }
