@@ -179,7 +179,7 @@ class StudentController extends BaseController
                   <ul role="menu" class="dropdown-menu">
                     <li><a href="' . route("tenant.invoice.payments", [$data->invoice_id, 2]) . '">View Payments</a></li>
                     <li><a href="' . route('tenant.student.invoice', $data->student_invoice_id) . '">View Invoice</a></li>
-                    <li><a href="http://localhost/condat/tenant/contact/2">Edit</a></li>
+                    <li><a href="'.route("tenant.student.editInvoice", $data->student_invoice_id).'">Edit</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Delete</a></li>
                   </ul>
                 </div>';
@@ -284,6 +284,21 @@ class StudentController extends BaseController
         //$data['client_name'] = $this->application->getClientName($invoice->course_application_id);
         $data['pay_details'] = $this->invoice->getPayDetails($invoice_id);
         return view("Tenant::Student/Invoice/show", $data);
+    }
+
+    public function editInvoice($invoice_id)
+    {
+        $data['invoice'] = $this->invoice->getDetails($invoice_id);
+        return view("Tenant::Student/Invoice/edit", $data);
+    }
+
+    public function updateInvoice($invoice_id)
+    {
+        $this->validate($this->request, $this->rules);
+
+        $application_id = $this->invoice->editPayment($this->request->all(), $invoice_id);
+        Flash::success('Payment has been updated successfully.');
+        return redirect()->route('tenant.application.students', $application_id);
     }
 
 }

@@ -8,7 +8,11 @@
                     <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </div>
-                    {!!Form::text('invoice_date', null, array('class' => 'form-control', 'id'=>'invoice_date'))!!}
+                    @if(!isset($invoice) || $invoice->invoice_date == null)
+                        {!!Form::text('invoice_date', null, array('class' => 'form-control', 'id'=>'invoice_date'))!!}
+                    @else
+                        {!!Form::text('invoice_date', format_date($invoice->invoice_date), array('class' => 'form-control', 'id'=>'invoice_date'))!!}
+                    @endif
                 </div>
                 @if($errors->has('invoice_date'))
                     {!! $errors->first('invoice_date', '<label class="control-label"
@@ -108,7 +112,11 @@
                     <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                     </div>
-                    {!!Form::text('due_date', null, array('class' => 'form-control', 'id'=>'due_date'))!!}
+                    @if(!isset($invoice) || $invoice->due_date == null)
+                        {!!Form::text('due_date', null, array('class' => 'form-control', 'id'=>'due_date'))!!}
+                    @else
+                        {!!Form::text('due_date', format_date($invoice->due_date), array('class' => 'form-control', 'id'=>'due_date'))!!}
+                    @endif
                 </div>
                 @if($errors->has('due_date'))
                     {!! $errors->first('due_date', '<label class="control-label"
@@ -172,11 +180,13 @@
 
     $(function () {
         $("#invoice_date").datepicker({
-            autoclose: true
+            autoclose: true,
+            format: 'dd/mm/yyyy'
         });
 
         $("#due_date").datepicker({
-            autoclose: true
+            autoclose: true,
+            format: 'dd/mm/yyyy'
         });
     });
 </script>

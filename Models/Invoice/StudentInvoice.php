@@ -144,4 +144,34 @@ class StudentInvoice extends Model
         $details->outstandingAmount = $this->getOutstandingAmount($invoice_id);
         return $details;
     }
+
+    function editPayment(array $request, $invoice_id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $invoice = Invoice::create([
+                'client_id' => null, //change this later
+                'amount' => $request['amount'],
+                'invoice_date' => insert_dateformat($request['invoice_date']),
+                'discount' => $request['discount'],
+                'invoice_amount' => $request['invoice_amount'],
+                'description' => $request['description'],
+                'due_date' => insert_dateformat($request['due_date']),
+            ]);
+
+            $student_invoice = StudentInvoice::create([
+                'invoice_id' => $invoice->invoice_id,
+                'application_id' => $application_id
+            ]);
+
+            DB::commit();
+            return $student_invoice->student_invoice_id;
+            // all good
+        } catch (\Exception $e) {
+            DB::rollback();
+            dd($e);
+            // something went wrong
+        }
+    }
 }
