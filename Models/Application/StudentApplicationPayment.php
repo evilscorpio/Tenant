@@ -113,10 +113,11 @@ class StudentApplicationPayment extends Model
 
     function editPayment($request, $payment_id)
     {
-        $payment = new ClientPayment();
-        $payment->edit($request, $payment_id);
+        $student_payment = StudentApplicationPayment::find($payment_id);
 
-        $student_payment = StudentApplicationPayment::where('client_payment_id', $payment_id)->first();
+        $payment = new ClientPayment();
+        $payment->edit($request, $student_payment->client_payment_id);
+
         return $student_payment->course_application_id;
     }
 }

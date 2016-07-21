@@ -108,23 +108,21 @@ class SubAgentApplicationPayment extends Model
         return $payment;
     }
 
-
-
     function getDetails($payment_id)
     {
-        $payment = StudentApplicationPayment::leftJoin('client_payments', 'client_payments.client_payment_id', '=', 'student_application_payments.client_payment_id')
-            ->leftJoin('payment_invoice_breakdowns', 'client_payments.client_payment_id', '=', 'payment_invoice_breakdowns.payment_id')
-            ->select(['student_application_payments.student_payments_id', 'client_payments.*', 'payment_invoice_breakdowns.invoice_id', 'course_application_id'])
+        $payment = SubAgentApplicationPayment::leftJoin('client_payments', 'client_payments.client_payment_id', '=', 'subagent_application_payments.client_payment_id')
+            ->select('client_payments.*')
             ->find($payment_id);
         return $payment;
     }
 
     function editPayment($request, $payment_id)
     {
-        $payment = new ClientPayment();
-        $payment->edit($request, $payment_id);
+        $student_payment = SubAgentApplicationPayment::find($payment_id);
 
-        $student_payment = StudentApplicationPayment::where('client_payment_id', $payment_id)->first();
+        $payment = new ClientPayment();
+        $payment->edit($request, $student_payment->client_payment_id);
+
         return $student_payment->course_application_id;
     }
 }

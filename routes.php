@@ -158,6 +158,8 @@ Route::group(array('prefix' => 'tenant', 'module' => 'Tenant', 'middleware' => '
     /* Create payments for a application sub agents */
     Route::get('subagents/{application_id}/payment', ['as' => 'application.subagents.payment', 'uses' => 'SubAgentController@createPayment']);
     Route::post('subagents/{application_id}/storePayment', ['as' => 'application.subagents.storePayment', 'uses' => 'SubAgentController@storePayment']);
+    Route::get('subagents/{payment_id}/editPayment', ['as' => 'application.subagents.editPayment', 'uses' => 'SubAgentController@editPayment']);
+    Route::put('subagents/{payment_id}/editPayment', ['as' => 'application.subagents.updatePayment', 'uses' => 'SubAgentController@updatePayment']);
     Route::get('subagents/payments/{client_id}/data', 'SubAgentController@getPaymentsData');
     Route::get('subagents/{payment_id}/payment/view', ['as' => 'subagents.payment.view', 'uses' => 'SubAgentController@viewPayment']);
 

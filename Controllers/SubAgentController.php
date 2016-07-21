@@ -65,6 +65,21 @@ class SubAgentController extends BaseController
         return redirect()->route('tenant.application.subagents', $application_id);
     }
 
+    public function editPayment($payment_id)
+    {
+        $data['payment'] = $this->payment->getDetails($payment_id);
+        return view("Tenant::SubAgent/Payment/edit", $data);
+    }
+
+    public function updatePayment($payment_id)
+    {
+        $this->validate($this->request, $this->rules);
+
+        $application_id = $this->payment->editPayment($this->request->all(), $payment_id);
+        Flash::success('Payment has been updated successfully.');
+        return redirect()->route('tenant.application.subagents', $application_id);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -114,7 +129,7 @@ class SubAgentController extends BaseController
                   </button>
                   <ul role="menu" class="dropdown-menu">
                     <li><a href="'.route('subagents.payment.view', $data->subagent_payments_id).'">View</a></li>
-                    <li><a href="http://localhost/condat/tenant/contact/2">Edit</a></li>
+                    <li><a href="'.route("application.subagents.editPayment", $data->subagent_payments_id).'">Edit</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Delete</a></li>
                   </ul>
                 </div>';

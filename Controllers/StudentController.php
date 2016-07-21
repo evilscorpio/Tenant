@@ -132,7 +132,7 @@ class StudentController extends BaseController
                   </button>
                   <ul role="menu" class="dropdown-menu">
                     <li><a href="' . url("tenant/students/payment/receipt/" . $data->student_payments_id) . '">Print Receipt</a></li>
-                    <li><a href="'.route("application.students.editPayment", $data->client_payment_id).'">Edit</a></li>
+                    <li><a href="'.route("application.students.editPayment", $data->student_payments_id).'">Edit</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Delete</a></li>
                   </ul>
                 </div>';
