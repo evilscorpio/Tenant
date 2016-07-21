@@ -71,7 +71,8 @@
     $(function () {
         var date = new Date();
         $("#date_paid").datepicker({
-            autoclose: true
+            autoclose: true,
+            format: 'dd/mm/yyyy'
         });
     });
 </script>

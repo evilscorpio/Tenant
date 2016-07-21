@@ -125,7 +125,7 @@
 
                 "ajax": appUrl + "/tenant/students/invoices/" + <?php echo $application->application_id ?> +"/data",
                 "columns": [
-                    {data: 'student_invoice_id', name: 'student_invoice_id'},
+                    {data: 'invoice_id', name: 'invoice_id'},
                     {data: 'invoice_date', name: 'invoice_date'},
                     {data: 'description', name: 'description', orderable: false},
                     {data: 'invoice_amount', name: 'invoice_amount'},
@@ -149,7 +149,7 @@
 
                 "ajax": appUrl + "/tenant/students/recent/" + <?php echo $application->application_id ?> +"/data",
                 "columns": [
-                    {data: 'student_invoice_id', name: 'student_invoice_id'},
+                    {data: 'invoice_id', name: 'invoice_id'},
                     {data: 'invoice_date', name: 'invoice_date'},
                     {data: 'description', name: 'description', orderable: false},
                     {data: 'invoice_amount', name: 'invoice_amount'},

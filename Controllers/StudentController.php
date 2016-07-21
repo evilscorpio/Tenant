@@ -141,7 +141,7 @@ class StudentController extends BaseController
                 if (empty($data->invoice_id) || $data->invoice_id == 0)
                     return 'Uninvoiced <a class="btn btn-success btn-xs" data-toggle="modal" data-target="#condat-modal" data-url="' . url('tenant/student/payment/' . $data->client_payment_id . '/' . $data->course_application_id . '/assign') . '"><i class="glyphicon glyphicon-plus-sign"></i> Assign to Invoice</a>';
                 else
-                    return format_id($data->invoice_id, 'SI');
+                    return format_id($data->invoice_id, 'I');
             })
             ->editColumn('date_paid', function ($data) {
                 return format_date($data->date_paid);
@@ -198,8 +198,8 @@ class StudentController extends BaseController
             ->editColumn('invoice_date', function ($data) {
                 return format_date($data->invoice_date);
             })
-            ->editColumn('student_invoice_id', function ($data) {
-                return format_id($data->student_invoice_id, 'SI');
+            ->editColumn('invoice_id', function ($data) {
+                return format_id($data->invoice_id, 'I');
             });
         return $datatable->make(true);
     }
@@ -251,8 +251,8 @@ class StudentController extends BaseController
             ->editColumn('invoice_date', function ($data) {
                 return format_date($data->invoice_date);
             })
-            ->editColumn('student_invoice_id', function ($data) {
-                return format_id($data->student_invoice_id, 'SI');
+            ->editColumn('invoice_id', function ($data) {
+                return format_id($data->invoice_id, 'I');
             });
         return $datatable->make(true);
     }
