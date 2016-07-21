@@ -63,18 +63,18 @@
             </div>
         </div>
         
-        <div class="form-group @if($errors->has('gst')) {{'has-error'}} @endif">
-                    {!!Form::label('gst', 'GST *', array('class' => 'col-sm-4 control-label')) !!}
+        <div class="form-group @if($errors->has('total_gst')) {{'has-error'}} @endif">
+                    {!!Form::label('total_gst', 'GST *', array('class' => 'col-sm-4 control-label')) !!}
                     <div class="col-sm-8">
                         <div class="input-group">
                             <span class="input-group-addon">$</span>
-                            {!!Form::text('gst', null, array('class' => 'form-control', 'id'=>'gst','placeholder'=>'10% of Amount ','readonly' => 'true'))!!}
+                            {!!Form::text('total_gst', null, array('class' => 'form-control', 'id'=>'gst','placeholder'=>'10% of Amount ','readonly' => 'true'))!!}
                             <span class="input-group-addon">
                                {{ Form::checkbox('gst_checker_incentive', 'incentive', false,array('id'=>'gst_checker_incentive')) }} GST
                             </span>
                         </div>
-                        @if($errors->has('gst'))
-                            {!! $errors->first('gst', '<label class="control-label"
+                        @if($errors->has('total_gst'))
+                            {!! $errors->first('total_gst', '<label class="control-label"
                                                                      for="inputError">:message</label>') !!}
                         @endif
                     </div>

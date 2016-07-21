@@ -294,10 +294,15 @@ class StudentController extends BaseController
 
     public function updateInvoice($invoice_id)
     {
-        $this->validate($this->request, $this->rules);
+        $rules = [
+            'invoice_amount' => 'required|numeric',
+            'invoice_date' => 'required',
+            'due_date' => 'required'
+        ];
+        $this->validate($this->request, $rules);
 
         $application_id = $this->invoice->editPayment($this->request->all(), $invoice_id);
-        Flash::success('Payment has been updated successfully.');
+        Flash::success('Invoice has been updated successfully.');
         return redirect()->route('tenant.application.students', $application_id);
     }
 

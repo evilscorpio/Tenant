@@ -41,6 +41,8 @@ class StudentInvoice extends Model
                 'invoice_date' => insert_dateformat($request['invoice_date']),
                 'discount' => $request['discount'],
                 'invoice_amount' => $request['invoice_amount'],
+                'final_total' => $request['final_total'],
+                'total_gst' => $request['total_gst'],
                 'description' => $request['description'],
                 'due_date' => insert_dateformat($request['due_date']),
             ]);
@@ -66,7 +68,7 @@ class StudentInvoice extends Model
         $stats['invoice_amount'] = $this->getTotalAmount($application_id);
         $stats['total_paid'] = $this->getTotalPaid($application_id);
         $due_amount = $stats['invoice_amount'] - $stats['total_paid'];
-        $stats['due_amount'] = ($due_amount < 0)? 0 : $due_amount;
+        $stats['due_amount'] = ($due_amount < 0) ? 0 : $due_amount;
         return $stats;
     }
 
@@ -96,15 +98,14 @@ class StudentInvoice extends Model
             ->get();
         //->lists('invoice_details', 'invoices.invoice_id');
         $invoice_list = array();
-        foreach($invoices as $key => $invoice)
-        {
+        foreach ($invoices as $key => $invoice) {
             $formatted_id = format_id($invoice->invoice_id, 'SI');
-            $invoice_list[$invoice->invoice_id] = $formatted_id. ', $'. $invoice->amount;
+            $invoice_list[$invoice->invoice_id] = $formatted_id . ', $' . $invoice->amount;
         }
         return $invoice_list;
     }
 
-    function getClientId ($invoice_id)
+    function getClientId($invoice_id)
     {
         $client = StudentInvoice::join('course_application', 'student_invoices.application_id', '=', 'course_application.course_application_id')
             ->select('client_id')
@@ -116,7 +117,7 @@ class StudentInvoice extends Model
     {
         $paid = $this->getPaidAmount($invoice_id);
         $final_total = Invoice::find($invoice_id)->invoice_amount;
-        $outstanding = ($final_total - $paid > 0)? $final_total - $paid : 0;
+        $outstanding = ($final_total - $paid > 0) ? $final_total - $paid : 0;
         return $outstanding;
     }
 
@@ -147,31 +148,19 @@ class StudentInvoice extends Model
 
     function editPayment(array $request, $invoice_id)
     {
-        DB::beginTransaction();
+        $student_invoice = StudentInvoice::find($invoice_id);
 
-        try {
-            $invoice = Invoice::create([
-                'client_id' => null, //change this later
-                'amount' => $request['amount'],
-                'invoice_date' => insert_dateformat($request['invoice_date']),
-                'discount' => $request['discount'],
-                'invoice_amount' => $request['invoice_amount'],
-                'description' => $request['description'],
-                'due_date' => insert_dateformat($request['due_date']),
-            ]);
+        $invoice = Invoice::find($student_invoice->invoice_id);
+        $invoice->amount = $request['amount'];
+        $invoice->invoice_date = insert_dateformat($request['invoice_date']);
+        $invoice->discount = $request['discount'];
+        $invoice->invoice_amount = $request['invoice_amount'];
+        $invoice->final_total = $request['final_total'];
+        $invoice->total_gst = $request['total_gst'];
+        $invoice->description = $request['description'];
+        $invoice->due_date = insert_dateformat($request['due_date']);
+        $invoice->save();
 
-            $student_invoice = StudentInvoice::create([
-                'invoice_id' => $invoice->invoice_id,
-                'application_id' => $application_id
-            ]);
-
-            DB::commit();
-            return $student_invoice->student_invoice_id;
-            // all good
-        } catch (\Exception $e) {
-            DB::rollback();
-            dd($e);
-            // something went wrong
-        }
+        return $student_invoice->application_id;
     }
 }
