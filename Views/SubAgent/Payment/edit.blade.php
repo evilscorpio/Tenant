@@ -1,9 +1,9 @@
 @extends('layouts.tenant')
-@section('title', 'Update Invoice')
-@section('heading', 'Update Invoice')
+@section('title', 'Update Payment')
+@section('heading', 'Update Payment')
 @section('breadcrumb')
     @parent
-    <li><a href="{{url('tenant/clients')}}" title="All Clients"><i class="fa fa-users"></i> Payment Details</a></li>
+    <li><a href="{{url('tenant/clients')}}" title="All Clients"><i class="fa fa-users"></i> Client</a></li>
     <li>Add</li>
 @stop
 @section('content')
@@ -14,11 +14,10 @@
                 <h3 class="box-title">Edit Payment</h3>
             </div>
             @include('flash::message')
-             {!!Form::model($client, array('route' => array('tenant.client.update', $client->client_id), 'class' => 'form-horizontal form-left', 'method' => 'put'))!!}
-            {!!Form::hidden('user_id', $payment->user_id)!!}
-            @include('Tenant::Account/ClientInvoice/form')
+            {!!Form::model($payment, array('route' => array('application.subagents.updatePayment', $payment->subagent_payments_id), 'class' => 'form-horizontal form-left', 'method' => 'put'))!!}
+            @include('Tenant::SubAgent/Payment/form')
             <div class="box-footer clearfix">
-                <input type="submit" class="btn btn-primary pull-right" value="Add"/>
+                <input type="submit" class="btn btn-primary pull-right" value="Update"/>
             </div>
             {!!Form::close()!!}
         </div>
