@@ -35,26 +35,25 @@ class ApplicationStatus extends Model
      */
     public $timestamps = false;
 
+        
         function application_create(array $request, $course_application_id)
         {
            DB::beginTransaction();
 
           try {
                 
-                $status = ApplicationStatus::where('course_application_id', $course_application_id)->first();
-                if(!$status)
-                {
+                $status = ApplicationStatus::where('course_application_id', $course_application_id)
+                                            ->where('status_id', 2)
+                                            ->first();
+                  if(!$status)
+                  {
                  $status = ApplicationStatus::create([
                     'course_application_id' => $course_application_id,
                     'status_id'             => 2,
                     'date_applied'          => Carbon::now()
                     ]); 
                 }
-               // $status = ApplicationStatus::create([
-               //      'course_application_id' => $course_application_id,
-               //      'status_id'             => 2,
-               //      'date_applied'          => Carbon::now()
-               //      ]);
+
            
 
                DB::commit();
@@ -66,6 +65,97 @@ class ApplicationStatus extends Model
               dd($e);
               // something went wrong
           }
+         }
+
+         function offer_create(array $request, $course_application_id)
+        {
+           DB::beginTransaction();
+
+          try {
+                
+                 $status = ApplicationStatus::where('course_application_id', $course_application_id)
+                                            ->where('status_id', 3)
+                                            ->first();
+                  if(!$status)
+                {
+                 $status = ApplicationStatus::create([
+                    'course_application_id' => $course_application_id,
+                    'status_id'             => 3,
+                    'date_applied'          => Carbon::now()
+                    ]); 
+                }
+
+           
+
+               DB::commit();
+              return true;
+               // all good
+           } catch (\Exception $e) {
+               DB::rollback();
+              //return false;
+              dd($e);
+              // something went wrong
+          }
+         }
+
+         function coe_create(array $request, $course_application_id)
+        {
+           DB::beginTransaction();
+
+          try {
+                 
+                $status = ApplicationStatus::where('course_application_id', $course_application_id)
+                                            ->where('status_id', 4)
+                                            ->first();
+                  if(!$status)
+                {
+                 $status = ApplicationStatus::create([
+                    'course_application_id' => $course_application_id,
+                    'status_id'             => 4,
+                    'date_applied'          => Carbon::now()
+                    ]); 
+                }
+           
+
+               DB::commit();
+              return true;
+               // all good
+           } catch (\Exception $e) {
+               DB::rollback();
+              //return false;
+              dd($e);
+              // something went wrong
+          }
+         }
+
+         function coe_issued_create(array $request, $course_application_id)
+        {
+           DB::beginTransaction();
+
+          try {
+                
+                  $status = ApplicationStatus::where('course_application_id', $course_application_id)
+                                              ->where('status_id', 5)
+                                              ->first();
+                  if(!$status)
+                {
+                 $status = ApplicationStatus::create([
+                    'course_application_id' => $course_application_id,
+                    'status_id'             => 5,
+                    'date_applied'          => Carbon::now()
+                    ]); 
+                }
+           
+
+               DB::commit();
+              return true;
+              // all good
+            } catch (\Exception $e) {
+               DB::rollback();
+              //return false;
+              dd($e);
+              // something went wrong
+            }
          }
 
     function application_update(array $request, $course_application_id)
@@ -101,7 +191,7 @@ class ApplicationStatus extends Model
             $applications->tuition_fee = $request['total_tuition_fee'];
             $applications->intake_id   = $request['intake_date'];
             $applications->student_id   = $request['student_id'];
-            $applications->COE_fee   = $request['total_fee_for_coe'];
+            $applications->fee_for_coe  = $request['total_fee_for_coe'];
 
             $applications->save();
            
@@ -124,7 +214,7 @@ class ApplicationStatus extends Model
         try {
 
             $applications = CourseApplication::find($course_application_id);
-            $applications->COE_fee = $request['fee_paid_for_coe'];
+            $applications->fee_for_coe = $request['fee_paid_for_coe'];
             $applications->save();
 
            
@@ -147,7 +237,7 @@ class ApplicationStatus extends Model
         try {
 
             $applications = CourseApplication::find($course_application_id);
-            $applications->COE_fee = $request['total_tuition_fee'];
+            $applications->fee_for_coe = $request['total_tuition_fee'];
             $applications->end_date = $request['finish_date'];
             $applications->student_id = $request['student_id'];
             $applications->save();

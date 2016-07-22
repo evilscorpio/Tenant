@@ -13,33 +13,8 @@
     </div>
         
       
-    <div class="col-md-3">
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Payment Summary</h3>
-                </div>
-            
-            <!-- /.box-header -->
-                <div class="box-body">
-                    <strong>
-                        <i class="fa fa-calendar margin-r-5"></i>
-                        Total Invoice Amount
-                    </strong>
-                    <p class="text-muted">20000</p>
-                    <strong>
-                        <i class="fa fa-calendar margin-r-5"></i>
-                        Total Paid Amount
-                    </strong>
-                    <p class="text-muted">20000</p>
-                    <strong>
-                        <i class="fa fa-calendar margin-r-5"></i>
-                        Due Amount
-                    </strong>
-                    <p class="text-muted">8000</p>
-                </div>
-            </div>
-    </div>
-    <div class="col-xs-9">
+    
+    <div class="col-xs-12">
         <div class="box box-primary">
             <div class="box-header with-border">
                 <h3 class="box-title">Recent Invoices</h3>
@@ -53,9 +28,10 @@
                         <th>Invoice Date</th>
                         <th>Description</th>
                         <th>Invoice Amount</th>
+                        <th>GST</th>
                         <th>Status</th>
                         <th>Outstanding Amount</th>
-                        <th width="70px"></th>
+                        <th></th>
                     </tr>
                     </thead>
                 </table>
@@ -88,37 +64,26 @@
         <div class="box box-primary">
             <div class="box-header with-border">
                 <h3 class="box-title">Future Invoices</h3>
-                <button class="btn btn-success btn-flat pull-right"><i class="glyphicon glyphicon-plus-sign"></i> Create Invoice</button>
+                <button class="btn btn-success btn-flat pull-right"><i class="glyphicon glyphicon-plus-sign"></i> Create
+                    Invoice
+                </button>
             </div>
             <div class="box-body">
-                <table id="clients" class="table table-bordered table-striped dataTable">
+                <table id="recent" class="table table-bordered table-striped dataTable">
                     <thead>
                     <tr>
                         <th>Invoice ID</th>
-                        <th>Future Invoice Date</th>
+                        <th>Invoice Date</th>
                         <th>Description</th>
                         <th>Invoice Amount</th>
+                        <th>GST</th>
                         <th>Status</th>
                         <th>Outstanding Amount</th>
                         <th></th>
-
-                    </tr>
-                    <tr>
-                        <td>I80001</td>
-                        <td>12/06/2016</td>
-                        
-                        <td>College fee</td>
-                        <td>2000</td>
-                        <td>outstanding</td>
-                        <td>5000 /view paymens)</td>
-                        <td>Add payment  / view / edit / delete </td>
-
                     </tr>
                     </thead>
                 </table>
             </div>
-
-
         </div>
 
          
@@ -168,6 +133,7 @@
                     {data: 'invoice_date', name: 'invoice_date'},
                     {data: 'description', name: 'description', orderable: false, searchable: false},
                     {data: 'invoice_amount', name: 'invoice_amount'},
+                    {data: 'total_gst', name: 'total_gst'},
                     {data: 'status', name: 'status'},
                     {data: 'outstanding_amount', name: 'outstanding_amount'},
                     {data: 'action', name: 'action', orderable: false, searchable: false}
