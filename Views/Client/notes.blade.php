@@ -9,8 +9,8 @@
 
     <div class="container">
         <div class="row">
-        @include('Tenant::Client/client_header') 
-      </div>
+            @include('Tenant::Client/client_header')
+        </div>
     </div>
 
     <div class="col-md-3">
@@ -24,6 +24,7 @@
 
                 <form action='' method="POST">
                     <input type="hidden" name="_token" value="{{csrf_token()}}">
+
                     <div class="form-group">
                         <textarea name="description" class="form-control" id="description"></textarea>
                     </div>
@@ -57,52 +58,53 @@
     </div>
 
     <div class="col-md-8 col-xs-12">
-            <div class="box box-primary">
-                <div class="box-body table-responsive">
-                     @if(count($notes) > 0)                  
-                    <hr/>              
+        <div class="box box-primary">
+            <div class="box-body table-responsive">
+                @if(count($notes) > 0)
+                    <hr/>
                     <table id="table-lead" class="table table-hover">
-            
+
                         <thead>
                         <tr>
-                             <th>Added By</th>
+                            <th>Added By</th>
                             <th>Notes</th>
-                            <th>Remind me</th> 
-                             <th>Reminder date</th>                             
-                            <th>Processing</th>                            
+                            <th>Remind me</th>
+                            <th>Reminder date</th>
+                            <th>Processing</th>
                         </tr>
                         </thead>
                         <tbody>
-                  @foreach($notes as $key => $note)
-                        
+                        @foreach($notes as $key => $note)
+
                             <tr>
                                 <td>{{ get_tenant_name($note->added_by_user_id)}}</td>
                                 <td>{{ $note->description }}</td>
                                 <td>{{ ($note->remind == 1) ? 'yes' : 'no' }}</td>
                                 <td>{{($note->remind == 1) ? format_date($note->reminder_date) : ''}}</td>
                                 <td>
-                                    <a href="{{route('tenant.client.notes.delete', $note->notes_id)}}" target="_blank" onClick="return confirm('Are you sure want to delete this record')"><i class="fa fa-trash"></i> Delete</a>
+                                    <a href="{{route('tenant.client.notes.delete', $note->notes_id)}}" target="_blank"
+                                       onClick="return confirm('Are you sure want to delete this record')"><i
+                                                class="fa fa-trash"></i> Delete</a>
                                 </td>
-                               
+
                             </tr>
-                             @endforeach
+                        @endforeach
                         </tbody>
 
                     </table>
-                   @else
-                        <p class="text-muted well">
-                            No note uploaded yet.
-                        </p>
-                   @endif
-                </div>
+                @else
+                    <p class="text-muted well">
+                        No note uploaded yet.
+                    </p>
+                @endif
             </div>
-        </div>     </div>
+        </div>
     </div>
     <!-- Bootstrap date picker -->
     <script type="text/javascript">
         $(function () {
             $('.datepicker').datepicker({
-                format: "yyyy-mm-dd",
+                format: 'dd/mm/yyyy',
                 startDate: '+0d',
                 autoclose: true,
                 todayHighlight: true
@@ -120,12 +122,5 @@
             });
         });
 
-
     </script>
-    <script>
-
-</script>
-  
-  
-
 @stop

@@ -1,5 +1,5 @@
 @extends('layouts.tenant')
-@section('title', 'Client View')
+@section('title', 'Application View')
 @section('breadcrumb')
     @parent
     <li><a href="{{url('tenant/application')}}" title="All Applications"><i class="fa fa-users"></i> Applications</a>

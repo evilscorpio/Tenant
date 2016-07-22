@@ -165,4 +165,55 @@ class CollegeInvoice extends Model
         $details->outstandingAmount = $this->getOutstandingAmount($invoice_id);
         return $details;
     }
+
+    function editInvoice(array $request, $application_id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $college_invoice = CollegeInvoice::create([
+                'course_application_id' => $application_id,
+                'total_commission' => $request['total_commission'],
+                'total_gst' => $request['total_gst'],
+                'final_total' => $request['final_total'],
+                'installment_no' => $request['installment_no'],
+                'invoice_date' => insert_dateformat($request['invoice_date'])
+            ]);
+
+            if(isset($request['tuition_fee']))
+            {
+                $ci_commission = TuitionCommission::create([
+                    'tuition_fee' => $request['tuition_fee'],
+                    'enrollment_fee' => $request['enrollment_fee'],
+                    'material_fee' => $request['material_fee'],
+                    'coe_fee' => $request['coe_fee'],
+                    'other_fee' => $request['other_fee'],
+                    'sub_total' => $request['sub_total'],
+                    'description' => $request['description'],
+                    'commission_percent' => $request['commission_percent'],
+                    'commission_amount' => $request['commission_amount'],
+                    'commission_gst' => $request['tuition_fee_gst'],
+                    'college_invoice_id' => $college_invoice->college_invoice_id
+                ]);
+            }
+
+            if(isset($request['incentive']))
+            {
+                $ci_commission = OtherCommission::create([
+                    'amount' => $request['incentive'],
+                    'gst' => $request['incentive_gst'],
+                    'description' => $request['description'],
+                    'college_invoice_id' => $college_invoice->college_invoice_id
+                ]);
+            }
+
+            DB::commit();
+            return $college_invoice->college_invoice_id;
+            // all good
+        } catch (\Exception $e) {
+            DB::rollback();
+            dd($e);
+            // something went wrong
+        }
+    }
 }

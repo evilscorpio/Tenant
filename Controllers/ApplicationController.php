@@ -2,6 +2,7 @@
 
 use App\Http\Requests;
 use App\Modules\Tenant\Models\Agent;
+use App\Modules\Tenant\Models\Client\ApplicationNotes;
 use App\Modules\Tenant\Models\Client\Client;
 use App\Modules\Tenant\Models\Application\CourseApplication;
 use App\Modules\Tenant\Models\Course\BroadField;
@@ -25,7 +26,7 @@ class ApplicationController extends BaseController
         'payment_method' => 'required|min:2|max:45'
     ];
 
-    function __construct(Client $client, Request $request, CourseApplication $application, Institute $institute, Agent $agent, CollegePayment $payment, CollegeInvoice $invoice, StudentInvoice $student_invoice)
+    function __construct(Client $client, Request $request, CourseApplication $application, Institute $institute, Agent $agent, CollegePayment $payment, CollegeInvoice $invoice, StudentInvoice $student_invoice, ApplicationNotes $notes)
     {
         $this->client = $client;
         $this->request = $request;
@@ -34,6 +35,7 @@ class ApplicationController extends BaseController
         $this->agent = $agent;
         $this->payment = $payment;
         $this->invoice = $invoice;
+        $this->notes = $notes;
         $this->student_invoice = $student_invoice;
         parent::__construct();
     }
@@ -248,6 +250,25 @@ class ApplicationController extends BaseController
 
         Flash::success('Super Agent has been added successfully.');
         return redirect()->route('tenant.application.show', $application_id);
+    }
+
+    function notes($application_id)
+    {
+        $client_id = CourseApplication::find($application_id)->client_id;
+        $app = new \stdClass();
+        $app->application_id = $application_id;
+        $data['application'] = $app;
+        $data['client'] = $this->client->getDetails($client_id);
+        $data['notes'] = $this->notes->getAll($application_id);
+        return view("Tenant::Application/notes", $data);
+    }
+
+    function saveNote($application_id)
+    {
+        $created = $this->notes->add($this->request->all(), $application_id);
+        if($created)
+            Flash::success('Note has been added successfully.');
+        return redirect()->route('tenant.application.notes', $application_id);
     }
 
 }

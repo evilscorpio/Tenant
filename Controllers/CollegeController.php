@@ -189,7 +189,7 @@ class CollegeController extends BaseController
                   <ul role="menu" class="dropdown-menu">
                     <li><a href="' . route("tenant.invoice.payments", [$data->college_invoice_id, 1]) . '">View payments</a></li>
                     <li><a href="' . route('tenant.college.invoice', $data->college_invoice_id) . '">View Invoice</a></li>
-                    <li><a href="http://localhost/condat/tenant/contact/2">Edit</a></li>
+                    <li><a href="'.route("tenant.college.editInvoice", $data->college_invoice_id).'">Edit</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Delete</a></li>
                   </ul>
                 </div>';
@@ -238,7 +238,7 @@ class CollegeController extends BaseController
                   <ul role="menu" class="dropdown-menu">
                     <li><a href="' . route("tenant.invoice.payments", [$data->college_invoice_id, 1]) . '">View payments</a></li>
                     <li><a href="' . route('tenant.college.invoice', $data->college_invoice_id) . '">View Invoice</a></li>
-                    <li><a href="http://localhost/condat/tenant/contact/2">Edit</a></li>
+                    <li><a href="'.route("tenant.college.editInvoice", $data->college_invoice_id).'">Edit</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Delete</a></li>
                   </ul>
                 </div>';
@@ -287,6 +287,26 @@ class CollegeController extends BaseController
         $data['payment_id'] = $payment_id;
         $data['college'] = true;
         return view("Tenant::Client/Payment/assign", $data);
+    }
+
+    public function editInvoice($invoice_id)
+    {
+        $data['invoice'] = $this->invoice->getDetails($invoice_id);
+        return view("Tenant::Student/Invoice/edit", $data);
+    }
+
+    public function updateInvoice($invoice_id)
+    {
+        $rules = [
+            'invoice_amount' => 'required|numeric',
+            'invoice_date' => 'required',
+            'due_date' => 'required'
+        ];
+        $this->validate($this->request, $rules);
+
+        $application_id = $this->invoice->editInvoice($this->request->all(), $invoice_id);
+        Flash::success('Invoice has been updated successfully.');
+        return redirect()->route('tenant.application.students', $application_id);
     }
 
 }

@@ -99,6 +99,8 @@ Route::group(array('prefix' => 'tenant', 'module' => 'Tenant', 'middleware' => '
     Route::put('applications/{id}',['as' => 'tenant.application.update', 'uses' => 'ApplicationController@update']);
     Route::delete('applications/{id}',['as' => 'tenant.application.destroy', 'uses' => 'ApplicationController@destroy']);
     Route::get('applications/{id}/documents',['as' => 'tenant.application.document', 'uses' => 'ApplicationController@documents']);
+    Route::get('applications/{id}/notes',['as' => 'tenant.application.notes', 'uses' => 'ApplicationController@notes']);
+    Route::post('applications/{id}/notes',['as' => 'tenant.application.notes', 'uses' => 'ApplicationController@saveNote']);
 
     /* Get forms to add through ajax */
     Route::get('application/institute/add', ['as' => 'application.institute.add', 'uses' => 'ApplicationController@createInstitute']);
@@ -131,6 +133,8 @@ Route::group(array('prefix' => 'tenant', 'module' => 'Tenant', 'middleware' => '
 
     /* College Invoices */
     Route::get('college/{invoice_id}/invoice', ['as' => 'tenant.college.invoice', 'uses' => 'CollegeController@show']);
+    Route::get('college/{invoice_id}/editInvoice', ['as' => 'tenant.college.editInvoice', 'uses' => 'CollegeController@editInvoice']);
+    Route::put('college/{invoice_id}/editInvoice', ['as' => 'tenant.college.editInvoice', 'uses' => 'CollegeController@updateInvoice']);
 
     /* Routes for student section */
     Route::get('applications/{application_id}/students', ['as' => 'tenant.application.students', 'uses' => 'StudentController@index']);

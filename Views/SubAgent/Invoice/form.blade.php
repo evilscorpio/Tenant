@@ -102,11 +102,13 @@
 <script>
     $(function () {
         $("#invoice_date").datepicker({
-            autoclose: true
+            autoclose: true,
+            format: 'dd/mm/yyyy'
         });
 
         $("#due_date").datepicker({
-            autoclose: true
+            autoclose: true,
+            format: 'dd/mm/yyyy'
         });
     });
 </script>

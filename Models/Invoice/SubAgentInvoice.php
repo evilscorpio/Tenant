@@ -40,8 +40,8 @@ class SubAgentInvoice extends Model
                 'amount' => $request['amount'],
                 'invoice_date' => insert_dateformat($request['invoice_date']),
                 'discount' => $request['discount'],
-                'final_total' => $request['final_total'],
-                'total_gst' => $request['total_gst'],
+                //'final_total' => $request['final_total'],
+                //'total_gst' => $request['total_gst'],
                 'invoice_amount' => $request['invoice_amount'],
                 'description' => $request['description'],
                 'due_date' => insert_dateformat($request['due_date']),
@@ -143,15 +143,15 @@ class SubAgentInvoice extends Model
 
     function editInvoice(array $request, $invoice_id)
     {
-        $subagent_invoice = StudentInvoice::find($invoice_id);
+        $subagent_invoice = SubAgentInvoice::find($invoice_id);
 
         $invoice = Invoice::find($subagent_invoice->invoice_id);
         $invoice->amount = $request['amount'];
         $invoice->invoice_date = insert_dateformat($request['invoice_date']);
         $invoice->discount = $request['discount'];
         $invoice->invoice_amount = $request['invoice_amount'];
-        $invoice->final_total = $request['final_total'];
-        $invoice->total_gst = $request['total_gst'];
+        //$invoice->final_total = $request['final_total'];
+        //$invoice->total_gst = $request['total_gst'];
         $invoice->description = $request['description'];
         $invoice->due_date = insert_dateformat($request['due_date']);
         $invoice->save();

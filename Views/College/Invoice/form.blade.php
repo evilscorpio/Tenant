@@ -309,14 +309,14 @@
 <script>
     $(function () {
         $("#invoice_date").datepicker({
+            format: 'dd/mm/yyyy',
             autoclose: true
         });
 
         $("#due_date").datepicker({
+            format: 'dd/mm/yyyy',
             autoclose: true
         });
-
-
 
         $(".btn-collapse").click(function(e) {
             $('#tuition_fee').val(0);
