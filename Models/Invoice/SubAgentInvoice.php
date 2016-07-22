@@ -40,6 +40,8 @@ class SubAgentInvoice extends Model
                 'amount' => $request['amount'],
                 'invoice_date' => insert_dateformat($request['invoice_date']),
                 'discount' => $request['discount'],
+                'final_total' => $request['final_total'],
+                'total_gst' => $request['total_gst'],
                 'invoice_amount' => $request['invoice_amount'],
                 'description' => $request['description'],
                 'due_date' => insert_dateformat($request['due_date']),
@@ -129,6 +131,32 @@ class SubAgentInvoice extends Model
             ->where('invoice_id', $invoice_id)
             ->sum('client_payments.amount');
         return $paid;
+    }
+
+    function getDetails($invoice_id)
+    {
+        $subagent_invoice = SubAgentInvoice::join('invoices', 'subagent_invoices.invoice_id', '=', 'invoices.invoice_id')
+            ->select(['invoices.*', 'subagent_invoices.subagent_invoice_id'])
+            ->find($invoice_id);
+        return $subagent_invoice;
+    }
+
+    function editInvoice(array $request, $invoice_id)
+    {
+        $subagent_invoice = StudentInvoice::find($invoice_id);
+
+        $invoice = Invoice::find($subagent_invoice->invoice_id);
+        $invoice->amount = $request['amount'];
+        $invoice->invoice_date = insert_dateformat($request['invoice_date']);
+        $invoice->discount = $request['discount'];
+        $invoice->invoice_amount = $request['invoice_amount'];
+        $invoice->final_total = $request['final_total'];
+        $invoice->total_gst = $request['total_gst'];
+        $invoice->description = $request['description'];
+        $invoice->due_date = insert_dateformat($request['due_date']);
+        $invoice->save();
+
+        return $subagent_invoice->course_application_id;
     }
 }
 

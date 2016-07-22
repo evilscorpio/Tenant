@@ -146,10 +146,9 @@ class StudentInvoice extends Model
         return $details;
     }
 
-    function editPayment(array $request, $invoice_id)
+    function editInvoice(array $request, $invoice_id)
     {
         $student_invoice = StudentInvoice::find($invoice_id);
-
         $invoice = Invoice::find($student_invoice->invoice_id);
         $invoice->amount = $request['amount'];
         $invoice->invoice_date = insert_dateformat($request['invoice_date']);

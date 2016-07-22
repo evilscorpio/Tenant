@@ -172,7 +172,7 @@ class SubAgentController extends BaseController
                   <ul role="menu" class="dropdown-menu">
                     <li><a href="'.route("tenant.invoice.payments", [$data->invoice_id, 3]).'">View Payments</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">View</a></li>
-                    <li><a href="http://localhost/condat/tenant/contact/2">Edit</a></li>
+                    <li><a href="'.route("tenant.subagents.editInvoice", $data->subagent_invoice_id).'">Edit</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Delete</a></li>
                   </ul>
                 </div>';
@@ -220,7 +220,7 @@ class SubAgentController extends BaseController
                   <ul role="menu" class="dropdown-menu">
                     <li><a href="'.route("tenant.invoice.payments", [$data->invoice_id, 3]).'">View Payments</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">View</a></li>
-                    <li><a href="http://localhost/condat/tenant/contact/2">Edit</a></li>
+                    <li><a href="'.route("tenant.subagents.editInvoice", $data->subagent_invoice_id).'">Edit</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Delete</a></li>
                   </ul>
                 </div>';
@@ -255,9 +255,24 @@ class SubAgentController extends BaseController
         return view("Tenant::Client/Payment/assign", $data);
     }
 
-    function viewPayment($payment_id)
+    public function editInvoice($invoice_id)
     {
+        $data['invoice'] = $this->invoice->getDetails($invoice_id);
+        return view("Tenant::SubAgent/Invoice/edit", $data);
+    }
 
+    public function updateInvoice($invoice_id)
+    {
+        $rules = [
+            'invoice_amount' => 'required|numeric',
+            'invoice_date' => 'required',
+            'due_date' => 'required'
+        ];
+        $this->validate($this->request, $rules);
+
+        $application_id = $this->invoice->editInvoice($this->request->all(), $invoice_id);
+        Flash::success('Invoice has been updated successfully.');
+        return redirect()->route('tenant.application.subagents', $application_id);
     }
 
 }

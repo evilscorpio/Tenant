@@ -232,7 +232,7 @@ class StudentController extends BaseController
                   <ul role="menu" class="dropdown-menu">
                     <li><a href="' . route("tenant.invoice.payments", [$data->student_invoice_id, 2]) . '">View payments</a></li>
                     <li><a href="' . route('tenant.student.invoice', $data->student_invoice_id) . '">View Invoice</a></li>
-                    <li><a href="http://localhost/condat/tenant/contact/2">Edit</a></li>
+                    <li><a href="'.route("tenant.student.editInvoice", $data->student_invoice_id).'">Edit</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Delete</a></li>
                   </ul>
                 </div>';
@@ -301,7 +301,7 @@ class StudentController extends BaseController
         ];
         $this->validate($this->request, $rules);
 
-        $application_id = $this->invoice->editPayment($this->request->all(), $invoice_id);
+        $application_id = $this->invoice->editInvoice($this->request->all(), $invoice_id);
         Flash::success('Invoice has been updated successfully.');
         return redirect()->route('tenant.application.students', $application_id);
     }
