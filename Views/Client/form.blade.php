@@ -1,7 +1,6 @@
 <div class="box-body">
     <div class="col-md-6">
         <div class="">
-            Client Details
 
             <div class="">
                 <div class="form-group @if($errors->has('first_name')) {{'has-error'}} @endif">

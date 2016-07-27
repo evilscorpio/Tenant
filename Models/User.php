@@ -333,4 +333,18 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             ->first();
         return $user;
     }
+
+    public function activeClient(){
+        $activeClient=DB::table('active_clients')
+                ->leftJoin('clients','active_clients.client_id','=','clients.client_id')
+                ->leftJoin('persons', 'persons.person_id', '=', 'clients.person_id')
+                ->leftJoin('person_addresses', 'person_addresses.person_id', '=', 'persons.person_id')
+                ->leftJoin('addresses', 'addresses.address_id', '=', 'person_addresses.address_id')
+                ->leftJoin('person_phones', 'person_phones.person_id', '=', 'persons.person_id')
+                ->leftJoin('phones', 'phones.phone_id', '=', 'person_phones.phone_id')
+                ->leftJoin('users', 'users.user_id', '=', 'clients.user_id')       
+                ->where('active_clients.user_id',current_tenant_id())
+                ->get();
+        return $activeClient;
+    }
 }

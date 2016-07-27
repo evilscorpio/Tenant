@@ -5,6 +5,7 @@ use App\Modules\Tenant\Models\User;
 use DB;
 use Illuminate\Http\Request;
 use Flash;
+use App\Modules\Tenant\Models\Application\ApplicationStatus;
 
 class UserController extends BaseController {
 
@@ -18,14 +19,21 @@ class UserController extends BaseController {
 		'number' => 'required'
 	];
 
-	function __construct(User $user)
+	function __construct(User $user,ApplicationStatus $applicationStatus)
 	{
 		$this->user = $user;
+		$this->applicationStatus=$applicationStatus;
 		parent::__construct();
 	}
 
+	// user dashboard
 	public function dashboard(){
-		return view("Tenant::User/dashboard");
+		$data['active_clients']=$this->user->activeClient();
+		for($record=1;$record<=7;$record++){
+			$data['status'][$record]=$this->applicationStatus->statusRecord($record);
+		}	
+
+		return view("Tenant::User/dashboard",$data);
 	}
 
 	/**

@@ -255,6 +255,14 @@ class ApplicationStatus extends Model
         }
     }
 
+    public function statusRecord($status_id){
+        $statusRecord=DB::table('application_status')
+                ->select('status_id',DB::raw('count(*) as application_no'))        
+                ->where('status_id',$status_id)
+                ->get();
+        return $statusRecord;
+    }
+
 
 
 }

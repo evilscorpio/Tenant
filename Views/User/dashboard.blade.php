@@ -5,13 +5,12 @@
 @section('content')
 
     <div class="col-md-8">
-
         <div class="box box-primary">
             <div class="box-header ui-sortable-handle">
                 <h3 class="box-title">Active Clients</h3>
 
                 <div class="box-tools pull-right">
-                    <a class="btn btn-primary" href="http://expertfinance.thinkingnepal.com/system/lead/add"><i
+                    <a class="btn btn-primary" href="{{ route('tenant.client.create')}}"><i
                                 class="fa fa-plus"></i> Add Client</a>
                 </div>
             </div>
@@ -25,20 +24,27 @@
                         <th>Actions</th>
                     </tr>
                     </thead>
-                    <tr>
-                        <td>Jenish Maskey</td>
-                        <td>0430807730</td>
-                        <td>jenisjack_1@hotmail.com</td>
+                    <?php 
+                    foreach ($active_clients as $key => $value) {
+                        ?>
+                        <tr>
+                        <td>{{ $value->first_name }} {{ $value->middle_name }} {{ $value->last_name }} </td>
+                        <td>{{ $value->number }}</td>
+                        <td>{{ $value->email }}</td>
 
                         <td>
-                            <div class="box-tools pull-right">
-                                <a class="btn btn-primary" href=""><i class="fa fa-eye"></i></a>
+                            <div class="box-tools pull-left">
+                                <a class="btn btn-primary" href="{{ route('tenant.client.show',[$value->client_id])}}" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye" ></i></a>
+                                <a class="btn btn-primary" href="" data-toggle="tooltip" data-placement="top" title="Make Inactive"><i class="fa fa-remove"></i></a>
+                                
                             </div>
-                            <div class="box-tools pull-right">
-                                <a class="btn btn-primary" href=""><i class="fa fa-remove"></i></a>
-                            </div>
+                            
                         </td>
                     </tr>
+                    <?php
+                    }
+                    ?>
+                    
                 </table>
             </div>
         </div>
@@ -61,26 +67,27 @@
                         <li><span>0</span></li>
                     </ul>
                     <ul id="bars">
+
                         <li>
-                            <div data-applications="26" class="bar"></div>
+                            <div data-applications="{{ $status['1']['0']->application_no }}" class="bar"></div>
                             <span>Enquiry</span></li>
                         <li>
-                            <div data-applications="25" class="bar"></div>
+                            <div data-applications="{{ $status['2']['0']->application_no }}" class="bar"></div>
                             <span>Offer Processing</span></li>
                         <li>
-                            <div data-applications="30" class="bar"></div>
+                            <div data-applications="{{ $status['3']['0']->application_no }}" class="bar"></div>
                             <span>Offer Received</span></li>
                         <li>
-                            <div data-applications="16" class="bar"></div>
+                            <div data-applications="{{ $status['4']['0']->application_no }}" class="bar"></div>
                             <span>Coe Processing</span></li>
                         <li>
-                            <div data-applications="0" class="bar"></div>
+                            <div data-applications="{{ $status['5']['0']->application_no }}" class="bar"></div>
                             <span>Coe Received</span></li>
                         <li>
-                            <div data-applications="12" class="bar"></div>
+                            <div data-applications="{{ $status['6']['0']->application_no }}" class="bar"></div>
                             <span>Course Started</span></li>
                         <li>
-                            <div data-applications="2" class="bar"></div>
+                            <div data-applications="{{ $status['7']['0']->application_no }}" class="bar"></div>
                             <span>Course Completed</span></li>
                     </ul>
 
