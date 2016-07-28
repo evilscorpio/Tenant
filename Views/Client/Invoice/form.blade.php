@@ -182,7 +182,7 @@
         final_total = invoice_amount + gst;
         $('#final_total').val(final_total.toFixed(2));
     }
-    
+
     $(function () {
         $("#invoice_date").datepicker({
             format: 'dd/mm/yyyy',

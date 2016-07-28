@@ -9,7 +9,7 @@
 
     <div class="container">
         <div class="row">
-        @include('Tenant::Client/client_header')
+            @include('Tenant::Client/client_header')
         </div>
         <div class="col-md-3">
 
@@ -54,10 +54,11 @@
                 <div class="box box-primary">
                     <div class="box-header with-border">
                         <h3 class="box-title">Reminders</h3>
-                           
-                            <a href="{{url("tenant/clients/$client->client_id/notes")}}" class="btn btn-success pull-right btn-sm"><i class="fa fa-plus"></i> Add New</a>
-                        
-        
+
+                        <a href="{{url("tenant/clients/$client->client_id/notes")}}"
+                           class="btn btn-success pull-right btn-sm"><i class="fa fa-plus"></i> Add New</a>
+
+
                     </div>
                     <!-- Recent Payments -->
                     <div class="box-body">
@@ -67,141 +68,130 @@
                             <p class="text-muted">{{ format_date($remainder->reminder_date) }}</p>
                         @endforeach
                     </div>
-                    
                 </div>
-
-
             </div>
 
             <!-- /.box -->
         </div>
-        
+
         <div class="col-md-9">
-          <div class="nav-tabs-custom">
-            
-            <div class="tab-content">
-                <div class="active tab-pane" id="activity">
-                <!-- Post -->
-                    <div>
-                        
+            <div class="box">
+
+                <div class="box-body">
+                    <div class="active tab-pane" id="activity">
+                        <!-- Post -->
+                        <div>
+
                             <div class="col-sm-10">
-                              <input class="form-control input-sm" type="text" placeholder="Type a Comment">
+                                <input class="form-control input-sm" type="text" placeholder="Type a Comment">
                             </div>
                             <div class="col-sm-2">
-                              <a class="btn btn-primary btn-sm">Submit</a>
-                            </div> 
+                                <a class="btn btn-primary btn-sm">Submit</a>
+                            </div>
                             <div>&nbsp;</div>
 
-                    </div> 
-                <!-- /.post -->
-                </div>
-                <!-- /.post -->
-            </div>
-
-              <!-- /.tab-pane -->
-            <div class="tab-pane" id="timeline">
-                <!-- The timeline -->
-                <ul class="timeline timeline-inverse">
-                  <!-- timeline time label -->
-                  <li class="time-label">
+                        </div>
+                        <!-- /.post -->
+                    </div>
+                    <!-- The timeline -->
+                    <ul class="timeline timeline-inverse">
+                        <!-- timeline time label -->
+                        <li class="time-label">
                         <span class="bg-red">
                           10 Feb. 2014
                         </span>
-                  </li>
-                  <!-- /.timeline-label -->
-                  <!-- timeline item -->
-                  <li>
-                    <i class="fa fa-envelope bg-blue"></i>
+                        </li>
+                        <!-- /.timeline-label -->
+                        <!-- timeline item -->
+                        <li>
+                            <i class="fa fa-envelope bg-blue"></i>
 
-                    <div class="timeline-item">
-                      <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
+                            <div class="timeline-item">
+                                <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
 
-                      <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
+                                <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
 
-                      <div class="timeline-body">
-                        Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                        weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                        jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                        quora plaxo ideeli hulu weebly balihoo...
-                      </div>
-                      <div class="timeline-footer">
-                        <a class="btn btn-primary btn-xs">Read more</a>
-                        <a class="btn btn-danger btn-xs">Delete</a>
-                      </div>
-                    </div>
-                  </li>
-                  <!-- END timeline item -->
-                  <!-- timeline item -->
-                  <li>
-                    <i class="fa fa-user bg-aqua"></i>
+                                <div class="timeline-body">
+                                    Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
+                                    weebly ning heekya handango imeem plugg dopplr jibjab, movity
+                                    jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
+                                    quora plaxo ideeli hulu weebly balihoo...
+                                </div>
+                                <div class="timeline-footer">
+                                    <a class="btn btn-primary btn-xs">Read more</a>
+                                    <a class="btn btn-danger btn-xs">Delete</a>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- END timeline item -->
+                        <!-- timeline item -->
+                        <li>
+                            <i class="fa fa-user bg-aqua"></i>
 
-                    <div class="timeline-item">
-                      <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
+                            <div class="timeline-item">
+                                <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
 
-                      <h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request
-                      </h3>
-                    </div>
-                  </li>
-                  <!-- END timeline item -->
-                  <!-- timeline item -->
-                  <li>
-                    <i class="fa fa-comments bg-yellow"></i>
+                                <h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend
+                                    request
+                                </h3>
+                            </div>
+                        </li>
+                        <!-- END timeline item -->
+                        <!-- timeline item -->
+                        <li>
+                            <i class="fa fa-comments bg-yellow"></i>
 
-                    <div class="timeline-item">
-                      <span class="time"><i class="fa fa-clock-o"></i> 27 mins ago</span>
+                            <div class="timeline-item">
+                                <span class="time"><i class="fa fa-clock-o"></i> 27 mins ago</span>
 
-                      <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
+                                <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
 
-                      <div class="timeline-body">
-                        Take me to your leader!
-                        Switzerland is small and neutral!
-                        We are more like Germany, ambitious and misunderstood!
-                      </div>
-                      <div class="timeline-footer">
-                        <a class="btn btn-warning btn-flat btn-xs">View comment</a>
-                      </div>
-                    </div>
-                  </li>
-                  <!-- END timeline item -->
-                  <!-- timeline time label -->
-                  <li class="time-label">
+                                <div class="timeline-body">
+                                    Take me to your leader!
+                                    Switzerland is small and neutral!
+                                    We are more like Germany, ambitious and misunderstood!
+                                </div>
+                                <div class="timeline-footer">
+                                    <a class="btn btn-warning btn-flat btn-xs">View comment</a>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- END timeline item -->
+                        <!-- timeline time label -->
+                        <li class="time-label">
                         <span class="bg-green">
                           3 Jan. 2014
                         </span>
-                  </li>
-                  <!-- /.timeline-label -->
-                  <!-- timeline item -->
-                  <li>
-                    <i class="fa fa-camera bg-purple"></i>
+                        </li>
+                        <!-- /.timeline-label -->
+                        <!-- timeline item -->
+                        <li>
+                            <i class="fa fa-camera bg-purple"></i>
 
-                    <div class="timeline-item">
-                      <span class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
+                            <div class="timeline-item">
+                                <span class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
 
-                      <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
+                                <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
 
-                      <div class="timeline-body">
-                        <img src="http://placehold.it/150x100" alt="..." class="margin">
-                        <img src="http://placehold.it/150x100" alt="..." class="margin">
-                        <img src="http://placehold.it/150x100" alt="..." class="margin">
-                        <img src="http://placehold.it/150x100" alt="..." class="margin">
-                      </div>
-                    </div>
-                  </li>
-                  <!-- END timeline item -->
-                  <li>
-                    <i class="fa fa-clock-o bg-gray"></i>
-                  </li>
-                </ul>
-              </div>
-              <!-- /.tab-pane -->
-
-              
+                                <div class="timeline-body">
+                                    <img src="http://placehold.it/150x100" alt="..." class="margin">
+                                    <img src="http://placehold.it/150x100" alt="..." class="margin">
+                                    <img src="http://placehold.it/150x100" alt="..." class="margin">
+                                    <img src="http://placehold.it/150x100" alt="..." class="margin">
+                                </div>
+                            </div>
+                        </li>
+                        <!-- END timeline item -->
+                        <li>
+                            <i class="fa fa-clock-o bg-gray"></i>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.post -->
             </div>
-            <!-- /.tab-content -->
-          </div>
-          <!-- /.nav-tabs-custom -->
         </div>
-        <!-- /.col -->
-      
+    </div>
+    <!-- /.col -->
+
 
 @stop

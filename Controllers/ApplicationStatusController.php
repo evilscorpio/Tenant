@@ -43,7 +43,7 @@ class ApplicationStatusController extends BaseController
             ->orderBy('course_application.course_application_id', 'desc')
             ->get();
         
-        return view('Tenant::ApplicationStatus/enquiry',['applications'=>$applications]);
+        return view('Tenant::ApplicationStatus/enquiry',['applications' => $applications]);
     }
     
     //information for action page apply_offer
