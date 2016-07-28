@@ -92,7 +92,10 @@ class CourseApplication extends Model
             ->leftJoin('courses', 'course_application.institution_course_id', '=', 'courses.course_id')
             ->where('client_id', $client_id)
             ->select([DB::raw('CONCAT(companies.name, ", ", courses.name) AS info'), 'course_application.course_application_id'])
-            ->lists('info', 'courses.course_application_id');
+            ->lists('info', 'courses.course_application_id')
+            ->all();
+
+        $applications = array("0" => "No Applications") + $applications;
         return $applications;
     }
 

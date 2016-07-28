@@ -119,7 +119,6 @@
                     $('#reminderDate').fadeIn('slow');
                 else
                     $('#reminderDate').fadeOut('slow');
-
             });
         });
     </script>

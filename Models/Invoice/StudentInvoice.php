@@ -1,5 +1,6 @@
 <?php namespace App\Modules\Tenant\Models\Invoice;
 
+use App\Modules\Tenant\Models\Application\CourseApplication;
 use App\Modules\Tenant\Models\Application\StudentApplicationPayment;
 use Illuminate\Database\Eloquent\Model;
 use DB;
@@ -26,17 +27,16 @@ class StudentInvoice extends Model
      *
      * @var array
      */
-    protected $fillable = ['invoice_id', 'application_id'];
+    protected $fillable = ['invoice_id', 'application_id', 'client_id'];
 
     public $timestamps = false;
 
-    function add(array $request, $application_id)
+    function add(array $request, $client_id)
     {
         DB::beginTransaction();
 
         try {
             $invoice = Invoice::create([
-                'client_id' => null, //change this later
                 'amount' => $request['amount'],
                 'invoice_date' => insert_dateformat($request['invoice_date']),
                 'discount' => $request['discount'],
@@ -49,7 +49,8 @@ class StudentInvoice extends Model
 
             $student_invoice = StudentInvoice::create([
                 'invoice_id' => $invoice->invoice_id,
-                'application_id' => $application_id
+                'application_id' => ($request['application_id'] != 0)? $request['application_id'] : null,
+                'client_id' => $client_id
             ]);
 
             DB::commit();
@@ -133,7 +134,7 @@ class StudentInvoice extends Model
     function getDetails($invoice_id)
     {
         $student_invoice = StudentInvoice::join('invoices', 'student_invoices.invoice_id', '=', 'invoices.invoice_id')
-            ->select(['invoices.*', 'student_invoices.student_invoice_id'])
+            ->select(['invoices.*', 'student_invoices.*'])
             ->find($invoice_id);
         return $student_invoice;
     }

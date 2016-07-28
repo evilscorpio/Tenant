@@ -103,7 +103,10 @@ class StudentController extends BaseController
         ];
         $this->validate($this->request, $rules);
         // if validates
-        $created = $this->invoice->add($this->request->all(), $application_id);
+        $request = $this->request->all();
+        $request['application_id'] = $application_id;
+        $client_id = CourseApplication::find($application_id)->client_id;
+        $created = $this->invoice->add($request, $client_id);
         if ($created)
             Flash::success('Invoice has been created successfully.');
         return redirect()->route('tenant.application.students', $application_id);

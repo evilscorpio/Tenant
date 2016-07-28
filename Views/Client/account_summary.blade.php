@@ -1,5 +1,5 @@
 @extends('layouts.tenant')
-@section('title', 'Client View')
+@section('title', 'Client Account')
 @section('breadcrumb')
     @parent
     <li><a href="{{url('tenant/client')}}" title="All Clients"><i class="fa fa-users"></i> Clients</a></li>
@@ -69,7 +69,7 @@
                 </button>
             </div>
             <div class="box-body">
-                <table id="recent" class="table table-bordered table-striped dataTable">
+                <table id="future" class="table table-bordered table-striped dataTable">
                     <thead>
                     <tr>
                         <th>Invoice ID</th>
@@ -128,6 +128,30 @@
                 "autoWidth": true,
 
                 "ajax": appUrl + "/tenant/invoices/client/"+ <?php echo $client->client_id ?> +"/data",
+                "columns": [
+                    {data: 'invoice_id', name: 'invoice_id'},
+                    {data: 'invoice_date', name: 'invoice_date'},
+                    {data: 'description', name: 'description', orderable: false, searchable: false},
+                    {data: 'invoice_amount', name: 'invoice_amount'},
+                    {data: 'total_gst', name: 'total_gst'},
+                    {data: 'status', name: 'status'},
+                    {data: 'outstanding_amount', name: 'outstanding_amount'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false}
+                ]
+            });
+
+            fTable = $('#future').DataTable({
+                "processing": true,
+                "serverSide": true,
+
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": true,
+
+                "ajax": appUrl + "/tenant/invoices/future/"+ <?php echo $client->client_id ?> +"/data",
                 "columns": [
                     {data: 'invoice_id', name: 'invoice_id'},
                     {data: 'invoice_date', name: 'invoice_date'},

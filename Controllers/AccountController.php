@@ -9,6 +9,7 @@ use Flash;
 use DB;
 
 use Illuminate\Http\Request;
+use Carbon;
 
 class AccountController extends BaseController
 {
@@ -20,7 +21,7 @@ class AccountController extends BaseController
         'payment_method' => 'required|min:2|max:45'
     ];
 
-    function __construct(Client $client, Request $request, ClientPayment $payment,StudentInvoice $invoice, CourseApplication $application)
+    function __construct(Client $client, Request $request, ClientPayment $payment, StudentInvoice $invoice, CourseApplication $application)
     {
         $this->client = $client;
         $this->request = $request;
@@ -87,12 +88,6 @@ class AccountController extends BaseController
         return redirect()->route('tenant.accounts.index', $client_id);
     }
 
-    public function editClientInvoice()
-    {
-        return view("Tenant::Client/index");
-    }
-
-
     public function editClientPayment()
     {
         return view("Tenant::Client/index");
@@ -118,7 +113,7 @@ class AccountController extends BaseController
      */
     function getPaymentsData($client_id)
     {
-        $payments = ClientPayment::where('client_id', $client_id)->select(['*']);
+        $payments = ClientPayment::where('client_id', $client_id)->whereIn('payment_type', config('constants.payment_by'))->select(['*']);
 
         $datatable = \Datatables::of($payments)
             ->addColumn('action', '<div class="btn-group">
@@ -154,6 +149,56 @@ class AccountController extends BaseController
         $invoices = StudentInvoice::join('invoices', 'student_invoices.invoice_id', '=', 'invoices.invoice_id')
             ->join('course_application', 'course_application.course_application_id', '=', 'student_invoices.application_id')
             ->where('course_application.client_id', $client_id)
+            ->select(['invoices.*', 'student_invoices.student_invoice_id'])
+            ->orderBy('invoices.created_at', 'desc');
+
+        $datatable = \Datatables::of($invoices)
+            ->addColumn('action', function ($data) {
+                return '<div class="btn-group">
+                    <button class="btn btn-primary" type="button">Action</button>
+                  <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle" type="button">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                  </button>
+                  <ul role="menu" class="dropdown-menu">
+                    <li><a href="http://localhost/condat/tenant/contact/2">Add payment</a></li>
+                    <li><a href="http://localhost/condat/tenant/contact/2">View</a></li>
+                    <li><a href="' . route("tenant.invoice.edit", $data->student_invoice_id) . '">Edit</a></li>
+                    <li><a href="http://localhost/condat/tenant/contact/2">Delete</a></li>
+                  </ul>
+                </div>';
+            })
+            ->addColumn('status', function ($data) {
+                $outstanding = $this->invoice->getOutstandingAmount($data->invoice_id);
+                return ($outstanding != 0) ? 'Outstanding' : 'Paid';
+            })
+            ->addColumn('outstanding_amount', function ($data) {
+                $outstanding = $this->invoice->getOutstandingAmount($data->invoice_id);
+                if ($outstanding != 0)
+                    return $outstanding . ' <a class="btn btn-success btn-xs" data-toggle="modal" data-target="#condat-modal" data-url="' . url('tenant/invoices/' . $data->invoice_id . '/payment/add/2') . '"><i class="glyphicon glyphicon-plus-sign"></i> Add Payment</a>';
+                else
+                    return 0;
+            })
+            ->editColumn('invoice_date', function ($data) {
+                return format_date($data->invoice_date);
+            })
+            ->editColumn('invoice_id', function ($data) {
+                return format_id($data->invoice_id, 'I');
+            });
+        return $datatable->make(true);
+    }
+
+    /**
+     * Get all the future invoices through ajax request.
+     *
+     * @return JSON response
+     */
+    function getFutureData($client_id)
+    {
+        $invoices = StudentInvoice::join('invoices', 'student_invoices.invoice_id', '=', 'invoices.invoice_id')
+            ->join('course_application', 'course_application.course_application_id', '=', 'student_invoices.application_id')
+            ->where('course_application.client_id', $client_id)
+            ->where('invoice_date', '>=', Carbon\Carbon::now())
             ->select(['invoices.*'])
             ->orderBy('invoices.created_at', 'desc');
 
@@ -171,8 +216,17 @@ class AccountController extends BaseController
                     <li><a href="http://localhost/condat/tenant/contact/2">Delete</a></li>
                   </ul>
                 </div>')
-            ->addColumn('status', 'Outstanding')
-            ->addColumn('outstanding_amount', '5000 <button class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View Payments</button>')
+            ->addColumn('status', function ($data) {
+                $outstanding = $this->invoice->getOutstandingAmount($data->invoice_id);
+                return ($outstanding != 0) ? 'Outstanding' : 'Paid';
+            })
+            ->addColumn('outstanding_amount', function ($data) {
+                $outstanding = $this->invoice->getOutstandingAmount($data->invoice_id);
+                if ($outstanding != 0)
+                    return $outstanding . ' <a class="btn btn-success btn-xs" data-toggle="modal" data-target="#condat-modal" data-url="' . url('tenant/invoices/' . $data->invoice_id . '/payment/add/2') . '"><i class="glyphicon glyphicon-plus-sign"></i> Add Payment</a>';
+                else
+                    return 0;
+            })
             ->editColumn('invoice_date', function ($data) {
                 return format_date($data->invoice_date);
             })
@@ -275,6 +329,29 @@ class AccountController extends BaseController
     public function destroy($id)
     {
         //
+    }
+
+    public function editInvoice($invoice_id)
+    {
+        $data['invoice'] = $invoice = $this->invoice->getDetails($invoice_id);
+        $data['client_id'] = $invoice->client_id;
+        $data['applications'] = $this->application->getClientApplication($data['client_id']);
+
+        return view("Tenant::Client/Invoice/edit", $data);
+    }
+
+    public function updateInvoice($invoice_id)
+    {
+        $rules = [
+            'invoice_amount' => 'required|numeric',
+            'invoice_date' => 'required',
+            'due_date' => 'required'
+        ];
+        $this->validate($this->request, $rules);
+
+        $application_id = $this->invoice->editInvoice($this->request->all(), $invoice_id);
+        Flash::success('Invoice has been updated successfully.');
+        return redirect()->route('tenant.application.students', $application_id);
     }
 
 }

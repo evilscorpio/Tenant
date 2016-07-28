@@ -14,11 +14,10 @@
                 <h3 class="box-title">Add Invoice</h3>
             </div>
             @include('flash::message')
-             {!!Form::model($client, array('route' => array('tenant.client.update', $client->client_id), 'class' => 'form-horizontal form-left', 'method' => 'put'))!!}
-            {!!Form::hidden('user_id', $payment->user_id)!!}
+             {!!Form::model($invoice, array('route' => array('tenant.client.update', $invoice->student_invoice_id), 'class' => 'form-horizontal form-left', 'method' => 'put'))!!}
             @include('Tenant::Client/Invoice/form')
             <div class="box-footer clearfix">
-                <input type="submit" class="btn btn-primary pull-right" value="Add"/>
+                <input type="submit" class="btn btn-primary pull-right" value="Update"/>
             </div>
             {!!Form::close()!!}
         </div>

@@ -44,7 +44,7 @@
                                 href="{{route('tenant.application.subagents', $application->application_id)}}">Sub Agent
                             Accounts</a></li>
                     <li><a href="{{url("tenant/clients/$client->client_id/innerdocument")}}">Documents</a></li>
-                    <li><a href="{{route('tenant.application.notes', $application->application_id)}}">Notes</a></li>
+                    <li class="{{($current == 'notes')? 'active' : ''}}"><a href="{{route('tenant.application.notes', $application->application_id)}}">Notes</a></li>
                 </ul>
             </div>
             <!--/.nav-collapse -->

@@ -42,7 +42,8 @@ class StudentApplicationPayment extends Model
         DB::beginTransaction();
 
         try {
-            $payment = $this->createPayment($request);
+            $client_id = CourseApplication::find($application_id)->client_id;
+            $payment = $this->createPayment($request, $client_id);
 
             $student_payment = StudentApplicationPayment::create([
                 'course_application_id' => $application_id,
@@ -89,10 +90,10 @@ class StudentApplicationPayment extends Model
         }
     }
 
-    function createPayment($request)
+    function createPayment($request, $client_id = null)
     {
         $payment = ClientPayment::create([
-            'client_id' => null, //change this later if necessary
+            'client_id' => $client_id,
             'amount' => $request['amount'],
             'date_paid' => insert_dateformat($request['date_paid']),
             'payment_method' => $request['payment_method'],
