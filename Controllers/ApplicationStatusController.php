@@ -307,6 +307,11 @@ class ApplicationStatusController extends BaseController
         
         return view('Tenant::ApplicationStatus/coe_issued',compact('applications'));
     }
+
+    public function statusRecord($status_id){
+        $statusRecord = $this->application_status->statusRecord($status_id);
+        return $statusRecord;
+    }
     
 
 
