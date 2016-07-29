@@ -8,6 +8,7 @@ use App\Modules\Tenant\Models\Document;
 use App\Modules\Tenant\Models\Notes;
 use App\Modules\Tenant\Models\Client\ClientNotes;
 use App\Modules\Tenant\Models\Client\ApplicationNotes;
+use App\Modules\Tenant\Models\Timeline\ClientTimeline;
 use Flash;
 use DB;
 
@@ -24,7 +25,7 @@ class ClientController extends BaseController
         'number' => 'required'
     ];
 
-    function __construct(Client $client, Request $request, ClientDocument $document, notes $notes, ClientNotes $client_notes, ApplicationNotes $application_notes)
+    function __construct(Client $client, Request $request, ClientDocument $document, notes $notes, ClientNotes $client_notes, ApplicationNotes $application_notes, ClientTimeline $timeline)
     {
         $this->client = $client;
         $this->request = $request;
@@ -32,6 +33,7 @@ class ClientController extends BaseController
         $this->document = $document;
         $this->client_notes = $client_notes;
         $this->application_notes = $application_notes;
+        $this->timeline = $timeline;
         parent::__construct();
     }
 
@@ -137,6 +139,7 @@ class ClientController extends BaseController
     {
         $data['client'] = $this->client->getDetails($client_id);
         $data['remainders'] = $this->client_notes->getAll($client_id, true);
+        $data['timelines'] = $this->timeline->getDetails($client_id);
         return view("Tenant::Client/show", $data);
     }
 
@@ -222,6 +225,8 @@ class ClientController extends BaseController
 
         if ($file_info = tenant()->folder($folder, true)->upload($file)) {
             $this->document->uploadDocument($client_id, $file_info, $this->request->all());
+
+            $this->client->addLog($client_id, 3, ['{{NAME}}' => get_tenant_name(), '{{DESCRIPTION}}' => $this->request->input['description']]); //catch up from here krita
             \Flash::success('File uploaded successfully!');
             return redirect()->route('tenant.client.document', $client_id);
         }

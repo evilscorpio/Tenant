@@ -2,12 +2,15 @@
 
 use App\Modules\Tenant\Models\Person\PersonPhone;
 use App\Modules\Tenant\Models\Phone;
+use App\Modules\Tenant\Models\Timeline\Timeline;
+use App\Modules\Tenant\Models\Timeline\TimelineType;
 use App\Modules\Tenant\Models\User;
 use App\Modules\Tenant\Models\Address;
 use App\Modules\Tenant\Models\Person\Person;
 use App\Modules\Tenant\Models\Person\PersonAddress;
 use Illuminate\Database\Eloquent\Model;
 use DB;
+use Carbon;
 
 class Client extends Model
 {
@@ -31,7 +34,7 @@ class Client extends Model
      *
      * @var array
      */
-    protected $fillable = ['added_by', 'user_id', 'person_id', 'description','referred_by'];
+    protected $fillable = ['added_by', 'user_id', 'person_id', 'description', 'referred_by'];
 
     /**
      * Get the person record associated with the client.
@@ -80,8 +83,8 @@ class Client extends Model
                 'user_id' => $user->user_id,
                 'person_id' => $person->person_id,
                 'added_by' => current_tenant_id(),
-                'referred_by'=>$request['referred_by'],
-                'description'=>$request['description'],
+                'referred_by' => $request['referred_by'],
+                'description' => $request['description'],
             ]);
 
             // Add address
@@ -187,8 +190,47 @@ class Client extends Model
             ->leftJoin('person_phones', 'person_phones.person_id', '=', 'persons.person_id')
             ->leftJoin('phones', 'phones.phone_id', '=', 'person_phones.phone_id')
             ->leftJoin('users', 'users.user_id', '=', 'clients.user_id')
-            ->where('clients.client_id', $client_id) //and user for email?
+            ->where('clients.client_id', $client_id)//and user for email?
             ->first(); //dd($client->toArray());
         return $client;
+    }
+
+    /*
+     * Add logs for timeline
+     */
+    function addLog($client_id, $type_id, array $param)
+    {
+        $message = $this->getTimelineTemplate($type_id, $param);
+
+        Timeline::create([
+            'client_id' => $client_id,
+            'created_date' => Carbon\Carbon::today(),
+            'timeline_type_id' => $type_id,
+            'message' => $message,
+            'added_by' => current_tenant_id(),
+            'created_at' => Carbon\Carbon::now()
+        ]);
+    }
+
+    /**
+     * Get Template setting from database
+     * @param $templateKey
+     * @param $param
+     * @return \stdClass
+     */
+    function getTimelineTemplate($type_id, $param)
+    {
+        $message = '';
+        $template = TimelineType::find($type_id);
+        if (!empty($template)) {
+            $header = str_replace(array_keys($param), array_values($param), $template->header);
+            $body = str_replace(array_keys($param), array_values($param), $template->body);
+            $footer = str_replace(array_keys($param), array_values($param), $template->footer);
+            $add_class = ($template->body == null && $template->footer == null)? ' no-border' : '';
+            $message = '<h3 class="timeline-header'.$add_class.'">'.$header.'</h3>';
+            $message .= ($template->body != null)? '<div class="timeline-body">'.$body.'</div>' : '';
+            $message .= ($template->footer != null) ? '<div class="timeline-footer">'.$footer.'</div>' : '';
+        }
+        return $message;
     }
 }

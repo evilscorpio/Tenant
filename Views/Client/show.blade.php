@@ -93,6 +93,33 @@
                         </div>
                         <!-- /.post -->
                     </div>
+
+                    {{-- The actual timeline --}}
+                    <ul class="timeline timeline-inverse">
+                        <!-- timeline time label -->
+                        @foreach($timelines as $key => $grouped_timeline)
+                            <li class="time-label">
+                                <span class="bg-red">
+                                  {{ readable_date($key) }}
+                                </span>
+                            </li>
+                            <!-- /.timeline-label -->
+                            <!-- timeline item -->
+                            @foreach($grouped_timeline as $timeline)
+                            <li>
+                                <i class="fa {{$timeline->image}}"></i>
+
+                                <div class="timeline-item">
+                                    <span class="time"><i class="fa fa-clock-o"></i> {{get_datetime_diff($timeline->created_at)}}</span>
+                                    {!! $timeline->message !!}
+                                </div>
+                            </li>
+                            @endforeach
+                        @endforeach
+                    </ul>
+
+                    {{-- End Actual timeline --}}
+
                     <!-- The timeline -->
                     <ul class="timeline timeline-inverse">
                         <!-- timeline time label -->

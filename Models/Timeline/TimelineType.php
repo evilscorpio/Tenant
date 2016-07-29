@@ -3,7 +3,7 @@
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
-class TimelineIcon extends Model
+class TimelineType extends Model
 {
 
     /**
@@ -11,21 +11,21 @@ class TimelineIcon extends Model
      *
      * @var string
      */
-    protected $table = 'timeline_icons';
+    protected $table = 'timeline_types';
 
     /**
      * The primary key of the table.
      *
      * @var string
      */
-    protected $primaryKey = 'icon_id';
+    protected $primaryKey = 'type_id';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['image'];
+    protected $fillable = ['description', 'image', 'header', 'body'];
 
     /**
      * Disable default timestamp feature.
