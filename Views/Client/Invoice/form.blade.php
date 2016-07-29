@@ -33,7 +33,7 @@
             <div class="col-sm-8">
                 <div class="input-group">
                     <span class="input-group-addon">$</span>
-                    {!!Form::text('amount', null, array('class' => 'form-control', 'id'=>'amount'))!!}
+                    {!!Form::text('amount', null, array('class' => 'form-control', 'id'=>'amount','autocomplete'=>'off'))!!}
                 </div>
                 @if($errors->has('amount'))
                     {!! $errors->first('amount', '<label class="control-label"
@@ -47,11 +47,25 @@
             <div class="col-sm-8">
                 <div class="input-group">
                     <span class="input-group-addon">$</span>
-                    {!!Form::text('discount', null, array('class' => 'form-control', 'id'=>'discount'))!!}
+                    {!!Form::text('discount', 0, array('class' => 'form-control', 'id'=>'discount','autocomplete'=>'off'))!!}
                 </div>
                 @if($errors->has('discount'))
                     {!! $errors->first('discount', '<label class="control-label"
                                                               for="inputError">:message</label>') !!}
+                @endif
+            </div>
+        </div>
+
+        <div class="form-group @if($errors->has('invoice_amount')) {{'has-error'}} @endif">
+            {!!Form::label('invoice_amount', 'Invoice Amount *', array('class' => 'col-sm-4 control-label')) !!}
+            <div class="col-sm-8">
+                <div class="input-group">
+                    <span class="input-group-addon">$</span>
+                    {!!Form::text('invoice_amount', null, array('class' => 'form-control', 'id'=>'invoice_amount','autocomplete'=>'off'))!!}
+                </div>
+                @if($errors->has('invoice_amount'))
+                    {!! $errors->first('invoice_amount', '<label class="control-label"
+                                                           for="inputError">:message</label>') !!}
                 @endif
             </div>
         </div>
@@ -87,19 +101,7 @@
             </div>
         </div>
 
-        <div class="form-group @if($errors->has('invoice_amount')) {{'has-error'}} @endif">
-            {!!Form::label('invoice_amount', 'Invoice Amount *', array('class' => 'col-sm-4 control-label')) !!}
-            <div class="col-sm-8">
-                <div class="input-group">
-                    <span class="input-group-addon">$</span>
-                    {!!Form::text('invoice_amount', null, array('class' => 'form-control', 'id'=>'invoice_amount'))!!}
-                </div>
-                @if($errors->has('invoice_amount'))
-                    {!! $errors->first('invoice_amount', '<label class="control-label"
-                                                           for="inputError">:message</label>') !!}
-                @endif
-            </div>
-        </div>
+        
 
         <div class="form-group @if($errors->has('description')) {{'has-error'}} @endif">
             {!!Form::label('description', 'Description', array('class' => 'col-sm-4 control-label')) !!}
