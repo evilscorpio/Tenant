@@ -78,7 +78,7 @@ class ClientDocument extends Model
                 'client_id' => $client_id
             ]);
             DB::commit();
-            return $client_document_id->client_document_id;
+            return $document->document_id;
             // all good
         } catch (\Exception $e) {
             DB::rollback();

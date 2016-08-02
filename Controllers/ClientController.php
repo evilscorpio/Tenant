@@ -124,8 +124,11 @@ class ClientController extends BaseController
         // if validates
         $created = $this->client->add($this->request->all());
 
-        if ($created)
+        if ($created) {
             Flash::success('Client has been created successfully.');
+            $this->client->addLog($created, 1);
+        }
+
         return redirect()->route('tenant.client.index');
     }
 
@@ -224,9 +227,9 @@ class ClientController extends BaseController
         $file = ($file == '') ? 'document' : $file;
 
         if ($file_info = tenant()->folder($folder, true)->upload($file)) {
-            $this->document->uploadDocument($client_id, $file_info, $this->request->all());
-
-            $this->client->addLog($client_id, 3, ['{{NAME}}' => get_tenant_name(), '{{DESCRIPTION}}' => $this->request->input['description']]); //catch up from here krita
+            $document_id = $this->document->uploadDocument($client_id, $file_info, $this->request->all());
+            $document = Document::find($document_id);
+            $this->client->addLog($client_id, 3, ['{{NAME}}' => get_tenant_name(), '{{DESCRIPTION}}' => $document->description, '{{TYPE}}' => $document->type, '{{FILE_NAME}}' => $document->fileName, '{{VIEW_LINK}}' => $document->shelf_location, '{{DOWNLOAD_LINK}}' => route('tenant.client.document.download', $document_id)]);
             \Flash::success('File uploaded successfully!');
             return redirect()->route('tenant.client.document', $client_id);
         }
@@ -257,57 +260,31 @@ class ClientController extends BaseController
         return view("Tenant::Client/payments", $data);
     }
 
-    function innerdocument($client_id)
-    {
-        $data['client'] = $this->client->getDetails($client_id);
-        $data['documents'] = $this->document->getClientDocuments($client_id);
-        return view("Tenant::Client/innerdocument", $data);
-    }
-
-    function innernotes($client_id)
-    {
-        $data['client'] = $this->client->getDetails($client_id);
-        $data['client_notes'] = $this->client_notes->getClientNotes($client_id);
-        return view("Tenant::Client/innernotes", $data);
-    }
-
-    function uploadInnerDocument($client_id)
-    {
-        $upload_rules = ['document' => 'required|mimes:jpeg,bmp,png,doc,docx,pdf,txt,xls,xlsx',
-            'description' => 'required',
-            'type' => 'required',
-        ];
-        $this->validate($this->request, $upload_rules);
-
-        $folder = 'document';
-        $file = $this->request->input('document');
-        $file = ($file == '') ? 'document' : $file;
-
-        if ($file_info = tenant()->folder($folder, true)->upload($file)) {
-            $this->document->uploadDocument($client_id, $file_info, $this->request->all());
-            \Flash::success('File uploaded successfully!');
-            return redirect()->route('tenant.client.innerdocument', $client_id);
-        }
-
-        \Flash::danger('Uploaded file is not valid!');
-        return redirect()->back();
-    }
-
-
     function uploadClientNotes($client_id)
     {
-        $upload_rules = ['description' => 'required'
-        ];
+        $upload_rules = ['description' => 'required'];
         if ($this->request->get('remind') == 1)
             $upload_rules['reminder_date'] = 'required';
 
         $this->validate($this->request, $upload_rules);
 
-        $this->client_notes->add($client_id, $this->request->all());
-        \Flash::success('Notes uploaded successfully!');
+        $note_id = $this->client_notes->add($client_id, $this->request->all());
+        if($note_id) {
+            \Flash::success('Notes uploaded successfully!');
+            $this->client->addLog($client_id, 2, ['{{DESCRIPTION}}' => $this->getNoteFormat($note_id), '{{NAME}}' => get_tenant_name()]);
+        }
         return redirect()->route('tenant.client.notes', $client_id);
     }
 
+
+    function getNoteFormat($note_id)
+    {
+        $note = Notes::find($note_id);
+        $format = $note->description. "<br/>";
+        if($note->remind == 1)
+            $format .= "<strong>Reminder Date : </strong>". format_date($note->reminder_date);
+        return $format;
+    }
 
     function deleteNote($note_id)
     {

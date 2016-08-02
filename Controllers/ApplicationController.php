@@ -107,8 +107,12 @@ class ApplicationController extends BaseController
         $this->validate($this->request, $this->rules);*/
         // if validates
         $created = $this->application->add($this->request->all(), $client_id);
-        if ($created)
+        if ($created) {
             Flash::success('Application has been created successfully.');
+
+            $app = $this->application->getDetails($created);
+            $this->client->addLog($client_id, 6, ['{{NAME}}' => get_tenant_name(), '{{INSTITUTE}}' => $app->company_name, '{{COURSE}}' => $app->course_name, '{{INTAKE_DATE}}' => format_date($app->intake_date), '{{TUITION_FEE}}' => $app->tuition_fee, '{{VIEW_LINK}}' => route('tenant.application.show', $created)], $created);
+        }
         return redirect()->route('tenant.client.application', $client_id);
     }
 

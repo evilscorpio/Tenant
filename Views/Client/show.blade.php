@@ -62,11 +62,18 @@
                     </div>
                     <!-- Recent Payments -->
                     <div class="box-body">
-                        @foreach($remainders as $key => $remainder)
-                            <strong><i class="fa fa-file-text-o margin-r-5"></i> {{ $remainder->description }}</strong>
+                        @if(count($remainders) > 0)
+                            @foreach($remainders as $key => $remainder)
+                                <strong><i class="fa fa-file-text-o margin-r-5"></i> {{ $remainder->description }}
+                                </strong>
 
-                            <p class="text-muted">{{ format_date($remainder->reminder_date) }}</p>
-                        @endforeach
+                                <p class="text-muted">{{ format_date($remainder->reminder_date) }}</p>
+                            @endforeach
+                        @else
+                            <p class="text-muted well">
+                                No upcoming reminders.
+                            </p>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -78,47 +85,8 @@
             <div class="box">
 
                 <div class="box-body">
-                    <div class="active tab-pane" id="activity">
-                        <!-- Post -->
-                        <div>
 
-                            <div class="col-sm-10">
-                                <input class="form-control input-sm" type="text" placeholder="Type a Comment">
-                            </div>
-                            <div class="col-sm-2">
-                                <a class="btn btn-primary btn-sm">Submit</a>
-                            </div>
-                            <div>&nbsp;</div>
-
-                        </div>
-                        <!-- /.post -->
-                    </div>
-
-                    {{-- The actual timeline --}}
-                    <ul class="timeline timeline-inverse">
-                        <!-- timeline time label -->
-                        @foreach($timelines as $key => $grouped_timeline)
-                            <li class="time-label">
-                                <span class="bg-red">
-                                  {{ readable_date($key) }}
-                                </span>
-                            </li>
-                            <!-- /.timeline-label -->
-                            <!-- timeline item -->
-                            @foreach($grouped_timeline as $timeline)
-                            <li>
-                                <i class="fa {{$timeline->image}}"></i>
-
-                                <div class="timeline-item">
-                                    <span class="time"><i class="fa fa-clock-o"></i> {{get_datetime_diff($timeline->created_at)}}</span>
-                                    {!! $timeline->message !!}
-                                </div>
-                            </li>
-                            @endforeach
-                        @endforeach
-                    </ul>
-
-                    {{-- End Actual timeline --}}
+                    @include('Tenant::Client/Show/timeline')
 
                     <!-- The timeline -->
                     <ul class="timeline timeline-inverse">

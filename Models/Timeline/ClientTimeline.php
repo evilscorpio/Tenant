@@ -40,7 +40,7 @@ class ClientTimeline extends Model
             ->join('timeline_types', 'timeline_types.type_id', '=', 'timelines.timeline_type_id')
             ->where('client_timeline.client_id', $client_id)
             ->select('timelines.*', 'timeline_types.image')
-            ->orderBy('created_at')
+            ->orderBy('created_at', 'desc')
             ->get()
             ->groupBy('created_date');
         //dd($logs->toArray());

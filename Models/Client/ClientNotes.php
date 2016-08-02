@@ -57,7 +57,7 @@ class ClientNotes extends Model
             'added_by_user_id' => current_tenant_id(),
             'description' => $request['description'],
             'remind' => (isset($request['remind'])) ? 1 : 0,
-            'reminder_date' => $request['reminder_date'],
+            'reminder_date' => insert_dateformat($request['reminder_date']),
         ]);
 
         ClientNotes::create([

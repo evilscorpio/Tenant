@@ -2,6 +2,7 @@
 
 use App\Modules\Tenant\Models\Person\PersonPhone;
 use App\Modules\Tenant\Models\Phone;
+use App\Modules\Tenant\Models\Timeline\ClientTimeline;
 use App\Modules\Tenant\Models\Timeline\Timeline;
 use App\Modules\Tenant\Models\Timeline\TimelineType;
 use App\Modules\Tenant\Models\User;
@@ -198,17 +199,23 @@ class Client extends Model
     /*
      * Add logs for timeline
      */
-    function addLog($client_id, $type_id, array $param)
+    function addLog($client_id, $type_id, array $param = array(), $app_id = null)
     {
         $message = $this->getTimelineTemplate($type_id, $param);
 
-        Timeline::create([
-            'client_id' => $client_id,
+        $timeline = Timeline::create([
+            //'client_id' => $client_id,
             'created_date' => Carbon\Carbon::today(),
             'timeline_type_id' => $type_id,
             'message' => $message,
             'added_by' => current_tenant_id(),
             'created_at' => Carbon\Carbon::now()
+        ]);
+
+        ClientTimeline::create([
+            'client_id' => $client_id,
+            'timeline_id' => $timeline->timeline_id,
+            'application_id' => $app_id,
         ]);
     }
 
