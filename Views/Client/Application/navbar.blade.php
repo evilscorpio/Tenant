@@ -33,8 +33,8 @@
                     <li class="{{($current == 'show')? 'active' : ''}}"><a
                                 href="{{route('tenant.application.show', $application->application_id)}}">Dashboard</a>
                     </li>
-                    <li><a href="#">Application Details</a></li>
-                    <li class="{{($current == 'college')? 'active' : ''}}"><a
+                    <li><a href="{{route('tenant.application.details', $application->application_id)}}">Application Details</a></li>
+                    <li class="{{($current == 'details')? 'active' : ''}}"><a
                                 href="{{route('tenant.application.college', $application->application_id)}}">College
                             Accounts</a></li>
                     <li class="{{($current == 'students')? 'active' : ''}}"><a

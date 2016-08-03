@@ -34,15 +34,21 @@ class ClientTimeline extends Model
      */
     public $timestamps = false;
 
-    public function getDetails($client_id)
+    public function getDetails($id, $application = false)
     {
         $logs = ClientTimeline::join('timelines', 'timelines.timeline_id', '=', 'client_timeline.timeline_id')
             ->join('timeline_types', 'timeline_types.type_id', '=', 'timelines.timeline_type_id')
-            ->where('client_timeline.client_id', $client_id)
             ->select('timelines.*', 'timeline_types.image')
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'desc');
+
+        if($application == false)
+            $logs = $logs->where('client_timeline.client_id', $id)
             ->get()
             ->groupBy('created_date');
+        else
+            $logs = $logs->where('client_timeline.application_id', $id)
+                ->get()
+                ->groupBy('created_date');
         //dd($logs->toArray());
         return $logs;
     }

@@ -107,6 +107,9 @@ Route::group(array('prefix' => 'tenant', 'module' => 'Tenant', 'middleware' => '
     Route::get('applications/{id}/notes',['as' => 'tenant.application.notes', 'uses' => 'ApplicationController@notes']);
     Route::post('applications/{id}/notes',['as' => 'tenant.application.notes', 'uses' => 'ApplicationController@saveNote']);
 
+    /* Get application timline */
+    Route::get('applications/{id}/details',['as' => 'tenant.application.details', 'uses' => 'ApplicationController@details']);
+
     /* Get forms to add through ajax */
     Route::get('application/institute/add', ['as' => 'application.institute.add', 'uses' => 'ApplicationController@createInstitute']);
     Route::get('application/course/add', ['as' => 'application.course.add', 'uses' => 'ApplicationController@createCourse']);

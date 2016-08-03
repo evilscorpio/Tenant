@@ -87,8 +87,11 @@ class AccountController extends BaseController
         $this->validate($this->request, $this->rules);
         // if validates
         $created = $this->payment->add($this->request->all(), $client_id);
-        if ($created)
-            Flash::success('Payment has added successfully.');
+        if ($created) {
+            Flash::success('Payment has been added successfully.');
+            $invoice = ClientPayment::find($created);
+            $this->client->addLog($client_id, 4, ['{{NAME}}' => get_tenant_name(), '{{DESCRIPTION}}' => $invoice->description, '{{DATE}}' => format_date($invoice->invoice_date), '{{AMOUNT}}' => $invoice->amount, '{{VIEW_LINK}}' => route("tenant.student.invoice", $invoice->student_invoice_id)], $invoice->application_id);
+        }
         return redirect()->route('tenant.accounts.index', $client_id);
     }
 

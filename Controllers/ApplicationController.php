@@ -11,6 +11,7 @@ use App\Modules\Tenant\Models\Institute\Institute;
 use App\Modules\Tenant\Models\Invoice\CollegeInvoice;
 use App\Modules\Tenant\Models\Invoice\StudentInvoice;
 use App\Modules\Tenant\Models\Payment\CollegePayment;
+use App\Modules\Tenant\Models\Timeline\ClientTimeline;
 use Flash;
 use DB;
 
@@ -26,7 +27,7 @@ class ApplicationController extends BaseController
         'payment_method' => 'required|min:2|max:45'
     ];
 
-    function __construct(Client $client, Request $request, CourseApplication $application, Institute $institute, Agent $agent, CollegePayment $payment, CollegeInvoice $invoice, StudentInvoice $student_invoice, ApplicationNotes $notes)
+    function __construct(Client $client, Request $request, CourseApplication $application, Institute $institute, Agent $agent, CollegePayment $payment, CollegeInvoice $invoice, StudentInvoice $student_invoice, ApplicationNotes $notes, ClientTimeline $timeline)
     {
         $this->client = $client;
         $this->request = $request;
@@ -36,6 +37,7 @@ class ApplicationController extends BaseController
         $this->payment = $payment;
         $this->invoice = $invoice;
         $this->notes = $notes;
+        $this->timeline = $timeline;
         $this->student_invoice = $student_invoice;
         parent::__construct();
     }
@@ -185,6 +187,17 @@ class ApplicationController extends BaseController
         $data['uninvoiced_amount'] = $this->payment->getUninvoicedAmount($application_id);
         $data['client'] = $this->client->getDetails($application->client_id);
         return view("Tenant::Client/Application/show", $data);
+    }
+
+    public function details($application_id)
+    {
+        $client_id = CourseApplication::find($application_id)->client_id;
+        $app = new \stdClass();
+        $app->application_id = $application_id;
+        $data['application'] = $app;
+        $data['client'] = $this->client->getDetails($client_id);
+        $data['timelines'] = $this->timeline->getDetails($application_id, true);
+        return view("Tenant::Client/Application/details", $data);
     }
 
     /**
