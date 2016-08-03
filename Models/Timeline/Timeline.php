@@ -25,7 +25,7 @@ class Timeline extends Model
      *
      * @var array
      */
-    protected $fillable = ['client_id', 'created_date', 'timeline_type_id', 'message', 'added_by', 'created_at'];
+    protected $fillable = ['created_date', 'timeline_type_id', 'message', 'added_by', 'created_at'];
 
     /**
      * Disable default timestamp feature.

@@ -229,7 +229,7 @@ class ClientController extends BaseController
         if ($file_info = tenant()->folder($folder, true)->upload($file)) {
             $document_id = $this->document->uploadDocument($client_id, $file_info, $this->request->all());
             $document = Document::find($document_id);
-            $this->client->addLog($client_id, 3, ['{{NAME}}' => get_tenant_name(), '{{DESCRIPTION}}' => $document->description, '{{TYPE}}' => $document->type, '{{FILE_NAME}}' => $document->fileName, '{{VIEW_LINK}}' => $document->shelf_location, '{{DOWNLOAD_LINK}}' => route('tenant.client.document.download', $document_id)]);
+            $this->client->addLog($client_id, 3, ['{{NAME}}' => get_tenant_name(), '{{DESCRIPTION}}' => $document->description, '{{TYPE}}' => $document->type, '{{FILE_NAME}}' => $document->name, '{{VIEW_LINK}}' => $document->shelf_location, '{{DOWNLOAD_LINK}}' => route('tenant.client.document.download', $document_id)]);
             \Flash::success('File uploaded successfully!');
             return redirect()->route('tenant.client.document', $client_id);
         }

@@ -11,10 +11,8 @@
     <div class="row">
     @include('Tenant::Client/client_header') 
     </div>
-        
-      
-    
     <div class="col-xs-12">
+        @include('flash::message')
         <div class="box box-primary">
             <div class="box-header with-border">
                 <h3 class="box-title">Recent Invoices</h3>

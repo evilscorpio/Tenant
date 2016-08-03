@@ -4,6 +4,7 @@ use App\Http\Requests;
 use App\Modules\Tenant\Models\Application\CourseApplication;
 use App\Modules\Tenant\Models\Client\Client;
 use App\Modules\Tenant\Models\Client\ClientPayment;
+use App\Modules\Tenant\Models\Invoice\Invoice;
 use App\Modules\Tenant\Models\Invoice\StudentInvoice;
 use Flash;
 use DB;
@@ -67,8 +68,11 @@ class AccountController extends BaseController
         $this->validate($this->request, $rules);
         // if validates
         $created = $this->invoice->add($this->request->all(), $client_id);
-        if ($created)
-            Flash::success('Invoice has created successfully.');
+        if ($created) {
+            Flash::success('Invoice has been created successfully.');
+            $invoice = StudentInvoice::join('invoices', 'invoices.invoice_id', '=', 'student_invoices.invoice_id')->find($created);
+            $this->client->addLog($client_id, 4, ['{{NAME}}' => get_tenant_name(), '{{DESCRIPTION}}' => $invoice->description, '{{DATE}}' => format_date($invoice->invoice_date), '{{AMOUNT}}' => $invoice->amount, '{{VIEW_LINK}}' => route("tenant.student.invoice", $invoice->student_invoice_id)], $invoice->application_id);
+        }
         return redirect()->route('tenant.accounts.index', $client_id);
     }
 
@@ -147,8 +151,8 @@ class AccountController extends BaseController
     function getInvoicesData($client_id)
     {
         $invoices = StudentInvoice::join('invoices', 'student_invoices.invoice_id', '=', 'invoices.invoice_id')
-            ->join('course_application', 'course_application.course_application_id', '=', 'student_invoices.application_id')
-            ->where('course_application.client_id', $client_id)
+            ->leftJoin('course_application', 'course_application.course_application_id', '=', 'student_invoices.application_id')
+            ->where('student_invoices.client_id', $client_id)
             ->select(['invoices.*', 'student_invoices.student_invoice_id'])
             ->orderBy('invoices.created_at', 'desc');
 
