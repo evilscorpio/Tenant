@@ -63,8 +63,11 @@ class StudentController extends BaseController
         $this->validate($this->request, $this->rules);
         // if validates
         $created = $this->payment->add($this->request->all(), $application_id);
-        if ($created)
+        if ($created) {
             Flash::success('Payment has been added successfully.');
+            $payment = $this->payment->getDetails($created);
+            $this->client->addLog($payment->client_id, 5, ['{{NAME}}' => get_tenant_name(), '{{TYPE}}' => $payment->payment_type, '{{DESCRIPTION}}' => $payment->description, '{{DATE}}' => format_date($payment->date_paid), '{{AMOUNT}}' => $payment->amount, '{{VIEW_LINK}}' => url("tenant/students/payment/receipt/" . $payment->student_payments_id)], $payment->course_application_id);
+        }
         return redirect()->route('tenant.application.students', $application_id);
     }
 
@@ -107,8 +110,11 @@ class StudentController extends BaseController
         $request['application_id'] = $application_id;
         $client_id = CourseApplication::find($application_id)->client_id;
         $created = $this->invoice->add($request, $client_id);
-        if ($created)
+        if ($created) {
             Flash::success('Invoice has been created successfully.');
+            $invoice = StudentInvoice::join('invoices', 'invoices.invoice_id', '=', 'student_invoices.invoice_id')->find($created);
+            $this->client->addLog($client_id, 4, ['{{NAME}}' => get_tenant_name(), '{{DESCRIPTION}}' => $invoice->description, '{{DATE}}' => format_date($invoice->invoice_date), '{{AMOUNT}}' => $invoice->amount, '{{VIEW_LINK}}' => route("tenant.student.invoice", $invoice->student_invoice_id)], $invoice->application_id);
+        }
         return redirect()->route('tenant.application.students', $application_id);
     }
 
@@ -135,7 +141,7 @@ class StudentController extends BaseController
                   </button>
                   <ul role="menu" class="dropdown-menu">
                     <li><a href="' . url("tenant/students/payment/receipt/" . $data->student_payments_id) . '">Print Receipt</a></li>
-                    <li><a href="'.route("application.students.editPayment", $data->student_payments_id).'">Edit</a></li>
+                    <li><a href="' . route("application.students.editPayment", $data->student_payments_id) . '">Edit</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Delete</a></li>
                   </ul>
                 </div>';
@@ -182,7 +188,7 @@ class StudentController extends BaseController
                   <ul role="menu" class="dropdown-menu">
                     <li><a href="' . route("tenant.invoice.payments", [$data->invoice_id, 2]) . '">View Payments</a></li>
                     <li><a href="' . route('tenant.student.invoice', $data->student_invoice_id) . '">View Invoice</a></li>
-                    <li><a href="'.route("tenant.student.editInvoice", $data->student_invoice_id).'">Edit</a></li>
+                    <li><a href="' . route("tenant.student.editInvoice", $data->student_invoice_id) . '">Edit</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Delete</a></li>
                   </ul>
                 </div>';
@@ -235,7 +241,7 @@ class StudentController extends BaseController
                   <ul role="menu" class="dropdown-menu">
                     <li><a href="' . route("tenant.invoice.payments", [$data->student_invoice_id, 2]) . '">View payments</a></li>
                     <li><a href="' . route('tenant.student.invoice', $data->student_invoice_id) . '">View Invoice</a></li>
-                    <li><a href="'.route("tenant.student.editInvoice", $data->student_invoice_id).'">Edit</a></li>
+                    <li><a href="' . route("tenant.student.editInvoice", $data->student_invoice_id) . '">Edit</a></li>
                     <li><a href="http://localhost/condat/tenant/contact/2">Delete</a></li>
                   </ul>
                 </div>';

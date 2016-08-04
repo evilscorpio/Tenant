@@ -1,5 +1,6 @@
 <?php namespace App\Modules\Tenant\Models\Payment;
 
+use App\Modules\Tenant\Models\Application\CourseApplication;
 use App\Modules\Tenant\Models\Client\ClientPayment;
 use App\Modules\Tenant\Models\Invoice\Invoice;
 use App\Modules\Tenant\Models\Invoice\SubAgentInvoice;
@@ -48,7 +49,7 @@ class SubAgentApplicationPayment extends Model
         DB::beginTransaction();
 
         try {
-            $payment = $this->createPayment($request);
+            $payment = $this->createPayment($request, $application_id);
 
             $subagent_payment = SubAgentApplicationPayment::create([
                 'course_application_id' => $application_id,
@@ -95,10 +96,12 @@ class SubAgentApplicationPayment extends Model
         }
     }
 
-    public function createPayment($request)
+    public function createPayment($request, $application_id)
     {
+        $client_id = CourseApplication::find($application_id)->client_id;
+
         $payment = ClientPayment::create([
-            'client_id' => null, //change this later if necessary
+            'client_id' => $client_id, //change this later if necessary
             'amount' => $request['amount'],
             'date_paid' => insert_dateformat($request['date_paid']),
             'payment_method' => $request['payment_method'],
@@ -111,7 +114,7 @@ class SubAgentApplicationPayment extends Model
     function getDetails($payment_id)
     {
         $payment = SubAgentApplicationPayment::leftJoin('client_payments', 'client_payments.client_payment_id', '=', 'subagent_application_payments.client_payment_id')
-            ->select(['client_payments.*', 'subagent_application_payments.subagent_payments_id'])
+            ->select(['client_payments.*', 'subagent_application_payments.subagent_payments_id', 'subagent_application_payments.course_application_id'])
             ->find($payment_id);
         return $payment;
     }

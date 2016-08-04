@@ -116,8 +116,12 @@ class CollegeController extends BaseController
         $this->validate($this->request, $rules);
         // if validates
         $created = $this->invoice->add($this->request->all(), $application_id);
-        if ($created)
+        if ($created) {
             Flash::success('Invoice has created successfully.');
+            $invoice = CollegeInvoice::find($created);
+            $client_id = $this->invoice->getClientId($created);
+            $this->client->addLog($client_id, 4, ['{{NAME}}' => get_tenant_name(), '{{DESCRIPTION}}' => 'College Invoice', '{{DATE}}' => format_date($invoice->invoice_date), '{{AMOUNT}}' => $invoice->total_commission, '{{VIEW_LINK}}' => route('tenant.college.invoice', $invoice->college_invoice_id)], $application_id);
+        }
         return redirect()->route('tenant.application.college', $application_id);
     }
 

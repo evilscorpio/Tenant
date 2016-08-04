@@ -188,6 +188,7 @@ Route::group(array('prefix' => 'tenant', 'module' => 'Tenant', 'middleware' => '
     Route::post('payment/{payment_id}/assign', ['as' => 'tenant.payment.postAssign', 'uses' => 'InvoiceController@postAssign']);
 
     /* SubAgent Invoices */
+    Route::get('subagents/{invoice_id}/invoice', ['as' => 'tenant.subagents.invoice', 'uses' => 'SubAgentController@show']);
     Route::get('subagents/{invoice_id}/editInvoice', ['as' => 'tenant.subagents.editInvoice', 'uses' => 'SubAgentController@editInvoice']);
     Route::put('subagents/{invoice_id}/editInvoice', ['as' => 'tenant.subagents.editInvoice', 'uses' => 'SubAgentController@updateInvoice']);
 

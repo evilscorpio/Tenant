@@ -133,7 +133,7 @@ class CollegeInvoice extends Model
         return $invoice_list;
     }
 
-    function getClientId ($invoice_id)
+    function getClientId($invoice_id)
     {
         $client = CollegeInvoice::join('course_application', 'college_invoices.course_application_id', '=', 'course_application.course_application_id')
             ->select('client_id')

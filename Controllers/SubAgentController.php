@@ -60,8 +60,11 @@ class SubAgentController extends BaseController
         $this->validate($this->request, $this->rules);
         // if validates
         $created = $this->payment->add($this->request->all(), $application_id);
-        if ($created)
+        if ($created) {
             Flash::success('Payment has been added successfully.');
+            $payment = $this->payment->getDetails($created);
+            $this->client->addLog($payment->client_id, 5, ['{{NAME}}' => get_tenant_name(), '{{TYPE}}' => $payment->payment_type, '{{DESCRIPTION}}' => $payment->description, '{{DATE}}' => format_date($payment->date_paid), '{{AMOUNT}}' => $payment->amount, '{{VIEW_LINK}}' => route('subagents.payment.view', $payment->subagent_payments_id)], $payment->course_application_id);
+        }
         return redirect()->route('tenant.application.subagents', $application_id);
     }
 
@@ -101,8 +104,12 @@ class SubAgentController extends BaseController
         $this->validate($this->request, $rules);
         // if validates
         $created = $this->invoice->add($this->request->all(), $application_id);
-        if ($created)
+        if ($created) {
             Flash::success('Invoice has been created successfully.');
+            $client_id = CourseApplication::find($application_id)->client_id;
+            $invoice = SubAgentInvoice::join('invoices', 'invoices.invoice_id', '=', 'subagent_invoices.invoice_id')->find($created);
+            $this->client->addLog($client_id, 4, ['{{NAME}}' => get_tenant_name(), '{{DESCRIPTION}}' => $invoice->description, '{{DATE}}' => format_date($invoice->invoice_date), '{{AMOUNT}}' => $invoice->amount, '{{VIEW_LINK}}' => route("tenant.subagents.invoice", $invoice->subagent_invoice_id)], $invoice->course_application_id);
+        }
         return redirect()->route('tenant.application.subagents', $application_id);
     }
 
