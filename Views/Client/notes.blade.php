@@ -26,6 +26,7 @@
                     <input type="hidden" name="_token" value="{{csrf_token()}}">
 
                     <div class="form-group">
+                        <input type="hidden" value=0 name="timeline" />
                         <textarea name="description" class="form-control" id="description"></textarea>
                     </div>
                     <div class="checkbox form-group">

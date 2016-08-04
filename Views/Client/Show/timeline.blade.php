@@ -1,16 +1,16 @@
-
 <div class="active tab-pane" id="activity">
     <!-- Post -->
     <div>
-
+        {!! Form::open(['url' => 'tenant/clients/'.$client->client_id.'/notes', 'method' => 'post']) !!}
         <div class="col-sm-10">
-            <input class="form-control input-sm" type="text" placeholder="Type a Comment">
+            <input type="hidden" value=1 name="timeline" />
+            <input name="description" class="form-control input-sm" type="text" placeholder="Type a Comment">
         </div>
         <div class="col-sm-2">
-            <a class="btn btn-primary btn-sm">Submit</a>
+            <input type="submit" value="Submit" class="btn btn-primary btn-sm" />
         </div>
         <div>&nbsp;</div>
-
+        {!! Form::close() !!}
     </div>
     <!-- /.post -->
 </div>
@@ -20,9 +20,9 @@
     <!-- timeline time label -->
     @foreach($timelines as $key => $grouped_timeline)
         <li class="time-label">
-                                <span class="bg-red">
-                                  {{ readable_date($key) }}
-                                </span>
+            <span class="bg-red">
+              {{ readable_date($key) }}
+            </span>
         </li>
         <!-- /.timeline-label -->
         <!-- timeline item -->

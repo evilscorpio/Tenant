@@ -263,17 +263,22 @@ class ClientController extends BaseController
     function uploadClientNotes($client_id)
     {
         $upload_rules = ['description' => 'required'];
-        if ($this->request->get('remind') == 1)
+
+        $request = $this->request->all();
+        if (isset($request['remind']) && $request['remind'] == 1)
             $upload_rules['reminder_date'] = 'required';
 
         $this->validate($this->request, $upload_rules);
 
-        $note_id = $this->client_notes->add($client_id, $this->request->all());
+        $note_id = $this->client_notes->add($client_id, $request);
         if($note_id) {
             \Flash::success('Notes uploaded successfully!');
             $this->client->addLog($client_id, 2, ['{{DESCRIPTION}}' => $this->getNoteFormat($note_id), '{{NAME}}' => get_tenant_name()]);
         }
-        return redirect()->route('tenant.client.notes', $client_id);
+        if($this->request->get('timeline') == 1)
+            return redirect()->route('tenant.client.show', $client_id);
+        else
+            return redirect()->route('tenant.client.notes', $client_id);
     }
 
 
