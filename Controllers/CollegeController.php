@@ -83,8 +83,12 @@ class CollegeController extends BaseController
         $this->validate($this->request, $this->rules);
         // if validates
         $created = $this->payment->add($this->request->all(), $application_id);
-        if ($created)
+        if ($created) {
             Flash::success('Payment has added successfully.');
+            $payment = $this->payment->getDetails($created);
+            $client_id = CourseApplication::find($application_id)->client_id;
+            $this->client->addLog($client_id, 5, ['{{NAME}}' => get_tenant_name(), '{{TYPE}}' => $payment->payment_type, '{{DESCRIPTION}}' => $payment->description, '{{DATE}}' => format_date($payment->date_paid), '{{AMOUNT}}' => $payment->amount, '{{VIEW_LINK}}' => url("tenant/college/payment/receipt/" . $payment->college_payment_id)], $application_id);
+        }
         return redirect()->route('tenant.application.college', $application_id);
     }
 
