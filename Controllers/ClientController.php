@@ -55,26 +55,19 @@ class ClientController extends BaseController
     function getData()
     {
         $clients = Client::leftJoin('persons', 'clients.person_id', '=', 'persons.person_id')
-            ->leftJoin('users', 'clients.user_id', '=', 'users.user_id')
+            ->leftJoin('person_emails', 'person_emails.person_id', '=', 'persons.person_id')
+            ->leftJoin('emails', 'emails.email_id', '=', 'person_emails.email_id')
+            //->leftJoin('users', 'clients.user_id', '=', 'users.user_id')
             ->leftJoin('person_phones', 'person_phones.person_id', '=', 'persons.person_id')
             ->leftJoin('phones', 'phones.phone_id', '=', 'person_phones.phone_id')
             ->leftJoin('active_clients', function($q) {
                 $q->on('active_clients.client_id', '=', 'clients.client_id');
                 $q->where('active_clients.user_id', '=', current_tenant_id());
             })
-            ->select(['clients.client_id', 'clients.added_by', 'clients.added_by', 'users.email', 'users.status', 'phones.number', 'clients.created_at', DB::raw('CONCAT(persons.first_name, " ", persons.last_name) AS fullname'), 'active_clients.id as active_id']);
+            ->select(['clients.client_id', 'clients.added_by', 'clients.added_by', 'emails.email', 'phones.number', 'clients.created_at', DB::raw('CONCAT(persons.first_name, " ", persons.last_name) AS fullname'), 'active_clients.id as active_id']);
 
         $datatable = \Datatables::of($clients)
             ->addColumn('action', '<a data-toggle="tooltip" title="View Client" class="btn btn-action-box" href ="{{ route( \'tenant.client.show\', $client_id) }}"><i class="fa fa-eye"></i></a> <a data-toggle="tooltip" title="Client Documents" class="btn btn-action-box" href ="{{ route( \'tenant.client.document\', $client_id) }}"><i class="fa fa-file"></i></a> <a data-toggle="tooltip" title="Edit Client" class="btn btn-action-box" href ="{{ route( \'tenant.client.edit\', $client_id) }}"><i class="fa fa-edit"></i></a> <a data-toggle="tooltip" title="Delete Client" class="delete-user btn btn-action-box" href="{{ route( \'tenant.client.destroy\', $client_id) }}"><i class="fa fa-trash"></i></a>')
-            ->editColumn('status', '@if($status == 0)
-                                <span class="label label-warning">Pending</span>
-                            @elseif($status == 1)
-                                <span class="label label-success">Activated</span>
-                            @elseif($status == 2)
-                                <span class="label label-info">Suspended</span>
-                            @else
-                                <span class="label label-danger">Trashed</span>
-                            @endif')
             ->addColumn('active', function ($data) {
                 return ($data->active_id != null)? '<input type="checkbox" value=1 class="icheck active" id="'.$data->client_id.'" checked = "checked" />' : '<input type="checkbox" value=0 class="icheck active" id="'.$data->client_id.'"/>';
             })

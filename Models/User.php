@@ -342,7 +342,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 ->leftJoin('addresses', 'addresses.address_id', '=', 'person_addresses.address_id')
                 ->leftJoin('person_phones', 'person_phones.person_id', '=', 'persons.person_id')
                 ->leftJoin('phones', 'phones.phone_id', '=', 'person_phones.phone_id')
-                ->leftJoin('users', 'users.user_id', '=', 'clients.user_id')       
+                ->leftJoin('person_emails', 'person_emails.person_id', '=', 'persons.person_id')
+                ->leftJoin('emails', 'emails.email_id', '=', 'person_emails.email_id')
+                //->leftJoin('users', 'users.user_id', '=', 'clients.user_id')
                 ->where('active_clients.user_id',current_tenant_id())
                 ->get();
         return $activeClient;

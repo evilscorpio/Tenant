@@ -1,5 +1,7 @@
 <?php namespace App\Modules\Tenant\Models\Client;
 
+use App\Modules\Tenant\Models\Email;
+use App\Modules\Tenant\Models\Person\PersonEmail;
 use App\Modules\Tenant\Models\Person\PersonPhone;
 use App\Modules\Tenant\Models\Phone;
 use App\Modules\Tenant\Models\Timeline\ClientTimeline;
@@ -73,15 +75,25 @@ class Client extends Model
                 'passport_no' => $request['passport_no']
             ]);
 
-            $user = User::create([
+            /*$user = User::create([
                 'email' => $request['email'],
                 'role' => 0, // 0 : client, 1 : admin, 2 : super-admin
                 'status' => 0, // Pending
                 'person_id' => $person->person_id, // pending
+            ]);*/
+
+            $email = Email::create([
+                'email' => $request['email']
+            ]);
+
+            PersonEmail::create([
+                'person_id' => $person->person_id,
+                'email_id' => $email->email_id,
+                'is_primary' => 1
             ]);
 
             $client = Client::create([
-                'user_id' => $user->user_id,
+                //'user_id' => $user->user_id,
                 'person_id' => $person->person_id,
                 'added_by' => current_tenant_id(),
                 'referred_by' => $request['referred_by'],
@@ -146,9 +158,11 @@ class Client extends Model
             $person->passport_no = $request['passport_no'];
             $person->save();
 
-            $user = User::find($client->user_id);
-            $user->email = $request['email'];
-            $user->save();
+            $person_email = PersonEmail::where('person_id', $client->person_id)->first();
+            $email = Email::find($person_email->email_id);
+
+            $email->email = $request['email'];
+            $email->save();
 
             $person_address = PersonAddress::where('person_id', $client->person_id)->first();
             $address = Address::find($person_address->address_id);
@@ -190,8 +204,9 @@ class Client extends Model
             ->leftJoin('addresses', 'addresses.address_id', '=', 'person_addresses.address_id')
             ->leftJoin('person_phones', 'person_phones.person_id', '=', 'persons.person_id')
             ->leftJoin('phones', 'phones.phone_id', '=', 'person_phones.phone_id')
-            ->leftJoin('users', 'users.user_id', '=', 'clients.user_id')
-            ->where('clients.client_id', $client_id)//and user for email?
+            ->leftJoin('person_emails', 'person_emails.person_id', '=', 'persons.person_id')
+            ->leftJoin('emails', 'emails.email_id', '=', 'person_emails.email_id')
+            ->where('clients.client_id', $client_id)
             ->first(); //dd($client->toArray());
         return $client;
     }

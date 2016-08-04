@@ -32,9 +32,9 @@
 
                         <p class="text-muted">{{format_datetime($client->created_at)}}</p>
 
-                        <strong><i class="fa fa-calendar margin-r-5"></i> Created By</strong>
+                        <strong><i class="fa fa-user-plus margin-r-5"></i> Created By</strong>
 
-                        <p class="text-muted">{{format_datetime($client->created_at)}}</p>
+                        <p class="text-muted">{{get_tenant_name($client->added_by)}}</p>
 
                         <strong><i class="fa fa-file-text-o margin-r-5"></i> Due Amount</strong>
 
