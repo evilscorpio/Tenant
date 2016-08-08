@@ -2,6 +2,8 @@
 
 use App\Modules\Tenant\Models\Company\Company;
 use App\Modules\Tenant\Models\Company\CompanyContact;
+use App\Modules\Tenant\Models\Email;
+use App\Modules\Tenant\Models\Person\PersonEmail;
 use App\Modules\Tenant\Models\Person\PersonPhone;
 use App\Modules\Tenant\Models\Phone;
 use App\Modules\Tenant\Models\User;
@@ -206,11 +208,14 @@ class Institute extends Model
             'sex' => $request['sex']
         ]);
 
-        User::create([
-            'email' => $request['email'],
-            'user_type' => 3, // 0 : client, 1 : admin, 2 : super-admin, 3 : contact person
-            'status' => 0, // Pending
-            'person_id' => $person->person_id, // pending
+        $email = Email::create([
+            'email' => $request['email']
+        ]);
+
+        PersonEmail::create([
+            'person_id' => $person->person_id,
+            'email_id' => $email->email_id,
+            'is_primary' => 1
         ]);
 
         // Add Phone Number
@@ -259,10 +264,11 @@ class Institute extends Model
     function getContactDetails($contact_id)
     {
         $contact = CompanyContact::leftJoin('persons', 'persons.person_id', '=', 'company_contacts.person_id')
-            ->leftJoin('users', 'users.person_id', '=', 'persons.person_id')
+            ->leftJoin('person_emails', 'person_emails.person_id', '=', 'persons.person_id')
+            ->leftJoin('emails', 'emails.email_id', '=', 'person_emails.email_id')
             ->leftJoin('person_phones', 'person_phones.person_id', '=', 'persons.person_id')
             ->leftJoin('phones', 'phones.phone_id', '=', 'person_phones.phone_id')
-            ->select(['company_contacts.*', 'phones.number', 'users.email', 'persons.first_name', 'persons.last_name'])
+            ->select(['company_contacts.*', 'phones.number', 'emails.email', 'persons.first_name', 'persons.last_name'])
             ->find($contact_id);
         return $contact;
     }
@@ -322,9 +328,11 @@ class Institute extends Model
             $person->sex = $request['sex'];
             $person->save();
 
-            $user = User::where('person_id', $person->person_id)->first();
-            $user->email = $request['email'];
-            $user->save();
+            $person_email = PersonEmail::where('person_id', $contact->person_id)->first();
+            $email = Email::find($person_email->email_id);
+
+            $email->email = $request['email'];
+            $email->save();
 
             $person_phone = PersonPhone::where('person_id', $person->person_id)->first();
             $phone = Phone::find($person_phone->phone_id);

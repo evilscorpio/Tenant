@@ -107,7 +107,7 @@ class ClientController extends BaseController
     public function store()
     {
         /* Additional validations for creating user */
-        $this->rules['email'] = 'email|min:5|max:55|unique:users';
+        $this->rules['email'] = 'email|min:5|max:55|unique:emails';
         $messages = [
             'email.unique' => 'Client with the same email address already exists.',
         ];

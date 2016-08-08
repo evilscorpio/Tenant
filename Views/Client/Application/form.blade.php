@@ -85,6 +85,16 @@
         getIntakes();
     });
 
+    $("#course").change(function () {
+        var course = $("#course").val();
+        $.ajax({
+            url: appUrl + "/tenant/courses/" + course + "getTuitionFee",
+            success: function (result) {
+                $("#course").html(result.data.options);
+            }
+        });
+    });
+
     function getCourses() {
         var institute = $("#institute").val();
         $.ajax({

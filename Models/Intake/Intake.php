@@ -65,7 +65,8 @@ class Intake extends Model
     {
         $intakes = InstituteIntake::join('intakes', 'intakes.intake_id', '=', 'institute_intakes.intake_id')
             ->where('institute_intakes.institute_id', $institute_id)
-            ->lists('intakes.description', 'intakes.intake_id');
+            ->select('intakes.intake_id', DB::raw('CONCAT(intakes.intake_date, " ", intakes.description) AS intake'))
+            ->lists('intakes.intake', 'intakes.intake_id');
         return $intakes;
     }
 

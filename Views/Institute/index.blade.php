@@ -46,7 +46,7 @@
                     {data: 'short_name', name: 'short_name'},  
                     {data: 'number', name: 'number'},
                     {data: 'website', name: 'website'},
-                    {data: 'email', name: 'email'},
+                    {data: 'added_by', name: 'added_by'},
                     {data: 'action', name: 'action', orderable: false, searchable: false}
                 ]
             });

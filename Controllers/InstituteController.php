@@ -52,8 +52,8 @@ class InstituteController extends BaseController
     {
         $institutes = Institute::leftJoin('companies', 'institutes.company_id', '=', 'companies.company_id')
             ->leftJoin('phones', 'phones.phone_id', '=', 'companies.phone_id')
-            ->leftJoin('users', 'users.user_id', '=', 'institutes.added_by')
-            ->select(['institutes.institution_id', 'institutes.short_name','users.email' ,'institutes.created_at', 'companies.name', 'companies.phone_id','companies.website', 'companies.invoice_to_name', 'phones.number'])
+            //->leftJoin('users', 'users.user_id', '=', 'institutes.added_by')
+            ->select(['institutes.institution_id', 'institutes.short_name', 'institutes.created_at', 'companies.name', 'companies.phone_id','companies.website', 'companies.invoice_to_name', 'phones.number'])
             ->orderBy('institution_id', 'desc');
 
         $datatable = \Datatables::of($institutes)
@@ -63,6 +63,9 @@ class InstituteController extends BaseController
             })
             ->editColumn('institution_id', function ($data) {
                 return format_id($data->institution_id, 'I');
+            })
+            ->editColumn('added_by', function ($data) {
+                return get_tenant_name($data->added_by);
             });
         return $datatable->make(true);
     }
