@@ -69,7 +69,9 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#application_table').DataTable();
+            $('#application_table').DataTable({
+                "pageLength": 10
+            });
         });
     </script>
 @stop
