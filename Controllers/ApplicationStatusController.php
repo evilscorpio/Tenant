@@ -45,7 +45,7 @@ class ApplicationStatusController extends BaseController
             ->where('application_status.active', 1)
             ->where('application_status.status_id', 1)
             ->orderBy('course_application.course_application_id', 'desc')
-            ->get();
+            ->paginate(10);
         
         return view('Tenant::ApplicationStatus/enquiry',['applications' => $applications]);
     }
