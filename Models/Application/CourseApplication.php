@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
+use Carbon;
 
 class CourseApplication extends Model
 {
@@ -58,6 +59,13 @@ class CourseApplication extends Model
                 'institute_id' => $request['institute_id'],
                 //'location_id' => $request['location_id'],
                 //'sub_agent_commission' => $request['sub_agent_commission'],
+            ]);
+
+            ApplicationStatus::create([
+                'course_application_id' => $application->course_application_id,
+                'status_id' => 1, //enquiry
+                'date_applied' => Carbon\Carbon::now(),
+                'active' => 1
             ]);
 
             DB::commit();

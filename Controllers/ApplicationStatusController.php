@@ -30,16 +30,20 @@ class ApplicationStatusController extends BaseController
     //Information for Enquiry page
     public function index()
     {
-        $applications = CourseApplication::leftjoin('users', 'users.user_id', '=', 'course_application.user_id')
-            ->leftjoin('persons', 'persons.person_id', '=', 'users.person_id')
+        $applications = CourseApplication::join('clients', 'clients.client_id' ,'=', 'course_application.client_id')
+            ->leftJoin('persons', 'clients.person_id', '=', 'persons.person_id')
+            ->leftJoin('person_emails', 'person_emails.person_id', '=', 'persons.person_id')
+            ->leftJoin('emails', 'emails.email_id', '=', 'person_emails.email_id')
             ->leftjoin('person_phones', 'persons.person_id', '=', 'person_phones.person_id')
             ->leftjoin('phones', 'person_phones.phone_id', '=', 'phones.phone_id')
-            ->leftjoin('institute_courses', 'institute_courses.institute_course_id', '=' , 'course_application.institution_course_id')
-            ->leftjoin('courses', 'courses.course_id','=', 'institute_courses.course_id')
-            ->leftjoin('institutes', 'institutes.institution_id','=', 'institute_courses.institute_id')
-            ->leftjoin('companies', 'companies.company_id','=', 'institutes.company_id')
+            ->leftJoin('courses', 'course_application.institution_course_id', '=', 'courses.course_id')
+            ->leftJoin('institutes', 'course_application.institute_id', '=', 'institutes.institution_id')
+            ->leftJoin('companies', 'institutes.company_id', '=', 'companies.company_id')
             ->leftjoin('intakes', 'intakes.intake_id', '=' , 'course_application.intake_id')
-            ->select([DB::raw('CONCAT(persons.first_name, " ", persons.last_name) AS fullname'),'companies.name as company', 'courses.name', 'intakes.intake_date','course_application.tuition_fee', 'course_application.course_application_id', 'phones.number','users.email'])
+            ->join('application_status', 'application_status.course_application_id', '=', 'course_application.course_application_id')
+            ->select([DB::raw('CONCAT(persons.first_name, " ", persons.last_name) AS fullname'), 'companies.name as company', 'companies.invoice_to_name as invoice_to', 'courses.name', 'intakes.intake_date', 'course_application.course_application_id', 'phones.number', 'emails.email'])
+            ->where('application_status.active', 1)
+            ->where('application_status.status_id', 1)
             ->orderBy('course_application.course_application_id', 'desc')
             ->get();
         

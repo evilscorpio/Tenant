@@ -1,29 +1,24 @@
 @extends('layouts.tenant')
 @section('title', 'Application Enquiry')
+@section('heading', '<h1>Application - <small>Enquiry</small></h1>')
 @section('breadcrumb')
     @parent
-    <li><a href="{{url('tenant/clients')}}" title="All Clients"><i class="fa fa-users"></i> Clients</a></li>
-    <li>Notes</li>
+    <li><a href="{{url('tenant/clients')}}" title="All Clients"><i class="fa fa-users"></i> Applications</a></li>
+    <li>Enquiry</li>
 @stop
 
 @section('content')
-  <div class="container">
-    <div class="row">
       <div class="col-md-12">
-        @if(Session::has('success'))
-          <div class="alert alert-success">
-            <strong>Success: </strong>{{ Session::get('success')}}
-          </div>
-        @endif
-        <h1>Application - <small>Enquiry</small></h1>
-       
-        @include('Tenant::ApplicationStatus/partial/navbar')
-      
-          
-        <section>
+      @include('Tenant::ApplicationStatus/partial/navbar')
+
+          @include('flash::message')
           <div class="box box-primary">
+
+            <div class="box-header">
+              <h3 class="box-title">All Applications</h3>
+            </div>
+
             <div class="box-body">
-              <section>
                 <table class="table table-striped table-bordered table-condensed" id="application_table">
                   <thead>
                     <tr class="text-nowrap">
@@ -39,16 +34,16 @@
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach($applications as $application)         
+                    @foreach($applications as $application)
                       <tr>
-                        <td>{{ $application->course_application_id }}</td>
+                        <td>{{ format_id($application->course_application_id, 'AP') }}</td>
                         <td>{{ $application->fullname }}</td>
                         <td>{{ $application->number }}</td>
                         <td>{{ $application->email }}</td>
                         <td>{{ $application->company }}</td>
                         <td>{{ $application->name }}</td>
                         <td>{{ format_date($application->intake_date) }}</td>
-                        <td>{{ $application->company }}</td>
+                        <td>{{ $application->invoice_to }}</td>
                           <td>
                             <a href="{{ route('applications.apply.offer',[$application->course_application_id])}}" title="Apply Offer"><i class=" btn btn-primary btn-sm glyphicon glyphicon-education" data-toggle="tooltip" data-placement="top" title="Apply Offer"></i></a>
                             <a href="#" title="view"><i class="processing btn btn-primary btn-sm glyphicon glyphicon-eye-open" data-toggle="tooltip" data-placement="top" title="View"></i></a>
@@ -59,31 +54,9 @@
                     @endforeach
                   </tbody>
                 </table>
-              </section>
             </div>
           </div>
-        </section>
       </div>
-    </div>
-  </div>
-<script type="text/javascript">
-        $(document).ready(function () {
-          $('#application_table').DataTable({
-            "columns": [
-                {data: 'course_application_id', name: 'course_application_id'},
-                {data: 'fullname', name: 'fullname'},
-                {data: 'phone', name: 'phone'},
-                {data: 'email', name: 'email'},
-                {data: 'company', name: 'company'},
-                {data: 'name', name: 'name'},
-                {data: 'start_date', name: 'start_date'},
-                {data: 'company', name: 'company'},
-                {data: 'action', name: 'action', orderable: false, searchable: false}
-            ],
-            order: [ [0, 'desc'] ]
-          });
-        });
-</script>
 @stop
 
       

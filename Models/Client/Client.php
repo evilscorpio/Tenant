@@ -158,12 +158,21 @@ class Client extends Model
             $person->passport_no = $request['passport_no'];
             $person->save();
 
-            $person_email = PersonEmail::where('person_id', $client->person_id)->first();
-            $email = Email::find($person_email->email_id);
+            $person_email = PersonEmail::firstOrCreate(['person_id' => $client->person_id]);
 
-            $email->email = $request['email'];
-            $email->save();
+            //for when not saved, remove this when no old records
+            if($person_email->email_id != 0) {
+                $email = Email::find($person_email->email_id);
+                $email->email = $request['email'];
+                $email->save();
 
+            } else { //remove this one
+                $email = Email::create([
+                    'email' => $request['email']
+                ]);
+                $person_email->email_id = $email->email_id;
+                $person_email->save();
+            }
             $person_address = PersonAddress::where('person_id', $client->person_id)->first();
             $address = Address::find($person_address->address_id);
 

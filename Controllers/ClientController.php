@@ -136,6 +136,8 @@ class ClientController extends BaseController
         $data['client'] = $this->client->getDetails($client_id);
         $data['remainders'] = $this->client_notes->getAll($client_id, true);
         $data['timelines'] = $this->timeline->getDetails($client_id);
+
+        $data['timeline_list'] = $this->timeline->getTimeline($client_id);
         return view("Tenant::Client/show", $data);
     }
 
