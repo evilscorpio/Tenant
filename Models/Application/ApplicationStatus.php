@@ -37,35 +37,6 @@ class ApplicationStatus extends Model
     public $timestamps = false;
 
 
-    function application_create(array $request, $course_application_id)
-    {
-        DB::beginTransaction();
-
-        try {
-
-            $status = ApplicationStatus::where('course_application_id', $course_application_id)
-                ->where('status_id', 2)
-                ->first();
-            if (!$status) {
-                $status = ApplicationStatus::create([
-                    'course_application_id' => $course_application_id,
-                    'status_id' => 2,
-                    'date_applied' => Carbon::now()
-                ]);
-            }
-
-
-            DB::commit();
-            return true;
-            // all good
-        } catch (\Exception $e) {
-            DB::rollback();
-            //return false;
-            dd($e);
-            // something went wrong
-        }
-    }
-
     function offer_create(array $request, $course_application_id)
     {
         DB::beginTransaction();
@@ -153,17 +124,17 @@ class ApplicationStatus extends Model
         }
     }
 
-    function application_update(array $request, $course_application_id)
+    function apply_offer(array $request, $course_application_id)
     {
         DB::beginTransaction();
 
         try {
-
             $applications = CourseApplication::find($course_application_id);
-            $applications->tuition_fee = $request['total_tuition_fee'];
-            $applications->intake_id = $request['intake_date'];
+            $applications->tuition_fee = $request['tuition_fee'];
+            $applications->intake_id = $request['intake_id'];
             $applications->save();
 
+            $this->change_status($course_application_id, 2);
 
             DB::commit();
             return true;
@@ -174,6 +145,21 @@ class ApplicationStatus extends Model
             dd($e);
             // something went wrong
         }
+    }
+
+    function change_status($application_id, $status_id)
+    {
+        $previous_status = ApplicationStatus::where('course_application_id', $application_id)->where('active', 1)->first();
+        $previous_status->active = 0;
+        $previous_status->date_removed = Carbon::now();
+        $previous_status->save();
+
+        ApplicationStatus::create([
+            'course_application_id' => $application_id,
+            'status_id' => $status_id,
+            'date_applied' => Carbon::now(),
+            'active' => 1
+        ]);
     }
 
     function offer_update(array $request, $course_application_id)

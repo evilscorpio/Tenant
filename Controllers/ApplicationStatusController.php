@@ -2,28 +2,26 @@
 
 namespace App\Modules\Tenant\Controllers;
 
+use App\Modules\Tenant\Models\Intake\Intake;
 use Illuminate\Http\Request;
-use App\Modules\Tenant\Models\Person\Person;
 use App\Modules\Tenant\Models\Application\CourseApplication;
 use App\Modules\Tenant\Models\Application\ApplicationStatus;
-use App\Modules\Tenant\Models\Person\PersonPhone;
-use App\Modules\Tenant\Models\User;
 use App\Modules\Tenant\Models\Notes;
 use App\Modules\Tenant\Models\Document;
 use Session;
 use DB;
-use App\Modules\Tenant\Models\Institute_intake;
-use App\Modules\Tenant\Models\intake\intake;
+use Flash;
 
 class ApplicationStatusController extends BaseController
 {
-    function __construct(CourseApplication $course_application, Request $request, Notes $note, ApplicationStatus $application_status, Document $document)
+    function __construct(CourseApplication $application, Request $request, Notes $note, ApplicationStatus $application_status, Document $document, Intake $intake)
     {
-        $this->course_application = $course_application;
+        $this->application = $application;
         $this->application_status = $application_status;
         $this->note = $note;
         $this->document = $document;
         $this->request = $request;
+        $this->intake = $intake;
         parent::__construct();
     }
     
@@ -49,39 +47,23 @@ class ApplicationStatusController extends BaseController
         
         return view('Tenant::ApplicationStatus/enquiry',['applications' => $applications]);
     }
-    
-    //information for action page apply_offer
+
     public function apply_offer($course_application_id)
     {
+        $data['application'] = $this->application->getDetails($course_application_id);
+        $data['client_name'] = $this->application->getClientName($course_application_id);
+        $data['intakes']= $this->intake->getIntakes($data['application']->institute_id);
 
-        $applications = CourseApplication::leftjoin('users', 'users.user_id', '=', 'course_application.user_id')
-            ->leftjoin('persons', 'persons.person_id', '=', 'users.person_id')
-            ->leftjoin('institute_courses', 'institute_courses.institute_course_id', '=' , 'course_application.institution_course_id')
-            ->leftjoin('courses', 'courses.course_id','=', 'institute_courses.course_id')
-            ->leftjoin('institutes', 'institutes.institution_id','=', 'institute_courses.institute_id')
-            ->leftjoin('companies', 'companies.company_id','=', 'institutes.company_id')
-            ->leftjoin('institute_intakes', 'institute_intakes.intake_id', '=' , 'course_application.intake_id')
-            ->leftjoin('intakes', 'intakes.intake_id', '=' , 'institute_intakes.intake_id')
-            ->where('course_application.course_application_id',$course_application_id)
-            ->select(['persons.first_name','companies.name as company', 'courses.name', 'intakes.intake_date','course_application.tuition_fee', 'course_application.course_application_id', 'institute_intakes.institute_id','institute_intakes.intake_id'])
-            ->orderBy('course_application.course_application_id', 'desc')
-            ->find($course_application_id);
-
-        $intakes= Intake::lists('intake_date', 'intake_id')->toArray();
-
-        return view('Tenant::ApplicationStatus/action/apply_offer',['applications'=>$applications, 'intakes'=>$intakes]);   
+        return view('Tenant::ApplicationStatus/action/apply_offer', $data);
             
     }
 
      //updates for apply_offer
      public function update($course_application_id)
      {
-        $updated = $this->application_status->application_update($this->request->all(), $course_application_id);
-            if ($updated)
-                $updated = $this->application_status->application_create($this->request->all(), $course_application_id); 
-             
-        Session::flash('success', 'Updated Successfully');
-        return redirect()->route('applications.offer_letter_processing.index');
+         $this->application_status->apply_offer($this->request->all(), $course_application_id);
+         Flash::success('Offer Applied Successfully.');
+         return redirect()->route('applications.offer_letter_processing.index');
      }
 
 
