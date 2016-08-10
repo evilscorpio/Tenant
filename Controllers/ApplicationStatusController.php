@@ -2,6 +2,8 @@
 
 namespace App\Modules\Tenant\Controllers;
 
+use App\Modules\Tenant\Models\Application\ApplicationStatusDocument;
+use App\Modules\Tenant\Models\Client\Client;
 use App\Modules\Tenant\Models\Intake\Intake;
 use Illuminate\Http\Request;
 use App\Modules\Tenant\Models\Application\CourseApplication;
@@ -13,7 +15,7 @@ use Flash;
 
 class ApplicationStatusController extends BaseController
 {
-    function __construct(CourseApplication $application, Request $request, Notes $note, ApplicationStatus $application_status, Document $document, Intake $intake)
+    function __construct(CourseApplication $application, Request $request, Notes $note, ApplicationStatus $application_status, ApplicationStatusDocument $document, Intake $intake, Client $client)
     {
         $this->application = $application;
         $this->application_status = $application_status;
@@ -21,6 +23,7 @@ class ApplicationStatusController extends BaseController
         $this->document = $document;
         $this->request = $request;
         $this->intake = $intake;
+        $this->client = $client;
         parent::__construct();
     }
 
@@ -101,9 +104,13 @@ class ApplicationStatusController extends BaseController
     //updates for offer_received
     public function offer_received_update($course_application_id)
     {
-        $updated = $this->application_status->offer_received($this->request->all(), $course_application_id);
-
-        Session::flash('success', 'Updated Successfully');
+        $upload_rules = ['document' => 'required|mimes:jpg,jpeg,bmp,png,doc,docx,pdf,txt,xls,xlsx',
+            'description' => 'required',
+            'tuition_fee' => 'required',
+        ]; //$file = $this->request->file('document'); dd($file);
+        $this->validate($this->request, $upload_rules);
+        $this->application_status->offer_received($this->request->all(), $course_application_id);
+        Flash::success('Offer letter received.');
         return redirect()->route('applications.offer_letter_issued.index');
     }
 
@@ -143,21 +150,6 @@ class ApplicationStatusController extends BaseController
 
         Flash::success('Status Updated Successfully.');
         return redirect()->route('applications.coe_processing.index');
-    }
-
-    function uploadDocument($application_id)
-    {
-        $folder = 'document';
-        $file = $this->request->input('document');
-        $file = ($file == '') ? 'document' : $file;
-
-        if ($file_info = tenant()->folder($folder, true)->upload($file)) {
-            $document_id = $this->document->uploadDocument($application_id, $file_info, $this->request->all());
-            $document = Document::find($document_id);
-            $this->client->addLog($client_id, 3, ['{{NAME}}' => get_tenant_name(), '{{DESCRIPTION}}' => $document->description, '{{TYPE}}' => $document->type, '{{FILE_NAME}}' => $document->name, '{{VIEW_LINK}}' => $document->shelf_location, '{{DOWNLOAD_LINK}}' => route('tenant.client.document.download', $document_id)]);
-            \Flash::success('File uploaded successfully!');
-            return redirect()->route('tenant.client.document', $client_id);
-        }
     }
 
     //Information for coe processing page

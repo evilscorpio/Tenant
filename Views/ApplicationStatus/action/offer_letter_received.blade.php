@@ -89,17 +89,26 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    {{ Form::label('upload_offer_letter', 'Upload Offer Letter', ['class'=>'col-md-3 form-label text-right'])}}
+                <div class="form-group @if($errors->has('document')) {{'has-error'}} @endif">
+                    {{ Form::label('document', 'Upload Offer Letter', ['class'=>'col-md-3 form-label text-right'])}}
                     <div class="col-md-8">
-                        {{ Form::file('upload_offer_letter')}}
+                        {{ Form::file('document')}}
+                        @if($errors->has('document'))
+                            {!! $errors->first('document', '<label class="control-label"
+                                                                      for="inputError">:message</label>') !!}
+                        @endif
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group @if($errors->has('description')) {{'has-error'}} @endif">
                     {{ Form::label('description', 'Notes', ['class'=>'col-md-3 form-label text-right'])}}
                     <div class="col-md-8">
                         {{ Form::textarea('description', null, ['class'=>'form-control', 'rows'=>3])}}
+
+                        @if($errors->has('description'))
+                            {!! $errors->first('description', '<label class="control-label"
+                                                                      for="inputError">:message</label>') !!}
+                        @endif
                     </div>
                 </div>
 

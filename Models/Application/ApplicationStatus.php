@@ -1,10 +1,13 @@
 <?php namespace App\Modules\Tenant\Models\Application;
 
 use App\Modules\Tenant\Models\Client\ApplicationNotes;
+use App\Modules\Tenant\Models\Client\Client;
+use App\Modules\Tenant\Models\Document;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 use Carbon\Carbon;
 use App\Modules\Tenant\Models\Application\CourseApplication;
+use Illuminate\Http\Request;
 
 class ApplicationStatus extends Model
 {
@@ -157,6 +160,8 @@ class ApplicationStatus extends Model
 
             $this->change_status($course_application_id, 2);
 
+            $this->add_timeline($course_application_id, 2);
+
             DB::commit();
             return true;
             // all good
@@ -172,10 +177,8 @@ class ApplicationStatus extends Model
     {
         $previous_status = ApplicationStatus::where('course_application_id', $application_id)->where('active', 1)->first();
         $previous_status->active = 0;
-        $previous_status->date_removed = Carbon::now();
+        $previous_status->date_removed = get_today_datetime();
         $previous_status->save();
-
-        $this->change_status($application_id, 2);
 
         ApplicationStatus::create([
             'course_application_id' => $application_id,
@@ -183,6 +186,16 @@ class ApplicationStatus extends Model
             'date_applied' => Carbon::now(),
             'active' => 1
         ]);
+    }
+
+    function add_timeline($application_id, $status_id)
+    {
+        $client = new Client();
+        $client_id = CourseApplication::find($application_id)->client_id;
+        $status1 = Status::find($status_id-1)->decription;
+        $status2 = Status::find($status_id)->decription;
+
+        $client->addLog($client_id, 7, ['{{NAME}}' => get_tenant_name(), '{{STATUS1}}' => $status1, '{{STATUS2}}' => $status2, '{{VIEW_LINK}}' => route('tenant.application.show', $application_id)], $application_id);
     }
 
     function offer_received(array $request, $course_application_id)
@@ -200,9 +213,11 @@ class ApplicationStatus extends Model
             //Add Note
             $note = new ApplicationNotes();
             $note->add($request, $course_application_id);
+            $client = new Client();
+            $client->addLog($applications->client_id, 2, ['{{DESCRIPTION}}' => $request['description'], '{{NAME}}' => get_tenant_name()], $course_application_id);
 
             //Upload Document
-            $document = new
+            $this->uploadDocument($course_application_id, 2, $request);
 
             $this->change_status($course_application_id, 3);
 
@@ -272,5 +287,21 @@ class ApplicationStatus extends Model
         return $statusRecord;
     }
 
+    function uploadDocument($application_id, $status_id, $request, $file = '')
+    {
+        $folder = 'document';
+        $file = ($file == '') ? 'document' : $file;
 
+        $client_id = CourseApplication::find($application_id)->client_id;
+        if ($file_info = tenant()->folder($folder, true)->upload($file)) {
+            $document = new ApplicationStatusDocument();
+            $document_id = $document->uploadDocument($application_id, $file_info, $request, $status_id);
+            $document = Document::find($document_id);
+            $client = new Client();
+            $client->addLog($client_id, 3, ['{{NAME}}' => get_tenant_name(), '{{DESCRIPTION}}' => $document->description, '{{TYPE}}' => $document->type, '{{FILE_NAME}}' => $document->name, '{{VIEW_LINK}}' => $document->shelf_location, '{{DOWNLOAD_LINK}}' => route('tenant.client.document.download', $document_id)], $application_id);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

@@ -59,23 +59,25 @@ class ApplicationStatusDocument extends Model
      *
      * @return Boolean
      */
-    public function uploadDocument($client_id, $file, array $request)
+    public function uploadDocument($application_id, $file, array $request, $status_id = 1)
     {
         DB::beginTransaction();
 
         try {
+            $status_desc = Status::find($status_id)->description;
+
             $document = Document::create([
-                'type' => $request['type'],
+                'type' => $status_desc,
                 'user_id' => current_tenant_id(),
                 'name' => $file['fileName'],
                 'shelf_location' => $file['pathName'],
-                'description' => $request['description'],
+                'description' => $request['description'], //Offer Letter
             ]);
 
-            $client_document_id = ClientDocument::create([
+            ApplicationStatusDocument::create([
                 'document_id' => $document->document_id,
-                'status_id' => 1, //change later ??
-                'client_id' => $client_id
+                'application_status_id' => $status_id,
+                'application_id' => $application_id
             ]);
             DB::commit();
             return $document->document_id;
