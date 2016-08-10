@@ -4,7 +4,7 @@
 @section('breadcrumb')
     @parent
     <li><a href="{{url('tenant/clients')}}" title="All Clients"><i class="fa fa-users"></i> Clients</a></li>
-    <li>Notes</li>
+    <li>Offer Letter Processing</li>
 @stop
 
 @section('content')

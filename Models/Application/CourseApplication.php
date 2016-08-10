@@ -26,7 +26,7 @@ class CourseApplication extends Model
      *
      * @var array
      */
-    protected $fillable = ['institution_course_id', 'intake_id', 'end_date', 'super_agent_id', 'sub_agent_id', 'user_id', 'tuition_fee', 'student_id', 'client_id', 'total_discount', 'institute_id', 'location_id', 'sub_agent_commission'];
+    protected $fillable = ['institution_course_id', 'intake_id', 'end_date', 'super_agent_id', 'sub_agent_id', 'user_id', 'tuition_fee', 'student_id', 'client_id', 'fee_for_coe', 'total_discount', 'institute_id', 'location_id', 'sub_agent_commission'];
 
     /**
      * Disable default timestamp feature.
@@ -87,7 +87,7 @@ class CourseApplication extends Model
             ->leftJoin('intakes', 'course_application.intake_id', '=', 'intakes.intake_id')
             ->where('course_application.course_application_id', $application_id)
             //->select(['*'])
-            ->select(['companies.name', 'courses.name as course_name', 'companies.name as company_name', 'course_application.end_date', 'course_application.client_id', 'intakes.orientation_date', 'intakes.intake_date', 'course_application.institute_id', 'course_application.student_id', 'course_application.course_application_id as application_id', 'course_application.tuition_fee', 'course_application.sub_agent_id', 'course_application.super_agent_id', 'course_application.user_id as added_by'])
+            ->select(['companies.name', 'courses.name as course_name', 'companies.name as company_name', 'course_application.end_date', 'course_application.client_id', 'intakes.orientation_date', 'intakes.intake_date', 'intakes.intake_id', 'course_application.institute_id', 'course_application.student_id', 'course_application.course_application_id as application_id', 'course_application.tuition_fee', 'course_application.fee_for_coe', 'course_application.sub_agent_id', 'course_application.super_agent_id', 'course_application.user_id as added_by'])
             ->first();
 
         return $application;

@@ -1,5 +1,6 @@
 <?php namespace App\Modules\Tenant\Models\Application;
 
+use App\Modules\Tenant\Models\Client\ApplicationNotes;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 use Carbon\Carbon;
@@ -36,6 +37,26 @@ class ApplicationStatus extends Model
      */
     public $timestamps = false;
 
+    function getApplications($status = 1)
+    {
+        $applications = CourseApplication::join('clients', 'clients.client_id', '=', 'course_application.client_id')
+            ->leftJoin('persons', 'clients.person_id', '=', 'persons.person_id')
+            ->leftJoin('person_emails', 'person_emails.person_id', '=', 'persons.person_id')
+            ->leftJoin('emails', 'emails.email_id', '=', 'person_emails.email_id')
+            ->leftjoin('person_phones', 'persons.person_id', '=', 'person_phones.person_id')
+            ->leftjoin('phones', 'person_phones.phone_id', '=', 'phones.phone_id')
+            ->leftJoin('courses', 'course_application.institution_course_id', '=', 'courses.course_id')
+            ->leftJoin('institutes', 'course_application.institute_id', '=', 'institutes.institution_id')
+            ->leftJoin('companies', 'institutes.company_id', '=', 'companies.company_id')
+            ->leftjoin('intakes', 'intakes.intake_id', '=', 'course_application.intake_id')
+            ->join('application_status', 'application_status.course_application_id', '=', 'course_application.course_application_id')
+            ->select([DB::raw('CONCAT(persons.first_name, " ", persons.last_name) AS fullname'), 'companies.name as company', 'companies.invoice_to_name as invoice_to', 'courses.name', 'intakes.intake_date', 'course_application.course_application_id', 'phones.number', 'emails.email'])
+            ->where('application_status.active', 1)
+            ->where('application_status.status_id', $status)
+            ->orderBy('course_application.course_application_id', 'desc')
+            ->get();
+        return $applications;
+    }
 
     function offer_create(array $request, $course_application_id)
     {
@@ -154,6 +175,8 @@ class ApplicationStatus extends Model
         $previous_status->date_removed = Carbon::now();
         $previous_status->save();
 
+        $this->change_status($application_id, 2);
+
         ApplicationStatus::create([
             'course_application_id' => $application_id,
             'status_id' => $status_id,
@@ -162,20 +185,26 @@ class ApplicationStatus extends Model
         ]);
     }
 
-    function offer_update(array $request, $course_application_id)
+    function offer_received(array $request, $course_application_id)
     {
         DB::beginTransaction();
 
         try {
-
             $applications = CourseApplication::find($course_application_id);
-            $applications->tuition_fee = $request['total_tuition_fee'];
-            $applications->intake_id = $request['intake_date'];
+            $applications->tuition_fee = $request['tuition_fee'];
+            $applications->intake_id = $request['intake_id'];
             $applications->student_id = $request['student_id'];
-            $applications->fee_for_coe = $request['total_fee_for_coe'];
-
+            $applications->fee_for_coe = $request['fee_for_coe'];
             $applications->save();
 
+            //Add Note
+            $note = new ApplicationNotes();
+            $note->add($request, $course_application_id);
+
+            //Upload Document
+            $document = new
+
+            $this->change_status($course_application_id, 3);
 
             DB::commit();
             return true;
