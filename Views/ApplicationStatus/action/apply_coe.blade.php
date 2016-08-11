@@ -19,9 +19,8 @@
             <div class="box-body">
                 {!! Form::model($application,[
                     'class'=>'form-horizontal',
-                    'files'=>true,
                     'method'=>'POST',
-                    'route'=>['applications.update.applied.coe', $application->course_application_id]
+                    'route'=>['applications.update.applied.coe', $application->application_id]
                     ])!!}
 
                 <div class="form-group">
@@ -58,7 +57,7 @@
                                                                       for="inputError">:message</label>') !!}
                         @endif
 
-                        <a href="">View Offer Letter</a><br>
+                        <a href="{{ $offer_letter->shelf_location }}" target="_blank">View Offer Letter</a><br>
                     </div>
                 </div>
 

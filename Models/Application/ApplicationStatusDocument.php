@@ -88,4 +88,13 @@ class ApplicationStatusDocument extends Model
             return false;
         }
     }
+
+    function getDocument($application_id, $status_id =1)
+    {
+        $document = ApplicationStatusDocument::join('documents', 'documents.document_id', '=', 'application_status_documents.document_id')
+            ->where('application_id', $application_id)
+            ->where('application_status_id', $status_id)
+            ->first();
+        return $document;
+    }
 }

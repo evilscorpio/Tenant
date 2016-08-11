@@ -17,7 +17,7 @@
         
         <li class=" {{ Request::is('tenant/applications/offer_letter_processing', 'tenant/applications/*/offer_letter_received') ? 'active' : '' }}"><a href="{{ route('applications.offer_letter_processing.index')}}">Offer letter processing</a></li>
         
-        <li class="{{ Request::is('tenant/applications/offer_letter_issued', 'tenant/applications/*/coe_processing', 'tenant/applications/2/apply_coe' ) ? 'active' : ''}}" ><a href="{{ route('applications.offer_letter_issued.index') }}">Offer letter issued</a></li>
+        <li class="{{ Request::is('tenant/applications/offer_letter_issued', 'tenant/applications/*/coe_processing', 'tenant/applications/*/apply_coe' ) ? 'active' : ''}}" ><a href="{{ route('applications.offer_letter_issued.index') }}">Offer letter issued</a></li>
         
         <li class="{{ Request::is('tenant/applications/coe_processing', 'tenant/applications/*/coe_issued', 'tenant/applications/*/COE_issued') ? 'active' : ''}}" ><a href="{{ route('applications.coe_processing.index') }}">COE processing</a></li>
         

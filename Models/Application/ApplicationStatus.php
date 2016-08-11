@@ -237,11 +237,11 @@ class ApplicationStatus extends Model
         DB::beginTransaction();
 
         try {
-
             $applications = CourseApplication::find($course_application_id);
-            $applications->fee_for_coe = $request['fee_paid_for_coe'];
+            $applications->fee_for_coe = $request['fee_for_coe'];
             $applications->save();
 
+            $this->change_status($course_application_id, 4);
 
             DB::commit();
             return true;

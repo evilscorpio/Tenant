@@ -124,14 +124,14 @@ class ApplicationStatusController extends BaseController
     public function apply_coe($course_application_id)
     {
         $data['application'] = $this->application->getDetails($course_application_id);
+        $data['offer_letter'] = $this->document->getDocument($course_application_id, 2);
         return view('Tenant::ApplicationStatus/action/apply_coe', $data);
     }
 
     //updates for applied_offer
     public function update_applied_coe($course_application_id)
     {
-        $updated = $this->application_status->coe_update($this->request->all(), $course_application_id);
-
+        $this->application_status->coe_update($this->request->all(), $course_application_id);
         Flash::success('Status Updated Successfully.');
         return redirect()->route('applications.coe_processing.index');
     }
@@ -146,22 +146,9 @@ class ApplicationStatusController extends BaseController
     //Information for action of coe processing page
     public function action_coe_issued($course_application_id)
     {
-        $applications = CourseApplication::leftjoin('users', 'users.user_id', '=', 'course_application.user_id')
-            ->leftjoin('persons', 'persons.person_id', '=', 'users.person_id')
-            ->leftjoin('person_phones', 'persons.person_id', '=', 'person_phones.person_id')
-            ->leftjoin('phones', 'person_phones.phone_id', '=', 'phones.phone_id')
-            ->leftjoin('institute_courses', 'institute_courses.institute_course_id', '=', 'course_application.institution_course_id')
-            ->leftjoin('courses', 'courses.course_id', '=', 'institute_courses.course_id')
-            ->leftjoin('institutes', 'institutes.institution_id', '=', 'institute_courses.institute_id')
-            ->leftjoin('companies', 'companies.company_id', '=', 'institutes.company_id')
-            ->leftjoin('intakes', 'intakes.intake_id', '=', 'course_application.intake_id')
-            ->join('application_status', 'application_status.course_application_id', '=', 'course_application.course_application_id')
-            ->join('status', 'status.status_id', '=', 'application_status.status_id')
-            ->select([DB::raw('CONCAT(persons.first_name, " ", persons.last_name) AS fullname'), 'companies.name as company', 'courses.name', 'intakes.intake_date', 'course_application.tuition_fee', 'course_application.course_application_id', 'application_status.status_id', 'users.email', 'phones.number'])
-            ->orderBy('course_application.course_application_id', 'desc')
-            ->find($course_application_id);
-
-        return view('Tenant::ApplicationStatus/action/coe_issued', compact('applications'));
+        $data['application'] = $this->application->getDetails($course_application_id);
+        $data['intakes'] = $this->intake->getIntakes($data['application']->institute_id);
+        return view('Tenant::ApplicationStatus/action/coe_issued', $data);
     }
 
     //updates for action_coe_issued
