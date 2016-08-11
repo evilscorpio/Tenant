@@ -13,7 +13,7 @@
                 <h3 class="box-title">Client Details</h3>
             </div>
             {!!Form::model($client, array('route' => array('tenant.client.update', $client->client_id), 'class' => 'form-horizontal form-left', 'method' => 'put'))!!}
-            {!!Form::hidden('user_id', $client->user_id)!!}
+            {!!Form::hidden('email_id', $client->email_id)!!}
             @include('Tenant::Client/form')
             <div class="box-footer clearfix">
                 <input type="submit" class="btn btn-primary pull-right" value="Update"/>

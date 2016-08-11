@@ -123,24 +123,8 @@ class ApplicationStatusController extends BaseController
 
     public function apply_coe($course_application_id)
     {
-        $applications = CourseApplication::leftjoin('users', 'users.user_id', '=', 'course_application.user_id')
-            ->leftjoin('persons', 'persons.person_id', '=', 'users.person_id')
-            ->leftjoin('institute_courses', 'institute_courses.institute_course_id', '=', 'course_application.institution_course_id')
-            ->leftjoin('courses', 'courses.course_id', '=', 'institute_courses.course_id')
-            ->leftjoin('institutes', 'institutes.institution_id', '=', 'institute_courses.institute_id')
-            ->leftjoin('companies', 'companies.company_id', '=', 'institutes.company_id')
-            ->leftjoin('intakes', 'intakes.intake_id', '=', 'course_application.intake_id')
-            ->leftjoin('application_notes', 'course_application.course_application_id', '=', 'application_notes.application_id')
-            ->leftjoin('notes', 'application_notes.note_id', '=', 'notes.notes_id')
-            ->leftjoin('application_status', 'application_status.course_application_id', '=', 'course_application.course_application_id')
-            ->leftjoin('application_status_documents', 'application_status_documents.application_status_id', '=', 'application_status.application_status_id')
-            ->leftjoin('documents', 'documents.document_id', '=', 'application_status_documents.document_id')
-            ->where('course_application.course_application_id', $course_application_id)
-            ->select(['intakes.intake_date', 'course_application.tuition_fee', 'course_application.student_id', 'course_application.course_application_id'])
-            ->orderBy('course_application.course_application_id', 'desc')
-            ->find($course_application_id);
-
-        return view('Tenant::ApplicationStatus/action/apply_coe', compact('applications'));
+        $data['application'] = $this->application->getDetails($course_application_id);
+        return view('Tenant::ApplicationStatus/action/apply_coe', $data);
     }
 
     //updates for applied_offer

@@ -172,9 +172,9 @@ class ClientController extends BaseController
      */
     public function update($client_id)
     {
-        $user_id = $this->request->get('user_id');
+        $email_id = $this->request->get('email_id');
         /* Additional validation rules checking for uniqueness */
-        $this->rules['email'] = 'email|min:5|max:55|unique:users,email,' . $user_id . ',user_id';
+        $this->rules['email'] = 'email|min:5|max:55|unique:emails,email,'.$email_id.',email_id';
 
         $this->validate($this->request, $this->rules);
         // if validates
