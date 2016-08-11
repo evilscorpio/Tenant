@@ -110,8 +110,8 @@
                             </div>
                             <div class="panel-body">
                                 <div class="well well-sm">
-                                    Enrolled
-                                    <a href="#" class="pull-right">modify</a>
+                                    {{ $status->name }}
+                                    <a href="{{ $staus->action_link }}" class="pull-right">Modify</a>
                                 </div>
                             </div>
                         </div>

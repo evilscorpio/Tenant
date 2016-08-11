@@ -2,6 +2,7 @@
 
 use App\Http\Requests;
 use App\Modules\Tenant\Models\Agent;
+use App\Modules\Tenant\Models\Application\ApplicationStatus;
 use App\Modules\Tenant\Models\Client\ApplicationNotes;
 use App\Modules\Tenant\Models\Client\Client;
 use App\Modules\Tenant\Models\Application\CourseApplication;
@@ -27,7 +28,7 @@ class ApplicationController extends BaseController
         'payment_method' => 'required|min:2|max:45'
     ];
 
-    function __construct(Client $client, Request $request, CourseApplication $application, Institute $institute, Agent $agent, CollegePayment $payment, CollegeInvoice $invoice, StudentInvoice $student_invoice, ApplicationNotes $notes, ClientTimeline $timeline)
+    function __construct(Client $client, Request $request, CourseApplication $application, Institute $institute, Agent $agent, CollegePayment $payment, CollegeInvoice $invoice, StudentInvoice $student_invoice, ApplicationNotes $notes, ClientTimeline $timeline, ApplicationStatus $status)
     {
         $this->client = $client;
         $this->request = $request;
@@ -39,6 +40,7 @@ class ApplicationController extends BaseController
         $this->notes = $notes;
         $this->timeline = $timeline;
         $this->student_invoice = $student_invoice;
+        $this->status = $status;
         parent::__construct();
     }
 
@@ -179,6 +181,8 @@ class ApplicationController extends BaseController
         $data['commission_claimed'] = $this->payment->commissionClaimed($application_id);
         $remaining_commission = $data['total_commission_amount'] - $data['commission_claimed'];
         $data['remaining_commission'] = ($remaining_commission < 0)? 0 : $remaining_commission;
+
+        $data['status'] = $this->status->getStatusDetails($application_id);
 
         $student_stats = $this->student_invoice->getStats($application_id);
         $data['student_outstanding'] = $student_stats['due_amount'];

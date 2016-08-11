@@ -304,4 +304,49 @@ class ApplicationStatus extends Model
             return false;
         }
     }
+
+    function getStatusDetails($application_id)
+    {
+        $status = ApplicationStatus::join('status', 'application_status.status_id', '=', 'status.status_id')
+            ->where('application_status.course_application_id', $application_id)
+            ->where('application_status.active', 1)
+            ->select('application_status.*', 'status.name')
+            ->first();
+
+        $status->action_link = $this->getActionLink($status->status_id, $application_id);
+
+        return $status;
+    }
+
+    function getActionLink($status_id, $application_id)
+    {
+        switch ($status_id) {
+            case 1:
+                $link = route('applications.apply.offer', $application_id);
+                break;
+            case 2:
+                $link = route('applications.offer.received', $application_id);
+                break;
+            case 3:
+                $link = route('applications.apply.coe', $application_id);
+                break;
+            case 4:
+                $link = route('applications.action.coe.issued', $application_id);
+                break;
+            case 5:
+                $link = route('applications.apply.offer', $application_id);
+                break;
+            case 6:
+                $link = route('applications.apply.offer', $application_id);
+                break;
+            case 7:
+                $link = route('applications.apply.offer', $application_id);
+                break;
+            default: // For Cancelled Application
+                $link = '';
+                break;
+        }
+
+        return $link;
+    }
 }
