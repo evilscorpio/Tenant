@@ -111,7 +111,7 @@
                             <div class="panel-body">
                                 <div class="well well-sm">
                                     {{ $status->name }}
-                                    <a href="{{ $staus->action_link }}" class="pull-right">Modify</a>
+                                    <a href="{{ $status->action_link }}" class="pull-right">Modify</a>
                                 </div>
                             </div>
                         </div>
