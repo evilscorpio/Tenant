@@ -37,7 +37,7 @@
                 "serverSide": true,
                 "ajax": appUrl + "/tenant/client/data",
                 "columns": [
-                    {data: 'client_id', name: 'client_id'},
+                    {data: 'client_id', name: 'clients.client_id'},
                     {data: 'fullname', name: 'fullname'},
                     {data: 'number', name: 'number'},
                     {data: 'email', name: 'email'},
