@@ -19,8 +19,8 @@ class InvoiceReportController extends BaseController
 
     public function getInvoicePending()
     {
-        $data['invoice_reports'] = $this->Invoice->pendingInvoiceDetails();
-        //$data['date'] = Carbon::now();
+        $data['invoice_reports'] = $this->Invoice->getInvoiceDetails();
+        $data['date'] = Carbon::now();
 
         return view("Tenant::Invoice Report/invoice_pending",$data);
     }

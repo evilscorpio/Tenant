@@ -26,34 +26,35 @@
                   <thead>
                     <tr class="text-nowrap">
                       <th>Invoice Id</th>
+                      <th>Date</th>
                       <th>Client Name</th>
                       <th>Phone</th>
                       <th>Email</th>
                       <th>Invoice Amount</th>
                       <th>Total gst</th>
-                      <th>Status</th>
+                      
                       <th>Outstanding Amount</th>
                       <th></th>
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach($invoice_paid as $invoice)        
-                      @if(($invoice->invoice_amount) - ($invoice->amount) === 0)
-                        @elseif(($invoice->invoice_date) <= $date )
+                    @foreach($invoice_reports as $invoice)        
+                      
+                        @if(($invoice->invoice_date) <= $date and ($invoice->final_total - $invoice->total_paid) <= 0)
                           <tr>
                             <td>{{ $invoice->invoice_id }}</td>
+                            <td>{{ $invoice->invoice_date }}</td>
                             <td>{{ $invoice->fullname }}</td>
                             <td>{{ $invoice->number }}</td>
                             <td>{{ $invoice->email }}</td>
                             <td>{{ $invoice->invoice_amount }}</td>
                             <td>{{ $invoice->total_gst }}</td>
-                            <td>{{ (($invoice->invoice_amount) - ($invoice->amount) <= 0) ? 'paid' : 'pending' }}</td>
+                            
                             <td>
-                              @if(($invoice->invoice_amount) - ($invoice->amount) == 0)
-                                  {{ '-' }}
-                                @elseif(($invoice->invoice_amount) - ($invoice->amount) != 0)
-                                  {{ (($invoice->invoice_amount) - ($invoice->amount)) }}
+                              @if(($invoice->final_total) - ($invoice->total_paid) == 0)
+                                  {{ '-' }}  
                                 @else
+                                  {{ (($invoice->final_total) - ($invoice->total_paid)) }}
                               @endif
                             </td>
                             <td>
@@ -81,12 +82,13 @@
             "columns": 
             [
                 {data: 'invoice_id', name: 'invoice_id'},
+                {data: 'invoice_date', name: 'invoice_date'},
                 {data: 'fullname', name: 'fullname'},
                 {data: 'number', name: 'number'},
                 {data: 'email', name: 'email'},
                 {data: 'invoice_amount', name: 'invoice_amount'},
                 {data: 'total_gst', name: 'total_gst'},
-                {data: 'status', name: 'status'},
+                
                 {data: 'outstanding_amount', name: 'outstanding_amount'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
             ],

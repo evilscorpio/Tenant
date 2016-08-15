@@ -29,7 +29,7 @@ class Invoice extends Model
 
 
 
-    function pendingInvoiceDetails()
+    function getInvoiceDetails()
     {
         
       //  SELECT invoices.*,sum(client_payments.amount) from invoices LEFT JOIN payment_invoice_breakdowns on payment_invoice_breakdowns.invoice_id=invoices.invoice_id left JOIN client_payments on client_payments.client_payment_id=payment_invoice_breakdowns.payment_id group by payment_invoice_breakdowns.invoice_id 
@@ -43,9 +43,9 @@ class Invoice extends Model
             ->leftjoin('emails', 'emails.email_id', '=', 'person_emails.email_id')
             ->leftjoin('person_phones', 'persons.person_id', '=', 'person_phones.person_id')
             ->leftjoin('phones', 'person_phones.phone_id', '=', 'phones.phone_id')
-            ->select([DB::raw('CONCAT(persons.first_name, " ", persons.last_name) AS fullname'),'email','phones.number','invoices.invoice_amount','invoices.invoice_id','invoices.total_gst','invoices.invoice_date',DB::raw('SUM(client_payments.amount) AS total_paid')])
+            ->select([DB::raw('CONCAT(persons.first_name, " ", persons.last_name) AS fullname'),'email','phones.number','invoices.invoice_amount','invoices.final_total','invoices.invoice_id','invoices.total_gst','invoices.invoice_date',DB::raw('SUM(client_payments.amount) AS total_paid')])
             ->where('invoices.invoice_date', '<','DATE(CURDATE())' )
-            ->groupBy('payment_invoice_breakdowns.invoice_id')
+            ->groupBy('invoices.invoice_id')
             ->orderBy('invoices.invoice_date', 'desc')
             ->get();
             
