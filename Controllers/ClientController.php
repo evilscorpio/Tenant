@@ -294,29 +294,6 @@ class ClientController extends BaseController
         return redirect()->route('tenant.client.notes', $client_id);
     }
 
-    function uploadApplicationNotes($client_id)
-    {
-        $upload_rules = ['description' => 'required'
-        ];
-        if ($this->request->get('remind') == 1)
-            $upload_rules['reminder_date'] = 'required';
-
-        $this->validate($this->request, $upload_rules);
-
-        $this->application_notes->uploadApplicationNotes($client_id, $this->request->all());
-        \Flash::success('Notes uploaded successfully!');
-        return redirect()->route('tenant.client.innernotes', $client_id);
-    }
-
-    function deleteApplicationNote($note_id)
-    {
-        $application_id = $this->application_notes->deleteApplicationNote($note_id);
-
-        \Flash::success('Note deleted successfully!');
-        return redirect()->route('tenant.client.innernotes', $application_id);
-
-    }
-
     /* Krita */
     function setActive($client_id)
     {
@@ -331,6 +308,33 @@ class ClientController extends BaseController
     {
         $active = ActiveClient::where('client_id', $client_id)->where('user_id', current_tenant_id())->first();
         if(!empty($active)) $active->delete();
+    }
+
+    function compose($client_id)
+    {
+        $data['client'] = $this->client->getDetails($client_id);
+        return view("Tenant::Client/compose", $data);
+    }
+
+    function sendMail($client_id)
+    {
+        $upload_rules = ['subject' => 'required|max:255', 'body' => 'required'];
+
+        $request = $this->request->all();
+        if (isset($request['remind']) && $request['remind'] == 1)
+            $upload_rules['reminder_date'] = 'required';
+
+        $this->validate($this->request, $upload_rules);
+
+        $note_id = $this->client_notes->add($client_id, $request);
+        if($note_id) {
+            \Flash::success('Notes uploaded successfully!');
+            $this->client->addLog($client_id, 2, ['{{DESCRIPTION}}' => $this->getNoteFormat($note_id), '{{NAME}}' => get_tenant_name()]);
+        }
+        if($this->request->get('timeline') == 1)
+            return redirect()->route('tenant.client.show', $client_id);
+        else
+            return redirect()->route('tenant.client.notes', $client_id);
     }
 
 }

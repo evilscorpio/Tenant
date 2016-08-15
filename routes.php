@@ -273,12 +273,9 @@ Route::group(array('prefix' => 'tenant', 'module' => 'Tenant', 'middleware' => '
     Route::post('clients/{client_id}/notes', 'ClientController@uploadClientNotes');
     Route::get('note/{notes_id}/delete',['as' => 'tenant.client.notes.delete', 'uses' => 'ClientController@deleteNote']);
 
-    /*routes for innernotes*/
-    Route::get('clients/{client_id}/innernotes', 'ClientController@innernotes');
-    Route::get('client/data', 'ClientController@getData');
-    Route::get('clients/{client_id}/innernotes', ['as' => 'tenant.client.innernotes', 'uses' => 'ClientController@innernotes']);
-    Route::post('clients/{client_id}/innernotes', 'ClientController@uploadApplicationNotes');
-    Route::get('innernote/{notes_id}/delete',['as' => 'tenant.client.innernotes.delete', 'uses' => 'ClientController@deleteApplicationNote']);
+    /* Routes for Client Email */
+    Route::get('clients/{client_id}/compose', ['as' => 'tenant.client.compose', 'uses' => 'ClientController@compose']);
+    Route::post('clients/{client_id}/compose', 'ClientController@sendMail');
 
     /* Routes for Settings Module */
     Route::get('settings/company', ['as' => 'tenant.company.edit', 'uses' => 'SettingController@company']);

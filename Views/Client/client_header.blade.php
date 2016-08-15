@@ -13,7 +13,7 @@
             <div class="col-sm-10">
                 <div class="container">
                     <div class="pull-right">
-                        <a href="{{ route('tenant.client.edit', $client->client_id) }}" class="btn btn-flat btn-success"><i class="fa fa-envelope"></i> Email</a>
+                        <a href="{{ route('tenant.client.compose', $client->client_id) }}" class="btn btn-flat btn-success"><i class="fa fa-envelope"></i> Email</a>
                         <a href="{{ route('tenant.client.edit', $client->client_id) }}" class="btn btn-flat btn-primary"><i class="fa fa-edit"></i> Edit</a>
                     </div>
                     <h4>{{$client->first_name}} {{$client->middle_name}} <b>{{$client->last_name}}</b></h4>
