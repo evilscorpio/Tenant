@@ -13,7 +13,7 @@
         
         @include('Tenant::Invoice Report/partial/messages')
         
-        <h1>Pending Invoices - <small>Invoice List</small></h1>
+        <h1>Client Invoices - <small>Pending Invoices</small></h1>
 
         @include('Tenant::Invoice Report/partial/navbar')
 
@@ -31,16 +31,15 @@
                       <th>Phone</th>
                       <th>Email</th>
                       <th>Invoice Amount</th>
-                      <th>Total gst</th>
-                      
-                      <th>Outstanding Amount</th>
+                      <th>Total gst</th>                      
+                      <th>Outstanding</th>
                       <th></th>
                     </tr>
                   </thead>
                   <tbody>
                     @foreach($invoice_reports as $invoice)        
                       
-                        @if(($invoice->invoice_date) <= $date and ($invoice->final_total - $invoice->total_paid > 0))
+                        @if(($invoice->invoice_date) <= $date and ($invoice->final_total - $invoice->total_paid) > 0)
                           <tr>
                             <td>{{ $invoice->invoice_id }}</td>
                             <td>{{ $invoice->invoice_date }}</td>

@@ -319,9 +319,9 @@ Route::group(array('prefix' => 'tenant', 'module' => 'Tenant', 'middleware' => '
    // Route::resource('apply_offer', 'ApplyOfferController',['only'=>['edit','update']]);
 
      /*Routes for Invoice Reports All goes to InvoiceReportController*/
-    Route::get('invoice_report/pending', ['as'=>'invoice.list.index', 'uses'=>'InvoiceReportController@getInvoicePending']);
-    Route::get('invoice_report/invoice_paid', ['as'=>'invoice.paid', 'uses'=>'InvoiceReportController@getInvoicePaid']);
-    Route::get('invoice_report/invoice_future', ['as'=>'invoice.future', 'uses'=>'InvoiceReportController@getInvoicefuture']);
+    Route::get('client_invoice_report/invoice_pending', ['as'=>'client.invoice.pending', 'uses'=>'InvoiceReportController@clientInvoicePending']);
+    Route::get('client_invoice_report/invoice_paid', ['as'=>'client.invoice.paid', 'uses'=>'InvoiceReportController@clientInvoicePaid']);
+    Route::get('client_invoice_report/invoice_future', ['as'=>'client.invoice.future', 'uses'=>'InvoiceReportController@clientInvoicefuture']);
 
     //end anish routes
 });

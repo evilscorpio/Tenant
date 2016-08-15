@@ -13,7 +13,7 @@
         
         @include('Tenant::Invoice Report/partial/messages')
         
-        <h1>Paid Invoices - <small>Invoice List</small></h1>
+        <h1>Client Invoices - <small>Paid Invoices</small></h1>
 
         @include('Tenant::Invoice Report/partial/navbar')
 
@@ -31,9 +31,8 @@
                       <th>Phone</th>
                       <th>Email</th>
                       <th>Invoice Amount</th>
-                      <th>Total gst</th>
-                      
-                      <th>Outstanding Amount</th>
+                      <th>Total gst</th>                     
+                      <th>Outstanding</th>
                       <th></th>
                     </tr>
                   </thead>

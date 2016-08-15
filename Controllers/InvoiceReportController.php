@@ -17,7 +17,7 @@ class InvoiceReportController extends BaseController
         parent::__construct();
     }
 
-    public function getInvoicePending()
+    public function clientInvoicePending()
     {
         $data['invoice_reports'] = $this->Invoice->getInvoiceDetails();
         $data['date'] = Carbon::now();
@@ -25,7 +25,7 @@ class InvoiceReportController extends BaseController
         return view("Tenant::Invoice Report/invoice_pending",$data);
     }
 
-     public function getInvoicePaid()
+     public function clientInvoicePaid()
     {
         $data['invoice_reports'] = $this->Invoice->getInvoiceDetails();
         
@@ -36,7 +36,7 @@ class InvoiceReportController extends BaseController
     }
              
 
-    public function getInvoiceFuture()
+    public function clientInvoiceFuture()
     {
         $data['invoice_reports'] = $this->Invoice->getInvoiceDetails();
         
