@@ -318,5 +318,10 @@ Route::group(array('prefix' => 'tenant', 'module' => 'Tenant', 'middleware' => '
     //Route::put('applications/{course_application_id}/update', ['as'=>'apply_offer.update', 'uses'=>'ApplicationsStatusController@update']);
    // Route::resource('apply_offer', 'ApplyOfferController',['only'=>['edit','update']]);
 
+     /*Routes for Invoice Reports All goes to InvoiceReportController*/
+    Route::get('invoice_report/pending', ['as'=>'invoice.list.index', 'uses'=>'InvoiceReportController@getInvoicePending']);
+    Route::get('invoice_report/invoice_paid', ['as'=>'invoice.paid', 'uses'=>'InvoiceReportController@getInvoicePaid']);
+    Route::get('invoice_report/invoice_future', ['as'=>'invoice.future', 'uses'=>'InvoiceReportController@getInvoicefuture']);
+
     //end anish routes
 });

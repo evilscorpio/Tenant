@@ -17,4 +17,6 @@ Class Report extends Model{
         return $college_invoice;
 	}
 
+	
+
 }
