@@ -4,12 +4,14 @@ use App\Http\Requests;
 use App\Modules\Tenant\Models\Client\ActiveClient;
 use App\Modules\Tenant\Models\Client\Client;
 use App\Modules\Tenant\Models\Client\ClientDocument;
+use App\Modules\Tenant\Models\Client\ClientEmail;
 use App\Modules\Tenant\Models\Document;
 use App\Modules\Tenant\Models\Notes;
 use App\Modules\Tenant\Models\Client\ClientNotes;
 use App\Modules\Tenant\Models\Client\ApplicationNotes;
 use App\Modules\Tenant\Models\Timeline\ClientTimeline;
 use Flash;
+use Mail;
 use DB;
 
 use Illuminate\Http\Request;
@@ -25,7 +27,7 @@ class ClientController extends BaseController
         'number' => 'required'
     ];
 
-    function __construct(Client $client, Request $request, ClientDocument $document, notes $notes, ClientNotes $client_notes, ApplicationNotes $application_notes, ClientTimeline $timeline)
+    function __construct(Client $client, Request $request, ClientDocument $document, notes $notes, ClientNotes $client_notes, ApplicationNotes $application_notes, ClientTimeline $timeline, ClientEmail $email)
     {
         $this->client = $client;
         $this->request = $request;
@@ -34,6 +36,7 @@ class ClientController extends BaseController
         $this->client_notes = $client_notes;
         $this->application_notes = $application_notes;
         $this->timeline = $timeline;
+        $this->email = $email;
         parent::__construct();
     }
 
@@ -319,22 +322,39 @@ class ClientController extends BaseController
     function sendMail($client_id)
     {
         $upload_rules = ['subject' => 'required|max:255', 'body' => 'required'];
-
-        $request = $this->request->all();
-        if (isset($request['remind']) && $request['remind'] == 1)
-            $upload_rules['reminder_date'] = 'required';
+        $client = $this->client->getDetails($client_id);
 
         $this->validate($this->request, $upload_rules);
 
-        $note_id = $this->client_notes->add($client_id, $request);
-        if($note_id) {
-            \Flash::success('Notes uploaded successfully!');
-            $this->client->addLog($client_id, 2, ['{{DESCRIPTION}}' => $this->getNoteFormat($note_id), '{{NAME}}' => get_tenant_name()]);
+        $request = $this->request->all();
+        $request['email'] = $client->email;
+
+        $param = ['content'    => $request['body'],
+            'subject'    => $request['subject'],
+            'heading'    => 'Condat Solutions',
+            'subheading' => 'All your business in one space',
+        ];
+
+        $data = ['to_email'   => $client->email,
+            'to_name'    => $client->first_name . ' ' . $client->given_name,
+            'subject'    => $request['subject'],
+            'from_email' => 'krita@condat.com', //change this later
+            'from_name'  => 'Condat Solutions', //change this later
+            ];
+
+        $sent = Mail::send('template.master', $param, function ($message) use ($data) {
+            $message->to($data['to_email'], $data['to_name'])
+                ->subject($data['subject'])
+                ->from($data['from_email'], $data['from_name']);
+        });
+
+        if($sent) {
+            $this->email->storeMail($client_id, $request);
+            \Flash::success('Email sent successfully!');
+            $this->client->addLog($client_id, 8, ['{{CLIENT_NAME}}' => $client->first_name . ' ' . $client->given_name, '{{CLIENT_EMAIL}}' => $client->email, '{{SUBJECT}}' => $request['subject'], '{{BODY}}' => limit_char($request['body'], 100), '{{NAME}}' => get_tenant_name()]);
         }
-        if($this->request->get('timeline') == 1)
-            return redirect()->route('tenant.client.show', $client_id);
-        else
-            return redirect()->route('tenant.client.notes', $client_id);
+
+        return redirect()->route('tenant.client.show', $client_id);
     }
 
 }

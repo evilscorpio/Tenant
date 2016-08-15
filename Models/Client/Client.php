@@ -264,4 +264,13 @@ class Client extends Model
         }
         return $message;
     }
+
+    function getEmail($client_id)
+    {
+        $email = Client::leftJoin('persons', 'persons.person_id', '=', 'clients.person_id')
+            ->leftJoin('person_emails', 'person_emails.person_id', '=', 'persons.person_id')
+            ->leftJoin('emails', 'emails.email_id', '=', 'person_emails.email_id')
+            ->find($client_id);
+        return !empty($email)? $email->email : '';
+    }
 }
