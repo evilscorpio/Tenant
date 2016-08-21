@@ -44,7 +44,6 @@ class Invoice extends Model
             ->leftjoin('person_phones', 'persons.person_id', '=', 'person_phones.person_id')
             ->leftjoin('phones', 'person_phones.phone_id', '=', 'phones.phone_id')
             ->select([DB::raw('CONCAT(persons.first_name, " ", persons.last_name) AS fullname'),'email','phones.number','invoices.invoice_amount','invoices.final_total','invoices.invoice_id','invoices.total_gst','invoices.invoice_date',DB::raw('SUM(client_payments.amount) AS total_paid')])
-            ->where('invoices.invoice_date', '<','DATE(CURDATE())' )
             ->groupBy('invoices.invoice_id')
             ->orderBy('invoices.invoice_date', 'desc')
             ->get();
@@ -54,22 +53,5 @@ class Invoice extends Model
         return $invoice_reports;
     }
 
-    function paidInvoiceDetails()
-    {
-        
-         $invoice_reports = Invoice::leftjoin('payment_invoice_breakdowns', 'payment_invoice_breakdowns.invoice_id', '=', 'invoices.invoice_id')
-            ->leftjoin('client_payments', 'client_payments.client_payment_id', '=', 'payment_invoice_breakdowns.payment_id')
-            ->leftjoin('clients', 'clients.client_id', '=', 'client_payments.client_id')
-            ->leftjoin('persons', 'persons.person_id', '=', 'clients.person_id')
-            ->leftjoin('users', 'clients.user_id', '=', 'users.user_id')
-            ->leftjoin('person_phones', 'persons.person_id', '=', 'person_phones.person_id')
-            ->leftjoin('phones', 'person_phones.phone_id', '=', 'phones.phone_id')
-            ->select([DB::raw('CONCAT(persons.first_name, " ", persons.last_name) AS fullname'),'users.email','phones.number','invoices.invoice_amount','invoices.invoice_id','invoices.total_gst','invoices.invoice_date',DB::raw('SUM(client_payments.amount) AS total_paid')])
-            ->where('invoices.invoice_date', '<=','DATE(NOW())' )
-            ->groupBy('payment_invoice_breakdowns.invoice_id')
-            ->orderBy('invoices.invoice_id', 'desc')
-            ->get();
-
-        return $invoice_reports;
-    }
+    
 }

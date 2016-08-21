@@ -11,11 +11,11 @@
     <div class="row">
       <div class="col-md-12">
         
-        @include('Tenant::Invoice Report/partial/messages')
+        @include('Tenant::InvoiceReport/ClientInvoice/partial/messages')
         
-        <h1>Client Invoices - <small>Pending Invoices</small></h1>
+        <h1>Client Invoices - <small>Future Invoices</small></h1>
 
-        @include('Tenant::Invoice Report/partial/navbar')
+        @include('Tenant::InvoiceReport/ClientInvoice/partial/navbar')
 
           
         <section>
@@ -39,7 +39,7 @@
                   <tbody>
                     @foreach($invoice_reports as $invoice)        
                       
-                        @if(($invoice->invoice_date) <= $date and ($invoice->final_total - $invoice->total_paid) > 0)
+                        @if(($invoice->invoice_date) >= $date )
                           <tr>
                             <td>{{ $invoice->invoice_id }}</td>
                             <td>{{ $invoice->invoice_date }}</td>
