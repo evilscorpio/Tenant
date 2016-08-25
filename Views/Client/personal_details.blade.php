@@ -37,7 +37,7 @@
 
                     <strong><i class="fa fa-file-text-o margin-r-5"></i> Referred By</strong>
 
-                    <p class="text-muted">{{$client->referred_by}}}</p>
+                    <p class="text-muted">{{$client->referred_by}}</p>
 
                     <strong><i class="fa fa-file-text-o margin-r-5"></i> Description</strong>
 
