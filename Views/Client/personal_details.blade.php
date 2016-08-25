@@ -110,14 +110,6 @@
                         <table class="table table-hover">
                             <tbody>
                             <tr>
-                                <th style="width: 34%;">Line 1</th>
-                                <td>{{ $client->line1 }}</td>
-                            </tr>
-                            <tr>
-                                <th>Line 2</th>
-                                <td>{{ $client->line2 }}</td>
-                            </tr>
-                            <tr>
                                 <th>Street</th>
                                 <td>{{ $client->street }}</td>
                             </tr>
