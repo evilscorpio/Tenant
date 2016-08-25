@@ -30,13 +30,13 @@ class ClientEmail extends Model
 
     public $timestamps = false;
 
-    function storeMail($client_id, array $request)
+    function storeMail($client_id, array $request, $status = 1)
     {
         ClientEmail::create([
             'email' => $request['email'],
             'subject' => $request['subject'],
             'body' => $request['body'],
-            'status' => $request['status'],
+            'status' => $status,
             'user_id' => current_tenant_id(),
             'client_id' => $client_id,
             'created_at' => get_today_datetime()

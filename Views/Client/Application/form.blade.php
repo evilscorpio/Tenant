@@ -99,9 +99,16 @@
         var institute = $("#institute").val();
         $.ajax({
             url: appUrl + "/tenant/courses/" + institute,
+            beforeSend: function() {
+                $("#course").before('<div class="form-control course-loading"><i class = "fa fa-spinner fa-spin"></i> Loading...</div>');
+                $('#course').hide();
+            },
             success: function (result) {
                 $("#course").html(result.data.options);
             }
+        }).complete(function(){
+            $("#course").show();
+            $('.course-loading').remove();
         });
     }
 
@@ -109,9 +116,16 @@
         var institute = $("#institute").val();
         $.ajax({
             url: appUrl + "/tenant/intakes/" + institute,
+            beforeSend: function() {
+                $("#intake").before('<div class="form-control intake-loading"><i class = "fa fa-spinner fa-spin"></i> Loading...</div>');
+                $('#intake').hide();
+            },
             success: function (result) {
                 $("#intake").html(result.data.options);
             }
+        }).complete(function(){
+            $("#intake").show();
+            $('.intake-loading').remove();
         });
     }
 

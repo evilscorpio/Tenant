@@ -40,7 +40,7 @@
                     {data: 'client_id', name: 'clients.client_id'},
                     {data: 'fullname', name: 'fullname'},
                     {data: 'number', name: 'number'},
-                    {data: 'email', name: 'email'},
+                    {data: 'email', name: 'emails.email'},
                     {data: 'added_by', name: 'added_by'},
                     {data: 'active', name: 'active', orderable: false, searchable: false},
                     {data: 'action', name: 'action', orderable: false, searchable: false}
