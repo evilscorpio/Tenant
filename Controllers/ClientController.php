@@ -9,6 +9,7 @@ use App\Modules\Tenant\Models\Document;
 use App\Modules\Tenant\Models\Notes;
 use App\Modules\Tenant\Models\Client\ClientNotes;
 use App\Modules\Tenant\Models\Client\ApplicationNotes;
+use App\Modules\Tenant\Models\Photo;
 use App\Modules\Tenant\Models\Timeline\ClientTimeline;
 use Flash;
 use Mail;
@@ -322,7 +323,14 @@ class ClientController extends BaseController
     function compose($client_id)
     {
         $data['client'] = $this->client->getDetails($client_id);
-        return view("Tenant::Client/compose", $data);
+        return view("Tenant::Client/Email/compose", $data);
+    }
+
+    function sent($client_id)
+    {
+        $data['client'] = $this->client->getDetails($client_id);
+        $data['emails'] = $this->email->getEmails($client_id);
+        return view("Tenant::Client/Email/sent", $data);
     }
 
     function sendMail($client_id)
@@ -342,7 +350,7 @@ class ClientController extends BaseController
         ];
 
         $data = ['to_email'   => $client->email,
-            'to_name'    => $client->first_name . ' ' . $client->given_name,
+            'to_name'    => $client->first_name . ' ' . $client->last_name,
             'subject'    => $request['subject'],
             'from_email' => 'krita@condat.com', //change this later
             'from_name'  => 'Condat Solutions', //change this later
@@ -357,10 +365,35 @@ class ClientController extends BaseController
         if($sent) {
             $this->email->storeMail($client_id, $request);
             \Flash::success('Email sent successfully!');
-            $this->client->addLog($client_id, 8, ['{{CLIENT_NAME}}' => $client->first_name . ' ' . $client->given_name, '{{CLIENT_EMAIL}}' => $client->email, '{{SUBJECT}}' => $request['subject'], '{{BODY}}' => limit_char($request['body'], 100), '{{NAME}}' => get_tenant_name()]);
+            $this->client->addLog($client_id, 8, ['{{CLIENT_NAME}}' => $client->first_name . ' ' . $client->last_name, '{{CLIENT_EMAIL}}' => $client->email, '{{SUBJECT}}' => $request['subject'], '{{BODY}}' => limit_char($request['body'], 100), '{{NAME}}' => get_tenant_name()]);
         }
 
         return redirect()->route('tenant.client.show', $client_id);
+    }
+
+    function urlUpload($client_id)
+    {
+        $url = $this->request->get('url');
+        $title = $this->request->get('title');
+
+        $extension = pathinfo($url, PATHINFO_EXTENSION);
+        $filename = str_random(4).'-'.str_slug($title).'.'. $extension;
+        //get file content from url
+        $file = file_get_contents($url);
+
+        $location = tenant()->folder('customer', true)->path();
+        //dd($location);
+        $file_info = array();
+        $file_info['fileName'] = $filename;
+        $file_info['pathName'] = $location;
+        $file = file_put_contents($location.$filename, $file);
+        if ($file) {
+            $photo_id = $this->client->uploadImage($client_id, $file_info, $this->request->all());
+            \Flash::success('Photo uploaded successfully!');
+        } else {
+            \Flash::error('Something went wrong! Please try again later');
+        }
+        return redirect()->back();
     }
 
 }
