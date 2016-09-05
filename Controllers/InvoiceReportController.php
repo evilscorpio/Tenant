@@ -44,7 +44,7 @@ class InvoiceReportController extends BaseController
         
         $data['date'] = Carbon::now();
 
-        return view("Tenant::InvoiceReport/Invoice/invoice_future",$data);
+        return view("Tenant::InvoiceReport/ClientInvoice/invoice_future",$data);
     }
 
 
@@ -54,6 +54,7 @@ class InvoiceReportController extends BaseController
     public function collegeInvoicePending()
     {
         $data['invoice_reports'] = $this->Report->CollegeInvoiceReport();
+        
         $data['date'] = Carbon::now();
 
         return view("Tenant::InvoiceReport/CollegeInvoice/invoice_pending",$data);

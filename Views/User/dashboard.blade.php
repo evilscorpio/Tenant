@@ -49,7 +49,7 @@
             </div>
         </div>
 
-        <div class="box box-primary">
+        <div class="box box-primary" style="background-color: rgb(213, 226, 233)">
             <div class="box-header ui-sortable-handle">
                 <h3 class="box-title">Application List</h3>
             </div>
